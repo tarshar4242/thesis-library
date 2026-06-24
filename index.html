@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>論文研讀庫 | 羅靜娟 714630117</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Noto Sans TC", sans-serif; background: #f4f6fb; color: #2c3e50; }
+
+  header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    color: white; padding: 48px 32px 40px;
+    text-align: center;
+  }
+  header h1 { font-size: 2rem; letter-spacing: 2px; margin-bottom: 8px; }
+  header p { opacity: 0.7; font-size: 0.95rem; }
+  .badge { display: inline-block; background: rgba(255,255,255,0.15); border-radius: 20px; padding: 4px 14px; font-size: 0.8rem; margin-top: 12px; }
+
+  .search-bar {
+    max-width: 600px; margin: 28px auto 0;
+    display: flex; gap: 0;
+  }
+  .search-bar input {
+    flex: 1; padding: 12px 16px; border: none; border-radius: 8px 0 0 8px;
+    font-size: 0.95rem; outline: none;
+  }
+  .search-bar button {
+    padding: 12px 20px; background: #e94560; color: white; border: none;
+    border-radius: 0 8px 8px 0; cursor: pointer; font-size: 0.95rem;
+  }
+
+  .stats { display: flex; justify-content: center; gap: 32px; padding: 24px; background: white; border-bottom: 1px solid #e8eaf0; }
+  .stat { text-align: center; }
+  .stat .num { font-size: 1.8rem; font-weight: 700; color: #0f3460; }
+  .stat .label { font-size: 0.8rem; color: #888; margin-top: 2px; }
+
+  main { max-width: 960px; margin: 32px auto; padding: 0 20px; }
+
+  .section-title {
+    font-size: 0.8rem; font-weight: 700; color: #888;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 2px solid #e8eaf0;
+  }
+
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+
+  .card {
+    background: white; border-radius: 12px; padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer; text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+
+  .card-header { display: flex; align-items: flex-start; gap: 12px; }
+  .card-id {
+    background: #0f3460; color: white;
+    font-size: 0.75rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 6px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .card-title { font-size: 0.95rem; font-weight: 600; line-height: 1.4; }
+  .card-en { font-size: 0.8rem; color: #888; line-height: 1.4; }
+
+  .card-meta { font-size: 0.78rem; color: #666; display: flex; flex-direction: column; gap: 4px; }
+  .card-meta span { display: flex; align-items: center; gap: 6px; }
+
+  .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: 0.72rem; padding: 3px 10px; border-radius: 20px;
+    background: #f0f4ff; color: #4a6fa5; font-weight: 500;
+  }
+
+  .card-files { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .file-btn {
+    font-size: 0.72rem; padding: 4px 10px; border-radius: 6px;
+    text-decoration: none; font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .file-btn:hover { opacity: 0.8; }
+  .file-btn.pdf { background: #fff0f0; color: #e53935; }
+  .file-btn.pptx { background: #fff3e0; color: #e65100; }
+  .file-btn.docx { background: #e8f5e9; color: #2e7d32; }
+
+  .doi-link { font-size: 0.75rem; color: #0f3460; word-break: break-all; }
+
+  footer { text-align: center; padding: 32px; color: #aaa; font-size: 0.8rem; border-top: 1px solid #e8eaf0; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📚 論文研讀庫</h1>
+  <p>碩士論文文獻管理中心｜生成式 AI × 知識管理 × 實踐社群</p>
+  <div class="badge">羅靜娟｜714630117</div>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="搜尋論文標題、作者、關鍵字…" oninput="filterCards()">
+    <button>搜尋</button>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="num" id="totalCount">2</div><div class="label">篇文獻</div></div>
+  <div class="stat"><div class="num">A</div><div class="label">核心理論類</div></div>
+  <div class="stat"><div class="num">B</div><div class="label">實證研究類</div></div>
+</div>
+
+<main>
+  <div class="section-title">所有文獻</div>
+  <div class="card-grid" id="cardGrid">
+
+    <!-- A05 -->
+    <a class="card" href="A05/README.md" data-keywords="野中 nonaka 知識創造 seci 隱性 顯性 組織">
+      <div class="card-header">
+        <span class="card-id">A05</span>
+        <div>
+          <div class="card-title">組織知識創造的動態理論</div>
+          <div class="card-en">A Dynamic Theory of Organizational Knowledge Creation</div>
+        </div>
+      </div>
+      <div class="card-meta">
+        <span>👤 Ikujiro Nonaka（野中郁次郎）</span>
+        <span>📰 Organization Science, Vol.5 No.1, 1994</span>
+        <span>🏆 Q1 經典理論文獻</span>
+      </div>
+      <div class="card-tags">
+        <span class="tag">SECI 模型</span>
+        <span class="tag">知識管理</span>
+        <span class="tag">隱性知識</span>
+        <span class="tag">核心理論</span>
+      </div>
+      <div class="card-files">
+        <a class="file-btn pdf" href="A05/A05野中知識創造_研讀簡報_20260620.pdf" onclick="e=>e.stopPropagation()">簡報 PDF</a>
+        <a class="file-btn pptx" href="A05/A05野中知識創造_研讀簡報_20260620.pptx" onclick="e=>e.stopPropagation()">簡報 PPTX</a>
+        <a class="file-btn pdf" href="A05/A05野中知識創造_段落中英對照_螢光標示_20260620.pdf" onclick="e=>e.stopPropagation()">中英對照</a>
+      </div>
+      <div class="doi-link">DOI: 10.1287/orsc.5.1.14</div>
+    </a>
+
+    <!-- A06 -->
+    <a class="card" href="A06/README.md" data-keywords="mayo clinic cop 實踐社群 community of practice 生成式ai 教育">
+      <div class="card-header">
+        <span class="card-id">A06</span>
+        <div>
+          <div class="card-title">生成式 AI 教育：在 Mayo Clinic 建立實踐社群</div>
+          <div class="card-en">Generative AI Education: Building a Community of Practice at Mayo Clinic</div>
+        </div>
+      </div>
+      <div class="card-meta">
+        <span>👤 Schultz, Van Erp, Minter, Nelson</span>
+        <span>📰 Innovations in Education and Teaching International, 2026</span>
+        <span>🏆 Q1 SSCI｜影響指數 4.9</span>
+      </div>
+      <div class="card-tags">
+        <span class="tag">實踐社群</span>
+        <span class="tag">生成式 AI</span>
+        <span class="tag">教育應用</span>
+        <span class="tag">觀點文</span>
+      </div>
+      <div class="card-files">
+        <a class="file-btn pdf" href="A06/A06共學團實踐社群_研讀簡報_20260624.pdf" onclick="e=>e.stopPropagation()">簡報 PDF</a>
+        <a class="file-btn pptx" href="A06/A06共學團實踐社群_研讀簡報_20260624.pptx" onclick="e=>e.stopPropagation()">簡報 PPTX</a>
+        <a class="file-btn pdf" href="A06/A06共學團實踐社群_段落中英對照_20260624.pdf" onclick="e=>e.stopPropagation()">中英對照</a>
+        <a class="file-btn docx" href="A06/A06共學團實踐社群_段落中英對照_20260624.docx" onclick="e=>e.stopPropagation()">中英對照 DOCX</a>
+      </div>
+      <div class="doi-link">DOI: 10.1080/14703297.2025.2507299</div>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  論文研讀庫｜羅靜娟 714630117｜更新日期：2026-06-24<br>
+  <a href="https://github.com/tarshar4242/thesis-library" style="color:#0f3460;">GitHub Repo</a>
+</footer>
+
+<script>
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const cards = document.querySelectorAll('.card');
+  let visible = 0;
+  cards.forEach(card => {
+    const text = (card.textContent + card.dataset.keywords).toLowerCase();
+    const show = !q || text.includes(q);
+    card.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('totalCount').textContent = visible;
+}
+</script>
+</body>
+</html>
