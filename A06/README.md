@@ -21,6 +21,7 @@
 
 | 檔案 | 說明 |
 |------|------|
+| `A06原文_Generative_AI_Education_CoP_at_Mayo_Clinic.pdf` | 論文原文 PDF（可直接在 GitHub 預覽） |
 | `A06共學團實踐社群_研讀簡報_20260624.pdf` | 研讀簡報（PDF 版，可直接在 GitHub 預覽） |
 | `A06共學團實踐社群_研讀簡報_20260624.pptx` | 研讀簡報（可編輯 PowerPoint 版） |
 | `A06共學團實踐社群_段落中英對照_20260624.pdf` | 段落中英對照（PDF 版，可直接在 GitHub 預覽） |
