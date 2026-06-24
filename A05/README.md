@@ -22,6 +22,7 @@
 
 | 檔案 | 說明 |
 |------|------|
+| `A05原文_A_Dynamic_Theory_of_Organizational_Knowledge_Creation_Nonaka1994.pdf` | 論文原文 PDF（Nonaka 1994，可直接在 GitHub 預覽） |
 | `A05野中知識創造_研讀簡報_20260620.pdf` | 研讀簡報（PDF 版，可直接在 GitHub 預覽） |
 | `A05野中知識創造_研讀簡報_20260620.pptx` | 研讀簡報（可編輯 PowerPoint 版） |
 | `A05野中知識創造_段落中英對照_螢光標示_20260620.pdf` | 段落中英對照（螢光標示重點版，可直接在 GitHub 預覽） |
