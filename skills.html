@@ -152,6 +152,34 @@
   .copy-btn:hover { background: var(--c, #8cbd7d); color: #faf8f3; border-color: var(--c, #8cbd7d); }
   .copy-btn.done { background: #8cbd7d; color: #faf8f3; border-color: #8cbd7d; }
 
+  .dl-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .dl-btn {
+    font-family: -apple-system, "Noto Sans TC", sans-serif; font-size: 0.72rem;
+    padding: 4px 10px; border-radius: 2px; text-decoration: none;
+    border: 1px solid; letter-spacing: 0.5px; transition: filter 0.15s;
+  }
+  .dl-btn.view { background: #eef3f8; color: #506880; border-color: #a0b8c8; }
+  .dl-btn.save { background: #eef5ee; color: #5a8060; border-color: #b8d4b0; }
+  .dl-btn:hover { filter: brightness(0.93); }
+  .builtin-badge {
+    display: inline-block; margin-top: 8px;
+    font-family: -apple-system, "Noto Sans TC", sans-serif; font-size: 0.7rem;
+    padding: 3px 10px; border-radius: 2px;
+    background: #e8e4d8; color: #7a7060; border: 1px solid #c8c0a8; letter-spacing: 0.5px;
+  }
+  .pack-bar {
+    max-width: 900px; margin: 20px auto 0; padding: 16px 22px;
+    background: #faf8f3; border: 1.5px solid #d4cfc3; border-left: 4px solid #c8a86a;
+    border-radius: 4px; font-size: 0.85rem; line-height: 1.9; color: #5a5344;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .pack-bar .zip-btn {
+    display: inline-block; background: #8cbd7d; color: #faf8f3;
+    text-decoration: none; padding: 9px 18px; border-radius: 3px;
+    font-size: 0.85rem; letter-spacing: 1px; white-space: nowrap;
+  }
+  .pack-bar .zip-btn:hover { background: #74a86a; }
+
   .skill-bottom {
     padding: 10px 16px 13px;
     background: #f0ece3; border-top: 1px solid #d4cfc3;
@@ -220,6 +248,11 @@
 
 <div class="howto">
   <b>怎麼使用：</b>不用背指令。跟 AI 說話時<b>講出卡片下方的任一關鍵字</b>，對應技能就會自動啟動；想精準指定，輸入 <code>/技能名稱</code>（卡片上的灰底代碼，可按「複製」）。點任何關鍵字也能直接複製、貼進對話框開始用。
+</div>
+
+<div class="pack-bar">
+  <span style="flex:1; min-width:220px;"><b>想帶回去自己用？</b>每張卡都有「📄 SKILL 原文」可看可複製、「⬇️ 下載」存單檔。安裝方式：把檔案放到你電腦的 <code>~/.claude/skills/技能名/SKILL.md</code>，或直接把原文貼給 Claude 請它照著做。標「Claude 內建」的不用安裝。</span>
+  <a class="zip-btn" href="skills-files/tarshar-skills-pack.zip" download>⬇️ 下載全部 41 個 SKILL（zip）</a>
 </div>
 
 <main>
@@ -397,6 +430,24 @@ const SKILLS = [
     kws:['幫我拆任務','怎麼開始做','切里程碑'] },
 ];
 
+// Claude 內建技能：不需安裝
+const BUILTIN = new Set(['anthropic-skills:docx','anthropic-skills:pdf','anthropic-skills:pptx','anthropic-skills:xlsx','anthropic-skills:morning','anthropic-skills:schedule','loop','deep-research','anthropic-skills:consolidate-memory']);
+// 一卡多檔的對應
+const MULTI = {'/post · /ad · /sales · /deck · /report':['post','ad','sales','deck','report'],'brand-setup · brand-check':['brand-setup','brand-check']};
+function dlFiles(s){
+  if (BUILTIN.has(s.name)) return null;
+  if (MULTI[s.name]) return MULTI[s.name];
+  return [s.name.replace('anthropic-skills:','')];
+}
+function dlHtml(s){
+  const files = dlFiles(s);
+  if (!files) return '<span class="builtin-badge">✔ Claude 內建，不需安裝</span>';
+  return '<div class="dl-row">' + files.map(f =>
+    `<a class="dl-btn view" href="skills-files/${f}.md" target="_blank">📄 ${files.length>1 ? f+' ' : ''}SKILL 原文</a>` +
+    `<a class="dl-btn save" href="skills-files/${f}.md" download="${f}.md">⬇️ 下載</a>`
+  ).join('') + '</div>';
+}
+
 const lineGrid = document.getElementById('lineGrid');
 const sectionsEl = document.getElementById('sections');
 let activeLine = null;
@@ -421,6 +472,7 @@ function render(){
             <span class="skill-name">${esc(s.name)}</span>
             <button class="copy-btn" onclick="copyText('${esc(s.name)}', this)">複製</button>
           </div>
+          ${dlHtml(s)}
         </div>
         <div class="skill-bottom">
           <div class="kw-label">這樣開口就會啟動</div>
