@@ -43,8 +43,8 @@
     padding: 4px 16px; font-family: -apple-system, sans-serif;
     font-size: 0.78rem; color: #6b6050; letter-spacing: 1px;
   }
+  .back-links { position: absolute; top: 16px; left: 16px; z-index: 2; display: flex; gap: 8px; flex-wrap: wrap; }
   .back-link {
-    position: absolute; top: 16px; left: 16px; z-index: 2;
     font-size: 0.78rem; color: #6b6050; text-decoration: none;
     border: 1px solid #b0aa96; border-radius: 2px; padding: 5px 12px;
     background: #faf8f3; letter-spacing: 1px;
@@ -197,7 +197,10 @@
 <body>
 
 <header>
-  <a class="back-link" href="index.html">← 回研讀庫</a>
+  <div class="back-links">
+    <a class="back-link" href="https://tarshar4242.github.io/kt-sweet-journey/lessons.html">← 課程筆記館</a>
+    <a class="back-link" href="index.html">📖 論文研讀庫</a>
+  </div>
   <div class="header-eyebrow">Learn AI with Tarshar · Agent Skills</div>
   <h1>SKILL 技能包 <span>·</span> 能力目錄</h1>
   <p>Tarshar 的 AI 助理能做的事，按主線分類｜每個技能都附「怎麼開口」的關鍵字</p>
@@ -446,10 +449,6 @@ function toggleLine(id){
 }
 
 function applyLineFilter(){
-  LINES.forEach(l => {
-    document.getElementById('sec-' + l.id).style.display =
-      (!activeLine || activeLine === l.id) ? '' : 'none';
-  });
   filterSkills();
 }
 
@@ -458,16 +457,15 @@ function filterSkills(){
   let visible = 0;
   LINES.forEach(l => {
     const sec = document.getElementById('sec-' + l.id);
-    if (sec.style.display === 'none') return;
+    const lineOk = !activeLine || activeLine === l.id;
     let secVisible = 0;
     sec.querySelectorAll('.skill').forEach(card => {
       const hit = !q || card.dataset.search.includes(q);
       card.style.display = hit ? '' : 'none';
       if (hit) secVisible++;
     });
-    sec.querySelector('.card-grid').parentElement.style.opacity = secVisible ? 1 : 0.35;
-    sec.style.display = (secVisible || !q) ? (!activeLine || activeLine === l.id ? '' : 'none') : 'none';
-    visible += secVisible;
+    sec.style.display = (lineOk && (secVisible > 0 || !q)) ? '' : 'none';
+    if (lineOk) visible += secVisible;
   });
   document.getElementById('emptyMsg').style.display = visible ? 'none' : 'block';
 }
