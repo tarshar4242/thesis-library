@@ -9,7 +9,7 @@
   </style>
 </head>
 <body>
-  <header class="top"><b>論文文獻閱讀卡</b><a href="index.html">← 回到研讀庫</a><a href="https://tarshar4242-rgb.github.io/ai-course-learning-hub/">所有系列</a></header>
+  <header class="top"><a href="index.html">← 回到研讀庫</a><a href="https://tarshar4242.github.io/kt-sweet-journey/lessons.html">🏠 回筆記館入口</a><b>論文文獻閱讀卡</b><a href="https://tarshar4242-rgb.github.io/ai-course-learning-hub/">所有系列</a></header>
   <div id="app"></div>
   <script src="data.js"></script>
   <script>
@@ -25,5 +25,6 @@
     document.querySelector('#save').onclick=()=>{localStorage.setItem(key,JSON.stringify(collect()));const s=document.querySelector('#saved');s.style.display='block';setTimeout(()=>s.style.display='none',1800)};
     document.querySelector('#export').onclick=()=>{const d=collect(),text=`${p.id}｜${p.title}\n\n閱讀狀態：${d.status}\n\n我的理解\n${d.understanding}\n\n放入論文的位置\n${d.placement}\n\n頁碼／圖表\n${d.page}\n\n支持的主張\n${d.claim}\n\n待問教授／待查\n${d.question}\n`;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));a.download=`${p.id}_我的文獻閱讀筆記.txt`;a.click();URL.revokeObjectURL(a.href)};
   </script>
+  <footer style="text-align:center;padding:26px 16px 36px;color:#718078;font-size:12px;line-height:1.9;border-top:1px solid #dce3dc;background:#f4f3ed">🍀 Learn AI with Tarshar ｜2026 · 論文文獻閱讀系列</footer>
 </body>
 </html>
