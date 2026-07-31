@@ -252,7 +252,7 @@
 
 <div class="pack-bar">
   <span style="flex:1; min-width:220px;"><b>想帶回去自己用？</b>每張卡都有「📄 SKILL 原文」可看可複製、「⬇️ 下載」存單檔。安裝方式：把檔案放到你電腦的 <code>~/.claude/skills/技能名/SKILL.md</code>，或直接把原文貼給 Claude 請它照著做。標「Claude 內建」的不用安裝。</span>
-  <a class="zip-btn" href="skills-files/tarshar-skills-pack.zip" download>⬇️ 下載全部 41 個 SKILL（zip）</a>
+  <a class="zip-btn" href="skills-files/tarshar-skills-pack.zip" download>⬇️ 下載全部 42 個 SKILL（zip）</a>
 </div>
 
 <main>
@@ -397,6 +397,9 @@ const SKILLS = [
   { line:'deliver', ico:'🤝', title:'專案交接說明文件', name:'anthropic-skills:project-handover-doc',
     desc:'任務做完後，把做了什麼寫成給小白看的六段式交接文件，只記真實發生的事。',
     kws:['幫我寫交接文件','工作交接','寫個說明給我之後看'] },
+  { line:'deliver', ico:'🎬', title:'簡報 PDF 變配音影片', name:'pdf-to-video',
+    desc:'丟一份簡報 PDF，每頁自動寫成講課口吻的旁白，配台灣中文語音與逐句同步字幕，組成 1080p 教學影片。超過 20 頁會先做短示範確認風格。',
+    kws:['做成影片','簡報變影片','配音影片','PDF 轉影片','加字幕跟語音做成影片'] },
 
   // ── 制度與日常 ──
   { line:'system', ico:'🏃', title:'對話接力棒', name:'anthropic-skills:chat-checkpoint',
