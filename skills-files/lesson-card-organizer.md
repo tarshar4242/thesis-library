@@ -1,6 +1,6 @@
 ---
-name: tar-lesson-card-manager
-description: Creates, reviews, names, organizes, and archives teaching knowledge cards from initial brief through local and Google Drive delivery. Use when the user says「整理圖卡」, asks for TAR 教案圖卡總管, wants knowledge-card series or execution-manual cards, or needs cards checked, versioned, grouped by case and style, uploaded to TAR_私房圖卡, and verified. Works with Codex and Claude when suitable image-generation and Google Drive tools are available.
+name: lesson-card-organizer
+description: Creates, reviews, names, organizes, and archives teaching knowledge cards from initial brief through local and Google Drive delivery. Use when the user says「整理圖卡」, asks for a 教案整理助理 Agent, wants knowledge-card series or execution-manual cards, or needs cards checked, versioned, grouped by case and style, uploaded to TAR_私房圖卡, and verified. Works with Codex and Claude when suitable image-generation and Google Drive tools are available.
 ---
 
 # TAR 教案圖卡總管

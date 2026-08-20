@@ -252,7 +252,7 @@
 
 <div class="pack-bar">
   <span style="flex:1; min-width:220px;"><b>想帶回去自己用？</b>每張卡都有「📄 SKILL 原文」可看可複製、「⬇️ 下載」存單檔。安裝方式：把檔案放到你電腦的 <code>~/.claude/skills/技能名/SKILL.md</code>，或直接把原文貼給 Claude 請它照著做。標「Claude 內建」的不用安裝。</span>
-  <a class="zip-btn" href="skills-files/tarshar-skills-pack.zip" download>⬇️ 下載全部 42 個 SKILL（zip）</a>
+  <a class="zip-btn" href="skills-files/tarshar-skills-pack.zip" download>⬇️ 下載全部 49 個 SKILL（zip）</a>
 </div>
 
 <main>
@@ -313,18 +313,24 @@ const SKILLS = [
   { line:'brand', ico:'🎴', title:'圖卡 Prompt 五風格工作室', name:'anthropic-skills:tarshar-card-prompt-studio',
     desc:'一個主題產 5 份 ChatGPT 生圖 prompt（莫蘭迪、手帳、復古報紙、京劇東方、工業科技）。',
     kws:['幫我做圖卡','圖卡 prompt','我要 5 種風格','生圖文案'] },
-  { line:'brand', ico:'🗃️', title:'教案圖卡總管', name:'tar-lesson-card-manager',
+  { line:'brand', ico:'🗃️', title:'教案圖卡總管', name:'lesson-card-organizer',
     desc:'圖卡從發想、審稿、命名、分組到上傳 Google Drive 歸檔，一條龍管理。',
     kws:['整理圖卡','圖卡歸檔','知識卡片系列'] },
   { line:'brand', ico:'🏛️', title:'公部門 AI 教案生成器', name:'anthropic-skills:gov-agency-lesson-generator',
     desc:'「AI 開機日」兩小時工作坊教案：開場故事、提示語範本、Before/After、學員卡片，雙版本輸出。',
     kws:['公部門 AI 教案','機關單位的教案','AI 開機日教案','給公務員的 AI 教案'] },
+  { line:'brand', ico:'🏅', title:'提案策略師', name:'proposal-strategist',
+    desc:'把提案當說服文件寫：先提煉 3-5 條勝出主軸，用三幕式敘事架構全文；商業提案與公部門投案（含補助案）兩種模式。',
+    kws:['幫我寫提案','投案','補助申請','計畫書','幫我看這份簡章'] },
   { line:'brand', ico:'🏷️', title:'部落格標題產生器', name:'anthropic-skills:blog-title-generator',
     desc:'貼文章進來，產 4 個知識型部落格風格的繁中標題讓你挑。',
     kws:['幫我取標題','想標題','取個標題'] },
   { line:'brand', ico:'🎤', title:'口條陪跑教練', name:'anthropic-skills:speech-coach',
     desc:'從對話中挑出講得繞的段落，改寫＋給專業關鍵字，存進 Notion 口條資料庫。',
     kws:['口條陪跑','金句提煉','幫我提煉今天的口條','今天的關鍵字'] },
+  { line:'brand', ico:'✒️', title:'散文結構教練', name:'essay-structure-coach',
+    desc:'貼一篇散文、心得長文或電子報草稿，用具名的敘事框架診斷結構哪裡卡；預設只診斷不代筆，保住自己的聲音。',
+    kws:['幫我看結構','這篇哪裡卡','文章診斷','結構診斷','散文教練'] },
   { line:'brand', ico:'📚', title:'學習系列企劃管理', name:'tarshar-learning-series-manager',
     desc:'把文章、課程、影片、論文等任何可重複的素材，變成有網站、有歸檔的學習系列。',
     kws:['做成學習系列','系列網站','延續那個系列'] },
@@ -334,6 +340,12 @@ const SKILLS = [
   { line:'brand', ico:'🗺️', title:'互動學習地圖', name:'anthropic-skills:interactive-learning-template',
     desc:'任何主題畫成可點擊探索的互動 SVG 學習地圖。',
     kws:['互動學習模板','學習地圖','畫成圖','做成互動的'] },
+  { line:'brand', ico:'📽️', title:'逐幀課堂筆記＋互動地圖', name:'lecture-notes-site',
+    desc:'把課程 Drive 資料夾（簡報＋錄影）做成逐幀詳細課堂筆記＋akira 風格互動學習地圖，直接上架課程筆記館。',
+    kws:['做 EP 筆記','課堂筆記','逐幀記錄','做成筆記並上架'] },
+  { line:'brand', ico:'🔭', title:'訪談／研究交叉彙整', name:'research-digest',
+    desc:'把多場訪談、演講、文章交叉拆解成研究彙整頁＋對外電子報；人名與數字要兩個獨立來源對得上才寫，並標出論者的利益位置。',
+    kws:['訪談彙整','研究彙整','演講彙整','交叉拆解'] },
 
   // ── 投資線 ──
   { line:'invest', ico:'📒', title:'投資決策日誌', name:'anthropic-skills:investment-journal',
@@ -405,6 +417,15 @@ const SKILLS = [
   { line:'system', ico:'🏃', title:'對話接力棒', name:'anthropic-skills:chat-checkpoint',
     desc:'對話快滿或要換新對話時，把進度、脈絡、待辦提煉成接力棒文件，新對話無縫接手。',
     kws:['存檔','快滿了','幫我做接力棒','保存進度','先這樣'] },
+  { line:'system', ico:'📔', title:'AI 協作日誌', name:'create-ai-collaboration-journal',
+    desc:'把一段重要協作整理成完整繁中日誌：封面＋導讀四節＋九部結構，保留原始想法、AI 被修正的地方與決策帳，可出小D版手冊。',
+    kws:['AI協作日誌','整理今天的協作歷程','把過程完整留下','記錄AI被我修正的地方'] },
+  { line:'system', ico:'🛤️', title:'共演化日誌（邊做邊記）', name:'ai-coevolution-journal',
+    desc:'工作進行中即時保存想法、決策脈絡、修正與分支，主線不被新點子劫走；是完整協作日誌的素材來源。',
+    kws:['保存決策','這個想法先存起來','記下這次修正'] },
+  { line:'system', ico:'🎛️', title:'ADHD 友善輸出模式', name:'i-have-adhd',
+    desc:'答案與下一步放第一行、多步驟編號列出、每回合報進度、給具體時間估計；說一次整段對話持續生效。',
+    kws:['ADHD模式','開ADHD模式','停止ADHD模式'] },
   { line:'system', ico:'🌅', title:'晨間簡報', name:'anthropic-skills:morning',
     desc:'把今天行程與任務彙整成一份晨間 brief，可設成每個工作日自動跑。',
     kws:['今天有什麼','晨間簡報','morning brief'] },

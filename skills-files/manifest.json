@@ -5,6 +5,11 @@
   "lines": 18
  },
  {
+  "key": "ai-coevolution-journal",
+  "file": "ai-coevolution-journal.md",
+  "lines": 164
+ },
+ {
   "key": "blog-title-generator",
   "file": "blog-title-generator.md",
   "lines": 86
@@ -25,9 +30,19 @@
   "lines": 83
  },
  {
+  "key": "create-ai-collaboration-journal",
+  "file": "create-ai-collaboration-journal.md",
+  "lines": 171
+ },
+ {
   "key": "deck",
   "file": "deck.md",
   "lines": 99
+ },
+ {
+  "key": "essay-structure-coach",
+  "file": "essay-structure-coach.md",
+  "lines": 74
  },
  {
   "key": "fb-deck-post",
@@ -60,6 +75,11 @@
   "lines": 598
  },
  {
+  "key": "i-have-adhd",
+  "file": "i-have-adhd.md",
+  "lines": 155
+ },
+ {
   "key": "interactive-learning-template",
   "file": "interactive-learning-template.md",
   "lines": 117
@@ -90,9 +110,19 @@
   "lines": 213
  },
  {
+  "key": "lecture-notes-site",
+  "file": "lecture-notes-site.md",
+  "lines": 93
+ },
+ {
   "key": "leon-design",
   "file": "leon-design.md",
   "lines": 391
+ },
+ {
+  "key": "lesson-card-organizer",
+  "file": "lesson-card-organizer.md",
+  "lines": 118
  },
  {
   "key": "maya-social",
@@ -135,9 +165,19 @@
   "lines": 74
  },
  {
+  "key": "proposal-strategist",
+  "file": "proposal-strategist.md",
+  "lines": 91
+ },
+ {
   "key": "report",
   "file": "report.md",
   "lines": 79
+ },
+ {
+  "key": "research-digest",
+  "file": "research-digest.md",
+  "lines": 160
  },
  {
   "key": "safety-setup",
@@ -163,11 +203,6 @@
   "key": "stock-signal-reader",
   "file": "stock-signal-reader.md",
   "lines": 160
- },
- {
-  "key": "tar-lesson-card-manager",
-  "file": "tar-lesson-card-manager.md",
-  "lines": 118
  },
  {
   "key": "tarshar-card-prompt-studio",
