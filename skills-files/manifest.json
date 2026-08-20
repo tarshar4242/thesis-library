@@ -120,6 +120,11 @@
   "lines": 391
  },
  {
+  "key": "lesson-card-organizer",
+  "file": "lesson-card-organizer.md",
+  "lines": 118
+ },
+ {
   "key": "maya-social",
   "file": "maya-social.md",
   "lines": 638
@@ -198,11 +203,6 @@
   "key": "stock-signal-reader",
   "file": "stock-signal-reader.md",
   "lines": 160
- },
- {
-  "key": "tar-lesson-card-manager",
-  "file": "tar-lesson-card-manager.md",
-  "lines": 118
  },
  {
   "key": "tarshar-card-prompt-studio",
