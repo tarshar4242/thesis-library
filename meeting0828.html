@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>8/28 Meeting 報告單｜Tarshar</title>
+<style>
+:root{--ink:#26332c;--muted:#718078;--green:#39775b;--deep:#264f3c;--paper:#f4f3ed;--card:#fffefa;--line:#dce3dc;--gold:#c49240;--red:#a74f5c;--blue:#3d6a8a}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;overflow-x:hidden}
+.top{position:sticky;top:0;z-index:30;background:var(--deep);color:#fff;padding:9px clamp(10px,3vw,30px);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.top a{padding:6px 9px;border:1px solid #ffffff44;border-radius:8px;color:#fff;text-decoration:none;font-size:11px;font-weight:900}
+.top b{margin-right:auto;font-size:13px}
+.tabs{position:sticky;top:47px;z-index:25;display:flex;gap:5px;overflow-x:auto;padding:9px clamp(10px,3vw,30px);background:#eef3ed;border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch}
+.tabs button{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 13px;font-size:12px;font-weight:900;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--green);border-color:var(--green);color:#fff}
+.wrap{max-width:820px;margin:auto;padding:16px 13px 70px}
+section{display:none}section.on{display:block}
+h2{margin:0 0 12px;font-family:Georgia,"Noto Serif TC",serif;font-size:21px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:15px;box-shadow:0 6px 16px #243b2c09;margin-bottom:12px}
+.say{border-left:5px solid var(--green);background:#f0f5f0;border-radius:0 12px 12px 0;padding:14px 15px;font-size:15px;line-height:2;margin-bottom:12px}
+.say b{display:block;font-size:11px;color:var(--green);letter-spacing:.06em;margin-bottom:7px}
+.warn{border-left:5px solid var(--red);background:#fdf0f2;border-radius:0 12px 12px 0;padding:13px 15px;margin-bottom:12px}
+.warn b{display:block;color:#8f3d4b;font-size:13px;margin-bottom:6px}
+.warn p{margin:0 0 7px;font-size:13px;line-height:1.8;color:#6d4048}
+.warn p:last-child{margin:0}
+.gold{border-left:5px solid var(--gold);background:#fff8e8;border-radius:0 12px 12px 0;padding:13px 15px;margin-bottom:12px;font-size:13px;line-height:1.8;color:#6e5932}
+.gold b{color:#8a6a24}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:4px 0 2px}
+th,td{border:1px solid #e0e7e0;padding:8px 9px;text-align:left;line-height:1.65;vertical-align:top}
+th{background:#eef3ed;font-weight:900;color:var(--deep);font-size:11.5px}
+.flow td:first-child{white-space:nowrap;font-weight:900;color:var(--green)}
+.flow td:nth-child(2){white-space:nowrap;color:var(--muted);font-weight:800}
+.pill{display:inline-block;font-size:10px;font-weight:950;padding:3px 9px;border-radius:999px;margin:0 5px 5px 0}
+.p-ok{background:#e3f0e6;color:#2c6647}.p-no{background:#f6e2e5;color:#8f3d4b}.p-hm{background:#fdf3e0;color:#8a6a24}.p-in{background:#e5edf4;color:#2f5771}
+.paper h3{margin:0 0 3px;font-size:17px;font-family:Georgia,"Noto Serif TC",serif}
+.paper .cite{font-size:11.5px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+h4{margin:15px 0 7px;font-size:13px;color:var(--green);border-bottom:1px solid #e4eae4;padding-bottom:4px}
+ul{margin:0;padding-left:19px;font-size:13.5px;line-height:1.85;color:#4b5b52}
+ul li{margin-bottom:5px}
+.quote{margin:8px 0;padding:11px 13px;background:#fafbf8;border:1px solid #e4e9e3;border-radius:10px}
+.quote em{display:block;font-style:italic;font-size:12.5px;color:#3f5147;line-height:1.65;margin-bottom:6px}
+.quote span{display:block;font-size:12.5px;color:#5c6b62;line-height:1.7}
+.quote b{display:inline-block;margin-top:6px;font-size:10.5px;color:var(--green);font-weight:950;background:#e8f0e9;padding:2px 8px;border-radius:6px}
+.ask{counter-reset:a}
+.ask .q{position:relative;padding:13px 14px 13px 46px;border:1px solid var(--line);border-radius:12px;background:var(--card);margin-bottom:9px}
+.ask .q::before{counter-increment:a;content:counter(a);position:absolute;left:13px;top:13px;width:23px;height:23px;border-radius:50%;background:var(--green);color:#fff;font-size:12px;font-weight:950;display:flex;align-items:center;justify-content:center}
+.ask .q b{display:block;font-size:14px;margin-bottom:4px}
+.ask .q p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.7}
+footer{text-align:center;padding:22px 14px 40px;color:var(--muted);font-size:11px;line-height:1.8;border-top:1px solid var(--line)}
+@media(max-width:560px){.wrap{padding:13px 9px 60px}.card{padding:12px}table{font-size:11.5px}th,td{padding:6px 7px}}
+</style>
+</head>
+<body>
+<header class="top"><a href="plan.html">← 作戰計畫</a><b>🎤 8/28 Meeting 報告單</b><a href="index.html">研讀庫</a></header>
+<nav class="tabs">
+  <button data-g="flow" class="on">流程</button>
+  <button data-g="a04">A04</button>
+  <button data-g="a09">A09</button>
+  <button data-g="a12">A12</button>
+  <button data-g="risk">⚠️ 要先處理</button>
+  <button data-g="ask">請老師裁示</button>
+  <button data-g="word">說法對照</button>
+</nav>
+<div class="wrap">
+
+<section id="flow" class="on">
+  <h2>當天怎麼進行</h2>
+  <div class="gold"><b>先記住一句話：</b>報告的重點不是「我讀了什麼」，而是「<b>我讀完之後，我的研究做了哪些決定</b>」。而 meeting 的價值，在最後能不能問出清楚的問題。</div>
+  <div class="say"><b>開場（可以直接照念）</b>老師，上次 6/27 我提了想把題目從「知識傳承」收斂成「知識檢索成效」，因為 meeting 延期，還沒討論到。今天我想先確認這個收斂的方向，然後報告我補讀的文獻——當時我自己列出方向轉了以後缺哪一類文獻，這兩篇就是補那個缺口的。</div>
+  <div class="card"><table class="flow">
+    <tr><th>段落</th><th>時間</th><th>要講什麼</th></tr>
+    <tr><td>① 開場定位</td><td>1 分</td><td>上次到哪、今天要確認什麼（照上面念）</td></tr>
+    <tr><td>② 進度回顧</td><td>2 分</td><td>題目現況、39 份文件集已封存去識別化、30 題題庫設計中、目標 3 月口試</td></tr>
+    <tr><td>③ 文獻報告</td><td>9 分</td><td>A04 → A09 → A12，每篇 3 分鐘</td></tr>
+    <tr><td>④ 設計對應</td><td>2 分</td><td>這三篇分別支撐第二章哪一節、第三章哪個決定</td></tr>
+    <tr><td>⑤ 請老師裁示</td><td>留白</td><td>四個問題（見分頁）</td></tr>
+  </table></div>
+  <div class="card">
+    <h4>每篇文獻固定講這五段（＝妳 A04 心得原本的格式）</h4>
+    <ul>
+      <li><b>書目定位</b>：發表在哪、有無同儕審查、DOI（妳教授的標準是「看發表在哪判斷份量」，所以先講這個）</li>
+      <li><b>研究問題與方法</b>：它問什麼、怎麼做、樣本多大</li>
+      <li><b>主要發現＋原文參照</b>：兩三條，各附英文原句與頁碼</li>
+      <li><b>我的方法評讀</b>：它的限制在哪（不是否定，是提醒自己）</li>
+      <li><b>對我研究的用處</b>：轉用到第幾章、支撐哪個決定</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h4>三篇串起來的故事線</h4>
+    <ul>
+      <li><b>A04</b>（前人實證）→ 有人用 SECI 比較過用 AI／不用 AI，發現 AI 幫得了外化、幫不了內化 → <b>所以我把主張守在檢索成效，不宣稱內化</b></li>
+      <li><b>A09</b>（領域缺口）→ 企業 RAG 研究九成停在實驗室驗證，真實部署只有 12.7% → <b>我補這個縫</b></li>
+      <li><b>A12</b>（評估方法）→ 語意搜尋要怎麼客觀評分、黃金查詢集怎麼建 → <b>我的六項指標與 30 題題庫有依據</b></li>
+    </ul>
+  </div>
+</section>
+
+<section id="a04">
+  <h2>A04｜前人實證（已寫好，需補一段）</h2>
+  <div class="card paper">
+    <h3>SECI 模型與 ChatGPT 在高等教育的整合</h3>
+    <div class="cite">Barreto, U. &amp; Abarca, Y. (2025). <i>Heliyon</i>, 11, e42814.<br>DOI: 10.1016/j.heliyon.2025.e42814</div>
+    <span class="pill p-ok">同儕審查</span><span class="pill p-ok">SCIE 收錄</span><span class="pill p-ok">可作主力引用</span>
+    <h4>妳已經寫好的核心（5/28）</h4>
+    <ul>
+      <li>200 名秘魯商管生對半分成用／不用 ChatGPT 兩組，學「財務攤銷」</li>
+      <li><b>外化階段效果顯著</b>：實驗組 64% 達優異，控制組僅 15%</li>
+      <li><b>內化階段反而變差</b>：SECI 預測內化的準確度，沒用 AI 是 63.4%，用了降到 41.3%</li>
+      <li>限制：單一國家、單一主題、ChatGPT 3.5 舊版、信度僅 0.72 左右</li>
+    </ul>
+  </div>
+  <div class="warn">
+    <b>⚠️ 交出去之前一定要補這一段</b>
+    <p>妳這份心得第六節寫著「<b>這正是我決定走質化的理由……訪談十幾到二十人</b>」。但 6/27 的草稿已經整份轉成量化準實驗、研究對象從真人改成文件。</p>
+    <p>兩份文件一起交出去，教授會讀到自相矛盾。<b>不要偷改舊檔</b>——在末尾加一段〈補記：2026-06 方向調整〉。</p>
+  </div>
+  <div class="say"><b>補記可以這樣起頭（內容妳自己寫）</b>本篇心得完成於 2026 年 5 月，當時我判斷採質性訪談。6 月重新評估研究可行性後，我將方法調整為量化準實驗——理由是不依賴受訪者配合、可重複操作、指標可量化。A04 的發現在新方向下依然成立，而且更支持我把研究主張守在「檢索成效」而非「學習內化」。</div>
+</section>
+
+<section id="a09">
+  <h2>A09｜領域現況與缺口</h2>
+  <div class="card paper">
+    <h3>RAG 與 LLM 在企業知識管理的應用</h3>
+    <div class="cite">Karakurt, E. &amp; Akbulut, A. (2026). <i>Applied Sciences</i>, 16(1), 368.<br>DOI: 10.3390/app16010368｜Systematic Review｜Open Access CC BY 4.0<br>Received 2025-11-26／Accepted 2025-12-16／<b>Published online 2025-12-29</b></div>
+    <span class="pill p-ok">同儕審查（MDPI）</span><span class="pill p-ok">系統性回顧 63 篇</span><span class="pill p-hm">年份要小心</span>
+    <div class="gold"><b>⚠️ 年份陷阱：</b>頁眉印 <b>2026</b>（歸在 Vol.16 Issue 1），但線上出版日是 <b>2025-12-29</b>。統一寫 <b>(2026)</b>（MDPI 官方引用格式），第一次出現時加註「published online 29 December 2025」。妳研讀庫原本寫 2025，要改。</div>
+    <h4>研究方法（3 分鐘要講得出來）</h4>
+    <ul>
+      <li>SLR 三階段；6 個資料庫（IEEE、ACM、ScienceDirect、Springer、Wiley、Google Scholar），2015–2025，截止 2025-06-15</li>
+      <li>初檢 500＋篇 → 五條排除條件 → 八題品質評分（滿分 16，低於 10 剔除）→ <b>最終 63 篇</b></li>
+      <li>雙人獨立編碼＋共識會議，<b>但未報告任何一致性係數</b>（沒有 kappa）</li>
+    </ul>
+    <h4>三個關鍵發現（附可引用原文）</h4>
+    <div class="quote">
+      <em>"dense vector retrieval is the dominant standard (80.5%)... often augmented by sparse filtering (e.g., BM25) (55%)"</em>
+      <span>密集向量檢索是主流（80.5%），但常需再輔以 BM25 這類稀疏過濾（55%）處理領域術語。</span>
+      <b>p.13（數據見 Table 9, p.12）</b>
+    </div>
+    <div class="quote">
+      <em>"only 19.5% of studies included human judgments, and just 15.6% measured tangible business impact outcomes"</em>
+      <span>僅 19.5% 的研究納入人工判斷，只有 15.6% 衡量實際商業影響。</span>
+      <b>p.14（數據見 Table 10, p.14）</b>
+    </div>
+    <div class="quote">
+      <em>"Only 13% of the articles reported real world case studies or field trials deploying RAG + LLM prototypes in live corporate environments"</em>
+      <span>僅 13% 的文章報告了在真實企業環境部署原型的實地試驗。</span>
+      <b>p.14（Table 11：k 折 93.6%、真實案例 12.7%）</b>
+    </div>
+    <h4>對我最有用的兩句（引言可直接引）</h4>
+    <div class="quote">
+      <em>"traditional knowledge management systems, which rely on keyword searches or manual categorization, struggle to handle rapidly evolving data or complex queries"</em>
+      <span>仰賴關鍵字搜尋或人工分類的傳統知識管理系統，難以應付快速變動的資料或複雜查詢。</span>
+      <b>p.1</b>
+    </div>
+    <div class="warn">
+      <b>🚨 千萬不能講錯的一句</b>
+      <p><b>A09 並沒有做「關鍵字 vs 語意檢索」的成效對照實驗。</b>Table 9 的 80.5% vs 55% 是「幾篇論文用了它」的次數，不是效能比較。</p>
+      <p>錯誤說法：「A09 證實語意檢索優於關鍵字檢索」→ 這是誤引，口試會被抓。</p>
+      <p>正確說法：「A09 顯示企業 RAG 已以密集向量檢索為主流，並把關鍵字檢索定位為傳統系統的痛點，<b>但該回顧並未報告兩者的成效對照實驗</b>」——這正好是我要補的空缺。</p>
+    </div>
+    <div class="gold"><b>🎁 好消息（研究缺口的鐵證）：</b>A09 全文<b>沒有出現過 tacit knowledge / implicit knowledge</b>（已全文檢索確認）。這 63 篇完全沒有涵蓋「隱性知識外化文件」這個場景——這是我研究定位的最強證據。</div>
+    <h4>它自己承認的限制（p.21）</h4>
+    <ul>
+      <li>排除灰色文獻造成範圍偏誤（但又說 55/63 篇來自會收錄預印本的 Google Scholar——<b>這是可以追問的矛盾</b>）</li>
+      <li>發表偏誤：成功案例比失敗案例更容易被發表</li>
+      <li>因指標異質性，<b>無法做量化 meta-analysis</b></li>
+    </ul>
+    <div class="warn">
+      <b>📌 我自己讀出來的問題（講出來會加分）</b>
+      <p>正文敘述與表格數字系統性對不上：指標 80.5%(正文) vs 81.0%(Table 10)、挑戰 47.6%(Table 13) vs 48.1%(討論)、平台 66.2% vs 66.7%⋯⋯至少五處。</p>
+      <p><b>我引用時一律以表格為準</b>（表格是 n/63 算得出來的，可驗算），並在註釋標明此不一致。</p>
+    </div>
+  </div>
+</section>
+
+<section id="a12">
+  <h2>A12｜評估方法（份量要誠實交代）</h2>
+  <div class="card paper">
+    <h3>Semantic Search Evaluation</h3>
+    <div class="cite">Zheng, C., Wang, J., Zhang, S. A., Kishore, A., &amp; Singh, S. (2024).<br><b>arXiv:2410.21549v1 [cs.IR], 28 Oct 2024</b>｜作者任職 LinkedIn｜全文 6 頁</div>
+    <span class="pill p-no">預印本</span><span class="pill p-no">未經同儕審查證實</span><span class="pill p-in">工業界實務報告</span>
+    <div class="warn">
+      <b>🎯 教授一定會問「這篇發表在哪」——這樣答</b>
+      <p><b>第一層</b>：我手上這份是 arXiv 預印本 v1，<b>PDF 本文完全沒有寫任何期刊或會議名稱</b>。</p>
+      <p><b>第二層</b>：arXiv 摘要頁的 Comments 欄註明被 CIKM 2024 的第 3 屆 Industrial Recommendation Systems <b>Workshop</b> 接受——但那是作者自填欄位，不是出版社背書。</p>
+      <p><b>第三層（份量判斷）</b>：這是 CIKM 底下的 <b>workshop 論文，不是主軌</b>。審查強度遠低於主軌，正文僅 4 頁。它的定位是「LinkedIn 真的在生產環境這樣做」的實務經驗報告，<b>價值在做法可借鏡，不在方法學嚴謹</b>。所以我只借它的評估流程，不引它的結論當證據。</p>
+    </div>
+    <h4>它做了什麼</h4>
+    <ul>
+      <li>在 LinkedIn 內容搜尋上，提出 <b>on-topic rate（切題率）</b>指標</li>
+      <li>管線五步：建黃金查詢集 → 取每題前 K=10 筆 → 組 prompt → 呼叫 GPT-3.5 → 算 OTR</li>
+      <li>判定規則：二元判定=1 <b>且</b>相關性分數 &gt; 0.5 才算切題（p.3）</li>
+      <li>驗證：10 位有經驗的同事各標 50 組 → 人機一致率 <b>81.72%</b>；另有 600 組驗證集 → prompt 正確率 <b>94.5%</b></li>
+    </ul>
+    <h4>對我最有價值的兩段</h4>
+    <div class="quote">
+      <em>"The on-topic decision should not only consider the keyword match between query and post. It should reflect the semantic matching between query intention and the post details."</em>
+      <span>切題判定不應只看查詢與貼文的關鍵字比對，而應反映查詢意圖與貼文細節的語意匹配。</span>
+      <b>p.3, §4.3.2</b>
+    </div>
+    <div class="quote">
+      <em>"Prompt B specifically directs attention to the main subject... it reduces the false positive that might occur due to keyword matching."</em>
+      <span>Prompt B 特別把注意力導向主要主題，因而降低了關鍵字比對造成的偽陽性。</span>
+      <b>p.2, §4.3.1（注意：此處 significantly 是「明顯」，非統計顯著）</b>
+    </div>
+    <div class="gold"><b>🎁 現成的教科書級例證：</b>Table 3 (p.3) 查詢 "promotion tips" 配到自我推銷貼文——<b>關鍵字 tips 命中，但語意不合</b>，分數僅 0.4 判定 0。附錄 Table 4 (p.6) 另有三組 Prompt A/B 判定相反的完整案例。<b>這就是我「關鍵字命中但答非所問」情境的現成英文例證。</b></div>
+    <h4>黃金查詢集怎麼建（＝我 30 題題庫的設計依據）</h4>
+    <ul>
+      <li><b>兩層結構</b>：Golden Set（穩定基準）＋ Open Set（動態熱門）</li>
+      <li>Golden Set 內又分兩型：<b>短關鍵字題</b>（covid-19、resume、work from home）與<b>長句意圖題</b>（how do I negotiate my salary）</li>
+      <li>原文明講長句題才是真正的挑戰：<em>"they pose a greater evaluation challenge, often being lengthier and more intricate in their intent."</em>（p.2）</li>
+      <li>⚠️ 但 A12 <b>未載明</b>黃金集題數、如何決定題數、抽樣方法——<b>我的「30 題」在這裡找不到規模依據</b>，要另找或自行說明理由</li>
+    </ul>
+    <div class="warn">
+      <b>📌 這篇的三個硬傷（我要主動指出，代表我讀得夠細）</b>
+      <p><b>1. 沒有 Limitations 章節</b>——從結論直接跳到參考文獻，全文沒有任何自我設限。</p>
+      <p><b>2. 沒有任何統計</b>——無檢定、無信賴區間、<b>無 inter-rater 係數</b>（只有一句 "a high degree of agreement"，沒有 kappa、沒說樣本幾組）。</p>
+      <p><b>3. 兩處文字瑕疵</b>：p.2 說 prompt 涵蓋 "three perspectives" 卻列了四項；p.3–4 說標註是 "three-step" 卻只列出兩步。這是預印本未經完整校對的實證。</p>
+    </div>
+    <div class="gold"><b>💪 反過來對我有利：</b>A12 只有一句「高度一致」而沒有信度係數。<b>如果我的評分有兩位評分者並報告 kappa，我在這一點上就超過了它。</b>但反過來說，A12 至少有 10 人團隊＋三人複核，所以<b>它不能拿來當「單人評分沒關係」的擋箭牌</b>——我需要第二位評分者。</div>
+  </div>
+</section>
+
+<section id="risk">
+  <h2>⚠️ 8/28 前要先處理</h2>
+  <div class="warn">
+    <b>🔴 1. A04 心得說「走質化」，與現在的量化設計互相矛盾</b>
+    <p>不要偷改舊檔，在末尾加〈補記：2026-06 方向調整〉，主動揭露轉折與理由。<b>主動說的人比藏起來的人可信。</b></p>
+  </div>
+  <div class="warn">
+    <b>🟡 2. 題目有三個版本，要擇一</b>
+    <p>meeting-01：AI 輔助隱性知識擷取與傳承之研究<br>6/27 草稿：AI 輔助知識檢索成效之研究（<b>刻意拿掉「隱性知識」</b>）<br>現行：AI 語意向量知識庫對隱性知識外化文件之檢索成效研究</p>
+    <p><b>建議用現行版</b>——「隱性知識外化文件」精準框住研究對象＝已文件化的經驗知識，正好解決 6/27 自己擔心的定義問題。但要準備好操作型定義。</p>
+  </div>
+  <div class="warn">
+    <b>🟡 3. 指標名稱不一致</b>
+    <p>6/27 草稿寫「語意<b>改寫</b>成功率」，研究架構圖寫「語意<b>改善</b>成功率」。<b>統一用「語意改寫成功率」</b>（指的是查詢語句改寫，不是改善）。</p>
+  </div>
+  <div class="gold">
+    <b>📌 還有一件事要老實面對：</b>我的六項指標裡，<b>查詢時間、查詢次數、語意改寫成功率這三項，A09 和 A12 都沒有</b>。<br>
+    → <b>不可以宣稱這兩篇支持這三項。</b><br>
+    → 正確講法：「現有文獻（A09 Table 10, p.14；A12 §3.2, p.2）的評估體系只涵蓋<b>結果品質</b>，未涵蓋使用者的<b>檢索歷程成本</b>，本研究補此空缺。」<b>這是原創性，不是缺陷。</b>
+  </div>
+</section>
+
+<section id="ask">
+  <h2>請老師裁示（依重要性排序）</h2>
+  <div class="gold">最後三分鐘只做這件事。<b>問不出問題的 meeting 等於白開。</b></div>
+  <div class="ask">
+    <div class="q"><b>6/27 提的收斂，老師認可嗎？</b><p>題目從「知識傳承」收到「知識檢索成效」，研究對象從真人改為文件資料集與查詢任務。這題不解決，後面全部是空談。</p></div>
+    <div class="q"><b>不以真人受訪者為主要資料來源，符合資管碩士論文要求嗎？</b><p>6/27 草稿第十三節第 4 題，因 meeting 延期至今未獲答覆。</p></div>
+    <div class="q"><b>評分者要幾位？</b><p>A12 有 10 人團隊＋三人複核。我若單人評分，信度會被質疑。是否需要第二位評分者並報告一致性係數（Cohen's kappa）？</p></div>
+    <div class="q"><b>文件集是研究者自建的 39 份，單一來源會被質疑代表性嗎？</b><p>需不需要補外部文件？另：30 題的樣本量，做成對 t 檢定／Wilcoxon／McNemar 夠嗎？</p></div>
+  </div>
+</section>
+
+<section id="word">
+  <h2>我的說法 → 教授聽的說法</h2>
+  <div class="gold">妳說「我的說法很片段沒架構」——其實妳的直覺完全對，<b>妳講的五段就是妳 5/28 寫 A04 心得時用的格式</b>。差的只是用詞。</div>
+  <div class="card"><table>
+    <tr><th>我原本說</th><th>報告時這樣講</th><th>差別</th></tr>
+    <tr><td>文獻大綱是什麼</td><td><b>書目定位與研究設計摘要</b></td><td>「大綱」像目錄；要聽的是「夠不夠格被引用、它怎麼做的」</td></tr>
+    <tr><td>重要的論點論述</td><td><b>核心主張與支持證據（附頁碼）</b></td><td>論點配證據才叫論述，附頁碼才是研究生等級</td></tr>
+    <tr><td>我看完的感想</td><td><b>對其研究方法的評讀與限制判斷</b></td><td>「感想」是讀後感，「評讀」才是文獻回顧</td></tr>
+    <tr><td>我自己的應用</td><td><b>對本研究設計的可轉用之處</b></td><td>要明講轉用到第幾章、支撐哪個決定</td></tr>
+    <tr><td>我覺得有相關的地方</td><td><b>與既有文獻的對話關係與研究定位</b></td><td>說成「誰說可行、誰說有限、我補哪個缺口」</td></tr>
+  </table></div>
+  <div class="card">
+    <h4>幾個現場好用的句型</h4>
+    <ul>
+      <li>不確定時：「這一點我還沒查證，我回去確認後補給老師。」<b>（比硬掰安全一百倍）</b></li>
+      <li>被質疑時：「老師的意思是不是⋯⋯？」<b>（先確認問題再回答）</b></li>
+      <li>提缺口時：「既有研究做到 X，但沒有處理 Y，我的研究補 Y。」</li>
+      <li>講限制時：「這篇的限制是 Z，這剛好提醒我自己要注意⋯⋯」</li>
+    </ul>
+  </div>
+</section>
+
+</div>
+<footer>🍀 Learn AI with Tarshar｜2026 · 8/28 指導教授 meeting 報告單<br>所有頁碼經逐頁核對，可直接寫進論文註釋。</footer>
+<script>
+const tabs=[...document.querySelectorAll('.tabs button')],secs=[...document.querySelectorAll('section')];
+tabs.forEach(b=>b.onclick=()=>{
+  tabs.forEach(x=>x.classList.toggle('on',x===b));
+  secs.forEach(s=>s.classList.toggle('on',s.id===b.dataset.g));
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+</script>
+</body>
+</html>

@@ -11,7 +11,7 @@
 | 來源 | arXiv 預印本 |
 | 日期 | 2024-10-28 |
 | arXiv ID | [2410.21549](https://arxiv.org/abs/2410.21549) |
-| 發表場合 | CIKM 2024 第 3 屆 Industrial Recommendation Systems Workshop |
+| 發表場合 | CIKM 2024 第 3 屆 Industrial Recommendation Systems **Workshop**（⚠️ 此資訊來源為 **arXiv 摘要頁 Comments 欄（作者自填）**，PDF 本文完全未載明任何會議或期刊名稱；手上這份為 v1 作者自存版，無 ACM 版權區塊與 ISBN。是 **workshop 而非 CIKM 主軌**，審查強度較低，定位為工業界實務經驗報告） |
 | 文章類型 | 工業應用論文（Industry Track）｜LinkedIn 搜尋系統實作 |
 | 研讀者 | 羅靜娟｜學號 714630117 |
 

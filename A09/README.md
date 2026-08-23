@@ -9,7 +9,7 @@
 |------|------|
 | 作者 | Ehlullah Karakurt & Akhan Akbulut（伊斯坦堡文化大學） |
 | 期刊 | *Applied Sciences*（MDPI） |
-| 出版年份 | 2025（刊出 2025-12-29） |
+| 出版年份 | **引用寫 2026**（MDPI 官方格式：Appl. Sci. **2026**, 16, 368；歸 Vol.16 Issue 1）；線上出版日為 2025-12-29，首次引用時加註 "published online 29 December 2025" |
 | 卷期 | Vol. 16, Issue 1, Article 368 |
 | 期刊等級 | SCIE 收錄｜Q2｜開放取用（Open Access） |
 | DOI | [10.3390/app16010368](https://doi.org/10.3390/app16010368) |
