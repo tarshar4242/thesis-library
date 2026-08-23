@@ -49,6 +49,9 @@ textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #39775b18}
 .grid i.ok{background:var(--green);border-color:var(--green);color:#fff}
 .grid i.cur{border-color:var(--green);border-width:2px;color:var(--green)}
 .note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px}
+.keep{margin-top:12px;padding:12px 13px;border-left:5px solid var(--red);border-radius:0 10px 10px 0;background:#fdf0f2;font-size:12.5px;line-height:1.8;color:#6d4048}
+.keep b{color:#8f3d4b}
+.keep>b:first-child{display:block;font-size:13px;margin-bottom:5px}
 footer{text-align:center;padding:22px 16px 40px;color:var(--muted);font-size:11px;line-height:1.8;border-top:1px solid var(--line)}
 @media(max-width:560px){.wrap{padding:12px 10px 60px}.card{padding:13px}}
 </style>
@@ -96,7 +99,11 @@ footer{text-align:center;padding:22px 16px 40px;color:var(--muted);font-size:11p
       <button id="copy">📋 複製今天的文字</button>
       <button id="expAll">📄 匯出全部（Markdown）</button>
     </div>
-    <div class="note">文字自動存在這台裝置的瀏覽器裡，關掉頁面也不會不見。要放進論文檔時，用上面的按鈕複製或匯出。</div>
+    <div class="keep">
+      <b>⚠️ 這裡是草稿本，不是正本</b>
+      文字只存在<b>這台裝置的這個瀏覽器</b>裡——換手機看不到，清瀏覽器資料就沒了。<br>
+      <b>每天寫完務必做這一步：</b>按「📋 複製今天的文字」→ 貼進妳的 Google 文件（放「1.🎯畢業論文」資料夾）。三秒鐘，換來永遠不會弄丟。
+    </div>
   </section>
 
   <section class="card">
