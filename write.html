@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>每天30分鐘・論文寫作陪跑｜Tarshar</title>
+<style>
+:root{--ink:#26332c;--muted:#718078;--green:#39775b;--deep:#264f3c;--paper:#f4f3ed;--card:#fffefa;--line:#dce3dc;--gold:#c49240;--red:#a74f5c}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;overflow-x:hidden}
+.top{position:sticky;top:0;z-index:20;background:var(--deep);color:#fff;padding:10px clamp(12px,4vw,40px);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.top a{padding:7px 10px;border:1px solid #ffffff44;border-radius:8px;color:#fff;text-decoration:none;font-size:11px;font-weight:900}
+.top b{margin-right:auto;font-size:14px}
+.wrap{max-width:760px;margin:auto;padding:16px 14px 70px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 6px;text-align:center;min-width:0}
+.stat strong{display:block;font-size:clamp(18px,4.5vw,26px);color:var(--green);font-family:Georgia,serif}
+.stat span{font-size:10px;color:var(--muted);font-weight:800}
+.rules{background:#fff8e8;border-left:5px solid var(--gold);border-radius:10px;padding:11px 13px;font-size:12px;line-height:1.75;color:#6e5932;font-weight:700;margin-bottom:14px}
+.rules b{color:#8a6a24}
+.nav{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.nav button{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:8px 12px;font-size:12px;font-weight:900;color:var(--green);cursor:pointer}
+.nav button:disabled{opacity:.35;cursor:default}
+.nav select{flex:1;min-width:0;height:38px;padding:0 8px;border:1px solid var(--line);border-radius:9px;background:var(--card);font-weight:800;font-size:12px;color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 6px 18px #243b2c0a;margin-bottom:12px}
+.stage{display:inline-block;font-size:10px;font-weight:950;padding:3px 9px;border-radius:999px;background:#e3f0e6;color:#2c6647;margin-bottom:8px}
+.stage.s2{background:#e5edf4;color:#2f5771}.stage.s3{background:#f6e9ec;color:#8a4552}
+h2{margin:0 0 4px;font-family:Georgia,"Noto Serif TC",serif;font-size:19px;line-height:1.35}
+.dayno{font-size:11px;color:var(--muted);font-weight:900;letter-spacing:.05em}
+.qbox{margin:12px 0 0;padding:13px;border-radius:11px;background:#f0f5f0;border:1px solid #dbe7dc}
+.qbox p{margin:0 0 8px;font-size:14px;line-height:1.8;color:#2f4438;font-weight:700}
+.qbox p:last-child{margin:0}
+.why{margin-top:9px;font-size:12px;color:var(--muted);line-height:1.7}
+.starter{margin-top:11px;padding:10px 12px;border-left:4px solid var(--green);background:#fbfcf9;border-radius:0 9px 9px 0;font-size:13px;color:#4b5b52;line-height:1.7}
+.starter b{display:block;font-size:10px;color:var(--green);margin-bottom:3px;letter-spacing:.05em}
+.writebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.writebar .cnt{font-size:12px;font-weight:900;color:var(--muted);margin-right:auto}
+.writebar .cnt em{font-style:normal;color:var(--green);font-size:15px}
+.timer{font-family:Georgia,serif;font-size:15px;font-weight:900;color:var(--deep);background:#eaf0e9;border-radius:8px;padding:5px 10px;min-width:64px;text-align:center}
+.writebar button{border:0;border-radius:8px;padding:8px 11px;font-size:11px;font-weight:950;cursor:pointer;color:#fff;background:var(--green)}
+.writebar button.ghost{color:var(--green);background:#fff;border:1px solid var(--line)}
+textarea{width:100%;min-height:230px;padding:14px;border:1px solid #cdd7cf;border-radius:12px;font:inherit;font-size:15px;line-height:1.95;resize:vertical;outline:0;background:#fff;color:var(--ink)}
+textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px #39775b18}
+.done{display:flex;align-items:center;gap:9px;margin-top:11px;padding:10px 12px;border:1px solid #e4e9e3;border-radius:10px;background:#fbfcf9;font-size:13px;font-weight:800;cursor:pointer}
+.done input{width:18px;height:18px;accent-color:var(--green)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.tools button{flex:1;min-width:130px;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:11px;font-size:12px;font-weight:900;color:var(--green);cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:5px;margin-top:10px}
+.grid i{display:flex;align-items:center;justify-content:center;height:34px;border:1px solid var(--line);border-radius:8px;background:#fff;font-style:normal;font-size:11px;font-weight:900;color:var(--muted);cursor:pointer}
+.grid i.ok{background:var(--green);border-color:var(--green);color:#fff}
+.grid i.cur{border-color:var(--green);border-width:2px;color:var(--green)}
+.note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px}
+footer{text-align:center;padding:22px 16px 40px;color:var(--muted);font-size:11px;line-height:1.8;border-top:1px solid var(--line)}
+@media(max-width:560px){.wrap{padding:12px 10px 60px}.card{padding:13px}}
+</style>
+</head>
+<body>
+<header class="top"><a href="plan.html">← 作戰計畫</a><b>✍️ 每天30分鐘</b><a href="index.html">研讀庫</a></header>
+
+<div class="wrap">
+  <div class="stats">
+    <div class="stat"><strong id="sDone">0</strong><span>已完成天數</span></div>
+    <div class="stat"><strong id="sWords">0</strong><span>累計字數</span></div>
+    <div class="stat"><strong id="sStreak">0</strong><span>連續天數</span></div>
+  </div>
+
+  <div class="rules">
+    <b>三條鐵則</b>（寫之前先念一次）<br>
+    1. 前 20 分鐘<b>只准往前寫，不准回頭改</b>——改字是明天的事。<br>
+    2. 想不到就直接打「<b>我卡在這裡，因為……</b>」，那也算字數。<br>
+    3. <b>字數沒到也算完成</b>，有坐下來寫就打勾。連續比完美重要。
+  </div>
+
+  <div class="nav">
+    <button id="prev">◀</button>
+    <select id="pick"></select>
+    <button id="next">▶</button>
+  </div>
+
+  <section class="card">
+    <span class="stage" id="stage"></span>
+    <div class="dayno" id="dayno"></div>
+    <h2 id="title"></h2>
+    <div class="qbox" id="qbox"></div>
+    <div class="why" id="why"></div>
+    <div class="starter"><b>可以這樣開頭（不喜歡就自己換）</b><span id="starter"></span></div>
+
+    <div class="writebar">
+      <div class="cnt">今天寫了 <em id="cnt">0</em> 字　／　目標 <span id="goal"></span> 字</div>
+      <div class="timer" id="timer">30:00</div>
+      <button id="tbtn">開始計時</button>
+    </div>
+    <textarea id="ta" placeholder="就從這裡開始打字。想到什麼寫什麼，句子不通順沒關係。"></textarea>
+    <label class="done"><input type="checkbox" id="dbox"><span>今天這一題，我寫完了 ✅</span></label>
+
+    <div class="tools">
+      <button id="copy">📋 複製今天的文字</button>
+      <button id="expAll">📄 匯出全部（Markdown）</button>
+    </div>
+    <div class="note">文字自動存在這台裝置的瀏覽器裡，關掉頁面也不會不見。要放進論文檔時，用上面的按鈕複製或匯出。</div>
+  </section>
+
+  <section class="card">
+    <div class="dayno">30 天總覽（點數字跳過去）</div>
+    <div class="grid" id="grid"></div>
+  </section>
+</div>
+
+<footer>🍀 Learn AI with Tarshar｜2026 · 論文寫作陪跑<br>每天 30 分鐘，30 天後妳會有第一章與第二章的初稿。</footer>
+
+<script>
+const DAYS=[
+{s:1,t:"我為什麼想做這個題目",g:350,
+ q:["這三年，妳自己寫了 SOP、教案、日誌、交接文件，加起來 39 份、二十幾萬字。當初為什麼要一直寫？","寫完之後，妳實際遇到了什麼事？"],
+ w:"第一章的第一段不是理論，是「妳為什麼站在這裡」。口試委員最想聽的就是這個。",
+ st:"我會研究這個題目，是因為我自己就是那個把知識寫下來、卻常常找不回來的人。"},
+{s:1,t:"「明明寫過卻找不到」的那一次",g:300,
+ q:["具體回想一次經驗：那天妳在找什麼？","找了多久、用了什麼方法？最後找到了沒有、怎麼解決的？"],
+ w:"抽象的痛點沒人有感覺，具體的場景才有說服力。這一段之後會變成研究背景裡最好看的部分。",
+ st:"印象最深的一次是……"},
+{s:1,t:"這只是我一個人的問題嗎",g:300,
+ q:["妳教過的學員、共事過的同事，有沒有一樣的狀況？","他們平常都怎麼處理？（憑記憶、問人、還是重寫一份？）"],
+ w:"要從「我的困擾」升級成「值得研究的現象」，就得證明別人也這樣。",
+ st:"這不只是我個人的困擾。"},
+{s:1,t:"AI 出現以後，什麼變了",g:350,
+ q:["以前找自己的資料靠什麼？（Ctrl+F、資料夾、記憶）","現在有 NotebookLM 這類工具之後，妳感覺哪裡真的變好？","哪裡還是不行、還是會失望？"],
+ w:"「為什麼現在做這個研究」的答案就在這一題。也順便誠實面對 AI 的限制，這是加分不是扣分。",
+ st:"生成式 AI 普及之後，檢索這件事出現了新的可能，但……"},
+{s:1,t:"所以我到底想知道什麼",g:300,
+ q:["用一句話講完妳想知道的事——講給不懂研究的朋友聽的那種講法。","再拆成三、四個小問題。不要用學術詞。"],
+ w:"研究問題的正式版明天再處理。今天先確定妳自己心裡那句話是什麼。",
+ st:"我想知道的其實很單純：……"},
+{s:1,t:"把前五天串成 1.1（不寫新的）",g:1200,
+ q:["把 Day1–Day5 依序讀一遍，用剪貼的方式串成連續的一段。","哪裡讀起來斷掉，就補一句「所以」「但是」「因此」。"],
+ w:"今天不創作，只做接合。妳會發現字數其實早就夠了——這就是「寫得出來」到「寫得完整」的那一步。",
+ st:"（把前五天的文字貼進來，開始接。）"},
+{s:1,t:"研究問題與目的（正式版）",g:400,
+ q:["把 Day5 的白話問題改寫成四條正式研究問題（準確度／完整度／效率／語意改善）。","每一條後面加一句：回答這題有什麼用？"],
+ w:"這一節口試委員會逐字唸。四條問題要能各自對應到妳之後量到的數字。",
+ st:"基於上述研究動機，本研究擬回答以下研究問題："},
+{s:1,t:"我做什麼、不做什麼",g:400,
+ q:["範圍：哪些文件、幾題、什麼工具、什麼時間做完？","限制：哪些事這次不處理？（不訪談人、不比較所有 AI 工具、文件來自單一研究者）"],
+ w:"主動說出限制的人，口試時最難被攻擊。被問到才承認的人最慘。",
+ st:"本研究的範圍限定在……"},
+{s:1,t:"名詞釋義（四個詞）",g:400,
+ q:["用自己的話定義：①隱性知識 ②隱性知識外化文件 ③語意向量檢索 ④傳統關鍵字搜尋。","每個 80–100 字。寫完在後面標『要補 A05 頁碼』這種待辦。"],
+ w:"「隱性知識外化文件」是妳自創的操作型定義，這是口委必問第一題。今天先寫妳的版本。",
+ st:"本研究所稱之「隱性知識外化文件」，係指……"},
+{s:1,t:"第一章通讀（只標記，不改）",g:200,
+ q:["從頭讀一次，標三種記號：😐 讀起來卡的句子、❓ 沒有證據的斷言、✂️ 可以刪的廢話。","把 ❓ 的部分列成一張『待補證據清單』寫在下面。"],
+ w:"第一章到今天就有初稿了。標記不是修改，是把問題看見——這張清單就是妳接下來要在第二章補的東西。",
+ st:"待補清單：1. "},
+
+{s:2,t:"SECI 用自己的話講一遍",g:400,
+ q:["不要看原文。把野中的四個轉化（社會化、外化、結合、內化）寫出來。","每一個配一個妳自己生活或教學裡的例子。"],
+ w:"寫不出來的那一個，就是妳要回去重讀 A05 的地方。這是最誠實的自我檢測。",
+ st:"野中郁次郎認為，知識在組織裡是透過四種轉化不斷循環的。"},
+{s:2,t:"哪一個轉化是我的主場",g:300,
+ q:["我的研究對象是『已經外化出來的文件』。那我到底在研究外化、結合、還是內化？","為什麼？講出理由。"],
+ w:"這一題答不清楚，整篇論文的理論定位就會浮。答清楚了，第二章就有主軸。",
+ st:"本研究聚焦的並非外化的過程，而是……"},
+{s:2,t:"2.1 開頭：知識管理為什麼重要",g:400,
+ q:["為什麼組織要做知識管理？講一個具體後果（人走了知識就沒了、新人重複踩坑）。"],
+ w:"文獻回顧不是文獻摘要的排排站。第一段要先讓讀者知道『這個領域在乎什麼』。",
+ st:"知識管理之所以成為組織關注的課題，源自於……"},
+{s:2,t:"A05 野中：他的貢獻與我的用法",g:400,
+ q:["野中 1994 這篇最重要的主張是什麼？","我要拿它來支撐我論文的哪一句話？"],
+ w:"每引一篇文獻，都要說得出「我為什麼引它」。說不出來就是湊字數。",
+ st:"Nonaka（1994）提出……本研究援引此一觀點，用以……"},
+{s:2,t:"A04：SECI 遇上 ChatGPT",g:350,
+ q:["A04 把 SECI 接到生成式 AI，它發現了什麼？","跟我的題目有什麼關係、又有什麼不一樣？"],
+ w:"『有什麼不一樣』比『有什麼關係』更重要——不一樣的地方就是妳的研究縫隙。",
+ st:"A04 的研究顯示……但該研究關注的是……，與本研究的差異在於……"},
+{s:2,t:"A10：AI 怎麼改變了人的找知識行為",g:350,
+ q:["A10 訪談 11 位開發者，發現了什麼行為轉變？","這個發現支持我研究的哪一個假設？它的限制是什麼？"],
+ w:"這是質化研究，妳做的是量化。互補關係要寫清楚，別假裝它能證明妳的結論。",
+ st:"Kirchner 等人（2025）以質化訪談發現……"},
+{s:2,t:"A11：機器維度——理論要修訂了",g:400,
+ q:["A11 為什麼說傳統知識生成模型要加一個『機器維度』？","如果 AI 也是知識生成的參與者，那 SECI 要怎麼改？我同意嗎？"],
+ w:"這一題是妳整篇論文最有理論味道的地方。有自己的立場，論文層次就不一樣。",
+ st:"Cerchione 等人（2025）主張……對此，本研究認為……"},
+{s:2,t:"2.2 收尾：AI 改變了 SECI 的什麼",g:400,
+ q:["把 Day14–17 收成一段結論：生成式 AI 進來之後，SECI 的哪一環變了？哪一環沒變？"],
+ w:"每一節結尾都要有一句『所以呢』。沒有結論句的文獻回顧，讀起來像目錄。",
+ st:"綜合上述文獻可知，……"},
+{s:2,t:"A09：RAG 是怎麼運作的",g:400,
+ q:["用自己的話講一遍：語意向量檢索是怎麼找到答案的？（不用寫公式，寫給不懂的人聽）","A09 指出目前研究的缺口是什麼？"],
+ w:"技術要能用白話講清楚——這正好是妳的強項，也是口試時的加分題。",
+ st:"語意向量檢索的運作原理，簡單來說是……"},
+{s:2,t:"A12：語意搜尋怎麼評估",g:350,
+ q:["A12 用什麼方法判斷搜尋結果好不好？（黃金查詢集、Top-K、LLM 判斷、人工驗證）","我的六個指標，哪幾個是從這裡來的？"],
+ w:"這一段直接餵給第三章。寫的時候就想著：我的評分規則能不能站在它肩膀上。",
+ st:"Zheng 等人（2024）提出的離線評估流程包含……"},
+{s:2,t:"2.3 兩種檢索的差別在哪",g:400,
+ q:["關鍵字搜尋跟語意搜尋，本質差在哪一步？","什麼情況下語意搜尋應該贏？什麼情況下它反而會輸？"],
+ w:"敢寫『它可能會輸』的人，研究設計才是誠實的。這段也是妳 RQ4 的理論基礎。",
+ st:"傳統關鍵字搜尋以字面比對為基礎，因此……"},
+{s:2,t:"補讀 A07（NLP × 隱性知識）",g:350,
+ q:["先讀 A07，然後寫：這篇在做什麼？跟我的題目重疊在哪、不同在哪？","記下至少一筆頁碼證據。"],
+ w:"A07 是四星文獻裡唯一還沒讀的。跟妳題目最貼，不能空著進口試。",
+ st:"A07 探討的是……"},
+{s:2,t:"中文文獻兩篇進文",g:350,
+ q:["從 B01–B04 挑兩篇讀完，各寫 150 字：它做了什麼、我引它做什麼。"],
+ w:"中文碩論的第二章要有中文對話。全是英文文獻，口委會問「台灣的研究呢」。",
+ st:"在中文相關研究方面，……"},
+{s:2,t:"2.4 研究缺口：別人沒做的是什麼",g:450,
+ q:["把整章讀一遍，回答：既有研究做到哪裡？哪一塊沒人做？","為什麼我這個研究剛好補上那一塊？"],
+ w:"這一節是整篇論文的關節。缺口說得夠準，口委就會覺得這個研究非做不可。",
+ st:"綜合上述，既有研究雖已……然而，仍缺乏……"},
+{s:2,t:"第二章通讀＋補洞",g:300,
+ q:["整章讀一遍，一樣標 😐❓✂️。","把 ❓ 列成清單：哪幾句還缺頁碼證據？"],
+ w:"到今天，第一章跟第二章都有初稿了。這是大多數研究生卡半年的地方，妳三週走完。",
+ st:"第二章待補清單：1. "},
+
+{s:3,t:"研究設計：為什麼用準實驗",g:400,
+ q:["為什麼我用準實驗而不是問卷或訪談？","『準』實驗跟真實驗差在哪？我這個設計的『準』體現在哪裡？"],
+ w:"方法選擇要有理由，不能只說「老師叫我這樣做」。",
+ st:"本研究採量化準實驗設計，理由在於……"},
+{s:3,t:"文件集怎麼來的、為什麼可信",g:450,
+ q:["39 份文件是怎麼挑的？五種類型各是什麼？","我做了哪些去識別化處理？為什麼剔除那三份？"],
+ w:"妳已經有完整的查核紀錄與去敏處理帳了——今天只是把它翻譯成論文的語言。",
+ st:"本研究之文件集共 39 份，來源為研究者自 2026 年起累積之……"},
+{s:3,t:"六個指標怎麼量",g:450,
+ q:["逐一寫：每個指標的定義、怎麼算、誰來評分。","「語意改善成功率」是自創的，要多寫兩句為什麼需要它。"],
+ w:"這是口委必問第四題。寫得越具體，被問倒的機率越低。",
+ st:"本研究採用六項成效指標，分述如下："},
+{s:3,t:"實驗怎麼跑：兩組流程",g:400,
+ q:["實驗組跟對照組各怎麼操作？","怎麼避免『先做的那組占便宜』（順序效應）？"],
+ w:"公平性是對照組設計的命門。想好了寫下來，口試就有底氣。",
+ st:"實驗程序分為兩個階段……"},
+{s:3,t:"30 天回顧：我寫了幾個字、還缺什麼",g:300,
+ q:["看一下上面的累計字數。三十天前妳說「我不知道要怎麼寫」。","現在還缺什麼？下一個 30 天要處理哪三件事？"],
+ w:"研究真正的轉折，是妳開始能用自己的話說出妳怎麼看這個問題。到這裡，妳已經在那個位置了。",
+ st:"三十天下來，我完成了……還缺的是……"}
+];
+const STAGE=["","第一章 · 緒論","第二章 · 文獻探討","第三章 · 研究方法"];
+const KEY='thesis-write-v1';
+let store={}; try{store=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+let cur=0;
+const $=id=>document.getElementById(id);
+const pick=$('pick');
+DAYS.forEach((d,i)=>{const o=document.createElement('option');o.value=i;o.textContent=`Day ${i+1}　${d.t}`;pick.appendChild(o)});
+
+function chars(s){return (s||'').replace(/\s/g,'').length}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+function rec(i){return store['d'+i]||(store['d'+i]={text:'',done:false})}
+
+function render(){
+  const d=DAYS[cur],r=rec(cur);
+  $('stage').textContent=STAGE[d.s];$('stage').className='stage'+(d.s>1?' s'+d.s:'');
+  $('dayno').textContent=`DAY ${cur+1} / 30`;
+  $('title').textContent=d.t;
+  $('qbox').innerHTML=d.q.map(q=>`<p>◆ ${q}</p>`).join('');
+  $('why').textContent='💡 '+d.w;
+  $('starter').textContent='「'+d.st+'」';
+  $('goal').textContent=d.g;
+  $('ta').value=r.text;$('dbox').checked=r.done;
+  $('cnt').textContent=chars(r.text);
+  $('prev').disabled=cur===0;$('next').disabled=cur===DAYS.length-1;
+  pick.value=cur;
+  const g=$('grid');g.innerHTML='';
+  DAYS.forEach((_,i)=>{const el=document.createElement('i');el.textContent=i+1;
+    if(rec(i).done)el.classList.add('ok'); if(i===cur)el.classList.add('cur');
+    el.onclick=()=>{cur=i;render();window.scrollTo({top:0,behavior:'smooth'})};g.appendChild(el)});
+  let done=0,words=0,streak=0,run=0;
+  DAYS.forEach((_,i)=>{const x=rec(i);words+=chars(x.text);if(x.done){done++;run++;if(run>streak)streak=run}else run=0});
+  $('sDone').textContent=done;$('sWords').textContent=words.toLocaleString();$('sStreak').textContent=streak;
+}
+$('ta').addEventListener('input',e=>{rec(cur).text=e.target.value;$('cnt').textContent=chars(e.target.value);save();
+  let words=0;DAYS.forEach((_,i)=>words+=chars(rec(i).text));$('sWords').textContent=words.toLocaleString()});
+$('dbox').addEventListener('change',e=>{rec(cur).done=e.target.checked;save();render()});
+$('prev').onclick=()=>{if(cur>0){cur--;render()}};
+$('next').onclick=()=>{if(cur<DAYS.length-1){cur++;render()}};
+pick.onchange=e=>{cur=+e.target.value;render()};
+
+$('copy').onclick=async()=>{const t=$('ta').value;
+  try{await navigator.clipboard.writeText(t);$('copy').textContent='✅ 已複製';}
+  catch(e){$('ta').select();document.execCommand('copy');$('copy').textContent='✅ 已複製';}
+  setTimeout(()=>$('copy').textContent='📋 複製今天的文字',1600)};
+$('expAll').onclick=async()=>{
+  let md='# 論文寫作 30 天草稿\n\n';
+  DAYS.forEach((d,i)=>{const r=rec(i);if(!chars(r.text))return;
+    md+=`## Day ${i+1}｜${d.t}\n\n${r.text}\n\n---\n\n`});
+  try{await navigator.clipboard.writeText(md);$('expAll').textContent='✅ 全文已複製到剪貼簿';}
+  catch(e){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown;charset=utf-8'}));a.download='論文寫作草稿.md';a.click();$('expAll').textContent='✅ 已下載';}
+  setTimeout(()=>$('expAll').textContent='📄 匯出全部（Markdown）',2200)};
+
+let left=1800,tick=null;
+function show(){const m=String(Math.floor(left/60)).padStart(2,'0'),s=String(left%60).padStart(2,'0');$('timer').textContent=m+':'+s}
+$('tbtn').onclick=()=>{
+  if(tick){clearInterval(tick);tick=null;$('tbtn').textContent='繼續';return}
+  $('tbtn').textContent='暫停';
+  tick=setInterval(()=>{left--;show();if(left<=0){clearInterval(tick);tick=null;$('timer').textContent='時間到 🎉';$('tbtn').textContent='再來30分';left=1800}},1000)};
+show();render();
+</script>
+</body>
+</html>
