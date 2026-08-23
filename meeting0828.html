@@ -61,7 +61,7 @@ footer{text-align:center;padding:22px 14px 40px;color:var(--muted);font-size:11p
 <div class="hdr">
   <header class="top"><a href="plan.html">← 作戰計畫</a><b>🎤 8/28 Meeting 報告單</b><a href="index.html">研讀庫</a></header>
   <nav class="tabs">
-    <a href="#flow" data-g="flow" class="on">流程</a>
+    <a href="#flow" data-g="flow" class="on">快答＋流程</a>
     <a href="#a04" data-g="a04">A04</a>
     <a href="#a09" data-g="a09">A09</a>
     <a href="#a12" data-g="a12">A12</a>
@@ -75,15 +75,46 @@ footer{text-align:center;padding:22px 14px 40px;color:var(--muted);font-size:11p
 
 <section id="flow" class="on">
   <h2>當天怎麼進行</h2>
-  <div class="gold"><b>先記住一句話：</b>報告的重點不是「我讀了什麼」，而是「<b>我讀完之後，我的研究做了哪些決定</b>」。而 meeting 的價值，在最後能不能問出清楚的問題。</div>
-  <div class="say"><b>開場（可以直接照念）</b>老師，上次 6/27 我提了想把題目從「知識傳承」收斂成「知識檢索成效」，因為 meeting 延期，還沒討論到。今天我想先確認這個收斂的方向，然後報告我補讀的文獻——當時我自己列出方向轉了以後缺哪一類文獻，這兩篇就是補那個缺口的。</div>
+  <div class="warn">
+    <b>⚠️ 2026-08-24 更新：教授實際問法比原規劃輕，文獻收在 3 篇</b>
+    <p>鄭教授在 LINE 群補了具體問法：「還是請大家報告主題面向，還有到目前有沒有看到哪些學術文章跟主題面向有關的？有沒有學術模型有想加入研究的（這個沒想法沒關係）」</p>
+    <p>實際出席：<b>3 位學生（含妳）＋ 2 位教授</b>，30 分鐘 3 人分，<b>每人約 5–8 分鐘</b>。<b>其他同學可能只準備一篇文獻，妳的文獻數量收在 3 篇以內</b>，不要比別人準備得誇張。</p>
+    <p><b>下面是上場先講的三篇精簡版</b>，原本準備的五段式深度報告與 A12 改列備用，教授或陳教授追問某一篇時再拉出來用（見 A04／A09／A12／A13 各分頁）。</p>
+  </div>
+  <div class="card">
+    <h4>✅ 上場講這個：3 篇精簡版（每篇約 1.5–2 分，總長約 5–7 分）</h4>
+    <div class="say"><b>Q1 主題面向（約 20 秒）</b>我的題目是《AI 語意向量知識庫對隱性知識外化文件之檢索成效研究：與傳統關鍵字搜尋之比較》，用量化準實驗比較 NotebookLM（語意向量檢索）與傳統關鍵字搜尋，在 39 份已去識別化的內部文件上的檢索成效。</div>
+    <div style="margin:10px 0"><b style="font-size:13px;color:var(--green)">Q2 目前看到的相關學術文章（3 篇＝範圍邊界＋領域缺口＋理論根基，各講三句：做什麼／關鍵發現／用途）</b></div>
+    <div class="card" style="margin:0 0 8px;background:#fafbf8">
+      <b style="font-size:13px">A04　範圍邊界</b>
+      <p style="font-size:13px;line-height:1.8;margin:4px 0">Barreto &amp; Abarca (2025)，<i>Heliyon</i>，SCIE 收錄同儕審查。200 名學生分組實驗：外化階段實驗組 64% 達優異、對照組僅 15%；內化階段反而降（63.4%→41.3%）。<br><b>用途：</b>讓我把主張守在「檢索成效」，不宣稱 AI 能促進內化或知識傳承。</p>
+    </div>
+    <div class="card" style="margin:0 0 8px;background:#fafbf8">
+      <b style="font-size:13px">A09　領域缺口</b>
+      <p style="font-size:13px;line-height:1.8;margin:4px 0">Karakurt &amp; Akbulut (2026)，<i>Applied Sciences</i>，同儕審查系統性回顧 63 篇。指出企業 RAG 研究多停留在實驗室驗證，真實部署與商業成效評估仍少。<br><b>用途：</b>語意向量檢索在真實隱性知識外化文件上的成效，目前沒有人量過——我補這個縫。</p>
+    </div>
+    <div class="card" style="margin:0 0 8px;background:#fff8e8">
+      <b style="font-size:13px">A13　理論根基（這週剛讀完）</b>
+      <p style="font-size:13px;line-height:1.8;margin:4px 0">Furnas 等人 (1987)，<i>Communications of the ACM</i>，ACM 同儕審查經典。任兩人替同一對象取同一個名字的機率 &lt;0.20，只認單一關鍵字的系統八到九成查詢會失敗。<br><b>用途：</b>把研究動機從個人經驗升級成四十年文獻史的既有問題；它當年的藥方（人工掛別名）做不到，語意向量檢索等於自動化它，但成效沒人量過——這就是我的缺口。</p>
+    </div>
+    <div class="say"><b>Q3 想加入的學術模型（約 20 秒，可以誠實說沒有）</b>目前沒有想再加入新的理論模型，SECI 還是核心骨架。若評分規則需要更嚴謹的方法，我會參考語意搜尋評估相關文獻，但那是評估方法、不是理論模型。</div>
+  </div>
+  <div class="card">
+    <h4>若有空檔，補問一句收斂確認（20 秒，不要硬插）</h4>
+    <div class="say">上次 6/27 我提了把題目從「知識傳承」收斂成「知識檢索成效」，這個方向老師認可嗎？</div>
+    <p style="font-size:12.5px;color:var(--muted);margin:4px 0 0">只在還有時間、教授沒接著問下一位同學時補問。這次沒機會問到，下次 meeting 或私訊再問也不遲。</p>
+  </div>
+
+  <h2 style="margin-top:26px">備用：原規劃的 15 分鐘深度版</h2>
+  <div class="gold"><b>先記住一句話：</b>報告的重點不是「我讀了什麼」，而是「<b>我讀完之後，我的研究做了哪些決定</b>」。教授追問某一篇時，用這套架構回答。</div>
+  <div class="say"><b>開場（教授深入問時可以這樣接）</b>老師，上次 6/27 我提了想把題目從「知識傳承」收斂成「知識檢索成效」，這兩篇就是我自己列出方向轉了以後要補的缺口。</div>
   <div class="card"><table class="flow">
     <tr><th>段落</th><th>時間</th><th>要講什麼</th></tr>
     <tr><td>① 開場定位</td><td>1 分</td><td>上次到哪、今天要確認什麼（照上面念）</td></tr>
     <tr><td>② 進度回顧</td><td>2 分</td><td>題目現況、39 份文件集已封存去識別化、30 題題庫設計中、目標 3 月口試</td></tr>
     <tr><td>③ 文獻報告</td><td>9 分</td><td>A04 → A09 → A12，每篇 3 分鐘</td></tr>
     <tr><td>④ 設計對應</td><td>2 分</td><td>這三篇分別支撐第二章哪一節、第三章哪個決定</td></tr>
-    <tr><td>⑤ 請老師裁示</td><td>留白</td><td>四個問題（見分頁）</td></tr>
+    <tr><td>⑤ 請老師裁示</td><td>留白</td><td>四個問題（見分頁，現在只有第 1 題重要）</td></tr>
   </table></div>
   <div class="card">
     <h4>每篇文獻固定講這五段（＝妳 A04 心得原本的格式）</h4>
@@ -307,9 +338,8 @@ footer{text-align:center;padding:22px 14px 40px;color:var(--muted);font-size:11p
   <div class="say"><b>如果教授問到研究動機或研究缺口，就這樣接</b>老師，我另外補讀了一篇 1987 年發表在 CACM 的經典，Furnas 等人做的實驗發現，任兩個人替同一個東西取同一個名字的機率不到 0.20，所以只認單一關鍵字的系統，八到九成的查詢會失敗。這篇讓我的研究動機從個人經驗變成一個有名字的既有問題。而且它當年開的藥方是人工替每個東西掛別名，在真實組織做不到——語意向量檢索等於把這件事自動化了，但成效還沒有人量過，這就是我要補的缺口。</div>
 
   <div class="warn">
-    <b>⏱️ 時間分配：15 分鐘版不要硬塞 A13</b>
-    <p>三篇（A04 → A09 → A12）報完才是主線。A13 是<b>備援彈藥</b>：時間有剩、或教授問到研究動機／研究缺口／「這只是妳自己的問題吧」的時候再拿出來。</p>
-    <p>真的很趕，就用一句話帶過：「我另外補讀了一篇 1987 年 CACM 的經典，證明用詞不一致是語言的普遍性質，我把它放在第一章動機與 2.4 研究缺口。」</p>
+    <b>⏱️ 2026-08-24 更新：A13 已是「快答＋流程」分頁的 3 篇之一，不用再等時間有剩</b>
+    <p>三篇改為 A04 → A09 → A13（原本的 A12 降為備用，見「快答＋流程」分頁）。這裡的三個數字、學術系譜圖是<b>教授追問更深</b>時的資料，不是上場先講的內容——上場講的三句話版本在最前面那個分頁。</p>
   </div>
 
   <div class="gold"><b>被問「這篇你要拿來幹嘛」時的標準答案：</b>A13 在本研究的定位是<b>問題界定文獻</b>，用於第一章動機與 2.4 研究缺口，以及第三章同義改寫題的設計依據，<b>不進入研究方法</b>。<br>講定位（哪一章、什麼功能、不做什麼），比講「這篇很重要」專業十倍。</div>
@@ -339,7 +369,8 @@ footer{text-align:center;padding:22px 14px 40px;color:var(--muted);font-size:11p
 
 <section id="ask">
   <h2>請老師裁示（依重要性排序）</h2>
-  <div class="gold">最後三分鐘只做這件事。<b>問不出問題的 meeting 等於白開。</b></div>
+  <div class="warn"><b>⚠️ 2026-08-24 更新：時間很緊，這四題現在是「有機會才問」</b><p>只有第一題（收斂是否通過）值得找空檔問；其餘三題留到私訊或下次 meeting 也不遲，不要為了問完四題擠掉快答三題的時間。</p></div>
+  <div class="gold">若有空檔就問。<b>問不出問題不是這次的失敗，下次還有機會。</b></div>
   <div class="ask">
     <div class="q"><b>6/27 提的收斂，老師認可嗎？</b><p>題目從「知識傳承」收到「知識檢索成效」，研究對象從真人改為文件資料集與查詢任務。這題不解決，後面全部是空談。</p></div>
     <div class="q"><b>不以真人受訪者為主要資料來源，符合資管碩士論文要求嗎？</b><p>6/27 草稿第十三節第 4 題，因 meeting 延期至今未獲答覆。</p></div>
