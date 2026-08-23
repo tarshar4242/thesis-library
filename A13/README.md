@@ -84,10 +84,30 @@
 
 ---
 
+## 📦 研讀包檔案
+
+| 檔案 | 說明 |
+|------|------|
+| `A13_original_Vocabulary_Problem_Furnas1987.pdf` | 論文原文 PDF |
+| `A13_bilingual.docx` | 保留 8 頁英文原文版面、逐頁繁中譯文與統一術語表的 Word |
+| `A13_bilingual.pdf` | 手機與網站閱讀用中英對照 PDF（28 頁） |
+| `A13_reading_summary.docx` | 口語研讀摘要 Word |
+| `A13_reading_summary.pdf` | 口語研讀摘要 PDF（4 頁） |
+
+## ✅ 翻譯與驗收狀態
+
+- Codex 依 `paper-bilingual-notes` 流程建檔、排版、重製與最終驗收。
+- Claude 已完成印刷頁碼 964–971 的全文交叉複核；依其報告排除雙欄錯序、OCR 幻覺、數據及書目錯誤。
+- 最終版本不再沿用自動機翻正文；每頁先保留英文原始頁面，後接經校正的繁體中文全文與表格。
+- 已檢查 8 張原文影像、關鍵數據、禁用錯譯字串、DOCX 文字層、PDF 文字層及全部 32 頁視覺輸出。
+- 現代語意搜尋、向量資料庫與 RAG 的連結皆標示為研讀延伸，不是作者原始主張。
+
+---
+
 ## 📚 參考文獻格式（APA）
 
 > Furnas, G. W., Landauer, T. K., Gomez, L. M., & Dumais, S. T. (1987). The vocabulary problem in human-system communication. *Communications of the ACM, 30*(11), 964–971.
 
 ---
 
-*建立日期：2026-08-23*
+*建立與雙核心複核日期：2026-08-23*
