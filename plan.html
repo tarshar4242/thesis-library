@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>論文完工作戰計畫｜Tarshar</title>
+<style>
+:root{--ink:#26332c;--muted:#718078;--green:#39775b;--deep:#264f3c;--paper:#f4f3ed;--card:#fffefa;--line:#dce3dc;--gold:#c49240;--red:#a74f5c;--blue:#3d6a8a}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;overflow-x:hidden}
+.top{position:sticky;top:0;z-index:20;background:var(--deep);color:#fff;padding:10px clamp(12px,4vw,40px);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.top a{padding:7px 10px;border:1px solid #ffffff44;border-radius:8px;color:#fff;text-decoration:none;font-size:11px;font-weight:900}
+.top b{margin-right:auto;font-size:14px}
+.hero{padding:30px clamp(16px,6vw,80px) 22px;background:linear-gradient(145deg,#fffefa,#eaf0e9)}
+h1{margin:0 0 6px;font-family:Georgia,"Noto Serif TC",serif;font-size:clamp(24px,4.5vw,40px);line-height:1.2}
+.sub{color:var(--muted);font-size:13px;line-height:1.6}
+.dash{max-width:860px;margin:14px auto 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 6px;text-align:center;min-width:0}
+.stat strong{display:block;font-size:clamp(20px,4vw,30px);color:var(--green);font-family:Georgia,serif}
+.stat span{font-size:11px;color:var(--muted);font-weight:800}
+.barwrap{max-width:860px;margin:12px auto 0}
+.bar{height:14px;border-radius:999px;background:#e2e8e1;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,#39775b,#5a9c7c);transition:width .4s}
+.bartext{font-size:11px;color:var(--muted);font-weight:800;margin-top:5px;text-align:right}
+.rule{max-width:860px;margin:16px auto 0;padding:12px 14px;border-left:5px solid var(--gold);background:#fff8e8;border-radius:10px;color:#6e5932;font-size:13px;font-weight:800;line-height:1.6}
+main{max-width:860px;margin:auto;padding:24px 14px 80px}
+.phase{position:relative;margin:0 0 14px;padding:16px 16px 14px 52px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 6px 18px #243b2c0a}
+.phase::before{content:"";position:absolute;left:24px;top:0;bottom:-14px;width:2px;background:#cfdccf}
+.phase:last-of-type::before{display:none}
+.dot{position:absolute;left:13px;top:18px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid var(--green);color:var(--green);font-size:11px;font-weight:950;display:flex;align-items:center;justify-content:center}
+.phase.done .dot{background:var(--green);color:#fff}
+.phase.now{border-color:var(--green);box-shadow:0 8px 22px #39775b22}
+.phase.now .dot{border-width:3px}
+.phead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.phead h2{margin:0;font-size:16px;font-family:Georgia,"Noto Serif TC",serif}
+.when{font-size:11px;color:var(--muted);font-weight:900}
+.chip{font-size:10px;font-weight:950;padding:3px 8px;border-radius:999px}
+.chip.done{background:#e3f0e6;color:#2c6647}
+.chip.now{background:var(--green);color:#fff}
+.chip.wait{background:#eef0ec;color:#8a968d}
+.goal{font-size:12px;color:#526159;margin:0 0 8px;line-height:1.55}
+.todo{display:grid;gap:6px}
+.todo label{display:flex;gap:9px;align-items:flex-start;padding:8px 10px;border:1px solid #e4e9e3;border-radius:10px;background:#fbfcf9;font-size:13px;line-height:1.5;cursor:pointer}
+.todo input{margin-top:2px;width:17px;height:17px;accent-color:var(--green);flex:none}
+.todo label:has(input:checked){background:#eef5ee;border-color:#c6dbc9}
+.todo label:has(input:checked) span{color:#7d8b81;text-decoration:line-through}
+.key{color:var(--red);font-weight:900}
+.boxes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.box h3{margin:0 0 8px;font-size:13px;color:var(--green)}
+.box ul{margin:0;padding-left:18px;font-size:12px;color:#526159;line-height:1.8}
+footer{text-align:center;padding:24px 16px 40px;color:var(--muted);font-size:12px;line-height:1.8;border-top:1px solid var(--line)}
+@media(max-width:560px){.boxes{grid-template-columns:1fr}.dash{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<header class="top"><a href="index.html">← 回研讀庫</a><b>🎯 論文完工作戰計畫</b><a href="https://tarshar4242.github.io/kt-sweet-journey/lessons.html">🏠 筆記館</a></header>
+
+<section class="hero">
+  <h1>口試倒數，一頁看完。</h1>
+  <div class="sub">AI 語意向量知識庫對隱性知識外化文件之檢索成效研究：與傳統關鍵字搜尋之比較（題目已定案）</div>
+  <div class="dash">
+    <div class="stat"><strong id="days">—</strong><span>距 2027/3 口試（天）</span></div>
+    <div class="stat"><strong id="pct">0%</strong><span>作戰完成度</span></div>
+    <div class="stat"><strong id="donecnt">0/0</strong><span>已完成項目</span></div>
+  </div>
+  <div class="barwrap"><div class="bar"><i id="fill"></i></div><div class="bartext" id="bartext"></div></div>
+  <div class="rule">📏 唯一衡量標準：這週論文長了幾個字、實驗材料多了幾件。研讀庫與網站，停止再優化。</div>
+</section>
+
+<main id="phases">
+
+<section class="phase" data-p="p1">
+  <div class="dot">P1</div>
+  <div class="phead"><h2>文件集定案</h2><span class="when">8/22–8/31</span><span class="chip"></span></div>
+  <p class="goal">39 份去敏副本已封存（8/21 完成查核＋定案），只剩歸位。</p>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p1a" checked><span>40 份候選逐檔查核（路徑・字數・敏感掃描）</span></label>
+    <label><input type="checkbox" data-k="p1b" checked><span>本人定案：收 39 份、剔 3 份（D38／D11／D18）</span></label>
+    <label><input type="checkbox" data-k="p1c" checked><span>去敏副本產出＋複掃驗證全乾淨＋封存凍結</span></label>
+    <label><input type="checkbox" data-k="p1d"><span>把 zip＋五份作戰文件拖進 Drive「1.🎯畢業論文」</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p2">
+  <div class="dot">P2</div>
+  <div class="phead"><h2>第一章 Draft Zero</h2><span class="when">9月上半</span><span class="chip"></span></div>
+  <p class="goal">粗稿就好，先寫得出來。妳的 39 份文件建置故事就是動機第一段。</p>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p2a"><span>研究背景與動機（先講妳自己的外化實踐）</span></label>
+    <label><input type="checkbox" data-k="p2b"><span>研究問題與目的（RQ1 更準・RQ2 更完整・RQ3 更快・RQ4 語意改善）</span></label>
+    <label><input type="checkbox" data-k="p2c"><span>研究範圍與限制</span></label>
+    <label><input type="checkbox" data-k="p2d"><span class="key">全章湊滿 2,500 字以上</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p3">
+  <div class="dot">P3</div>
+  <div class="phead"><h2>第二章 文獻探討</h2><span class="when">9月下半–10月中</span><span class="chip"></span></div>
+  <p class="goal">精讀 8 篇當骨架；引用文獻是寫作的副產品，邊寫邊補到 40 筆以上。</p>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p3a"><span>2.1 知識管理與 SECI（A05・A04 進文）</span></label>
+    <label><input type="checkbox" data-k="p3b"><span>2.2 生成式 AI × 知識管理（A10・A11 進文）</span></label>
+    <label><input type="checkbox" data-k="p3c"><span class="key">補讀 A07（NLP × 隱性知識）＋頁碼證據</span></label>
+    <label><input type="checkbox" data-k="p3d"><span>2.3 語意檢索與 RAG（A09・A12 進文）</span></label>
+    <label><input type="checkbox" data-k="p3e"><span>2.4 研究缺口小結＋中文文獻 B 類至少 2 篇進文</span></label>
+    <label><input type="checkbox" data-k="p3f"><span>引用文獻累積達 40 筆以上</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p4">
+  <div class="dot">P4</div>
+  <div class="phead"><h2>第三章＋實驗材料</h2><span class="when">10月下半–11月中</span><span class="chip"></span></div>
+  <p class="goal">實驗設計工作底稿已備好模板，填完就是第三章。</p>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p4a"><span>第三章草稿：研究設計・文件集・實驗程序・統計方法</span></label>
+    <label><input type="checkbox" data-k="p4b"><span>六項指標操作型定義定稿（第二評分者找好）</span></label>
+    <label><input type="checkbox" data-k="p4c"><span class="key">查詢題庫 30 題＋標準答案要點＋評分規則</span></label>
+    <label><input type="checkbox" data-k="p4d"><span>整套材料給教授過目（順便問：格式範本・語意改善指標・全稿死線）</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p5">
+  <div class="dot">P5</div>
+  <div class="phead"><h2>前測 Pilot</h2><span class="when">11月下半</span><span class="chip"></span></div>
+  <p class="goal">先小跑 5 題，把題庫與評分規則的坑踩完。</p>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p5a"><span>5 題前測：NotebookLM 組＋關鍵字組都跑通</span></label>
+    <label><input type="checkbox" data-k="p5b"><span>依前測修題庫與評分規則</span></label>
+    <label><input type="checkbox" data-k="p5c"><span>記錄實驗日期與工具版本（可重複性防線）</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p6">
+  <div class="dot">P6</div>
+  <div class="phead"><h2>正式實驗</h2><span class="when">12月</span><span class="chip"></span></div>
+  <p class="goal">同一時段內跑完，兩組順序交叉（counterbalancing）。</p>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p6a"><span>實驗組（NotebookLM）30 題全部跑完＋逐題記錄</span></label>
+    <label><input type="checkbox" data-k="p6b"><span>對照組（關鍵字搜尋）30 題跑完</span></label>
+    <label><input type="checkbox" data-k="p6c"><span>雙評分者評分完成</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p7">
+  <div class="dot">P7</div>
+  <div class="phead"><h2>第四章 結果分析</h2><span class="when">1月上半</span><span class="chip"></span></div>
+  <p class="goal">兩種結果劇本都先想好——「沒有比較好」也是成立的論文。</p>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p7a"><span>描述統計＋六指標圖表</span></label>
+    <label><input type="checkbox" data-k="p7b"><span>成對檢定（常態→paired t；否則 Wilcoxon）</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p8">
+  <div class="dot">P8</div>
+  <div class="phead"><h2>第五章＋全文整稿</h2><span class="when">1月下半</span><span class="chip"></span></div>
+  <p class="goal">結論、意涵、限制、未來研究，然後整本梳一遍。</p>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p8a"><span>第五章：結論・理論與實務意涵・限制</span></label>
+    <label><input type="checkbox" data-k="p8b"><span>中英文摘要</span></label>
+    <label><input type="checkbox" data-k="p8c"><span class="key">1 月底全稿送教授</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p9">
+  <div class="dot">P9</div>
+  <div class="phead"><h2>修訂與口試準備</h2><span class="when">2月</span><span class="chip"></span></div>
+  <div class="todo">
+    <label><input type="checkbox" data-k="p9a"><span>依教授意見修訂全稿</span></label>
+    <label><input type="checkbox" data-k="p9b"><span>申請口試（系上流程與文件）</span></label>
+    <label><input type="checkbox" data-k="p9c"><span>口試簡報＋口委必問十題演練</span></label>
+  </div>
+</section>
+
+<section class="phase" data-p="p10">
+  <div class="dot">🎓</div>
+  <div class="phead"><h2>口試</h2><span class="when">2027年3月</span><span class="chip"></span></div>
+  <div class="todo">
+    <label><input type="checkbox" data-k="pXa"><span>口試完成</span></label>
+    <label><input type="checkbox" data-k="pXb"><span>依委員意見修訂＋繳交，畢業！🍀</span></label>
+  </div>
+</section>
+
+<div class="boxes">
+  <div class="box"><h3>🗓 每週節奏（現在就開始）</h3><ul><li>每週 3 個「論文時段」×50 分鐘，只碰章節文字或實驗材料</li><li>每週日在研究日誌記一行進度</li><li>卡住 15 分鐘＝把卡點寫成一句話，帶來找我</li></ul></div>
+  <div class="box"><h3>❓ 下次見教授要問的三件事</h3><ul><li>系上論文格式範本（Word 模板／APA 版本）</li><li>「語意改善成功率」自創指標：保留或改用文獻既有指標</li><li>3 月口試回推，全稿最晚何時要到教授手上</li></ul></div>
+</div>
+
+</main>
+<footer>🍀 Learn AI with Tarshar｜2026 · 打勾進度保存在這台裝置<br>完整文字版：tarshar-vault／projects／論文線／完工作戰計畫.md</footer>
+
+<script>
+(function(){
+  var KEY='thesis-plan-v1';
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+  var boxes=[].slice.call(document.querySelectorAll('input[data-k]'));
+  boxes.forEach(function(b){ if(b.dataset.k in saved) b.checked=!!saved[b.dataset.k]; b.addEventListener('change',update); });
+  function update(){
+    var state={},done=0;
+    boxes.forEach(function(b){state[b.dataset.k]=b.checked;if(b.checked)done++;});
+    try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}
+    var pct=Math.round(done/boxes.length*100);
+    document.getElementById('pct').textContent=pct+'%';
+    document.getElementById('donecnt').textContent=done+'/'+boxes.length;
+    document.getElementById('fill').style.width=pct+'%';
+    document.getElementById('bartext').textContent=pct>=100?'🎓 完工！':'離完工還有 '+(boxes.length-done)+' 項';
+    var firstOpen=true;
+    [].slice.call(document.querySelectorAll('.phase')).forEach(function(ph){
+      var items=[].slice.call(ph.querySelectorAll('input[data-k]'));
+      var all=items.every(function(i){return i.checked});
+      var chip=ph.querySelector('.chip');
+      ph.classList.remove('done','now');
+      if(all){ph.classList.add('done');chip.textContent='✅ 完成';chip.className='chip done';}
+      else if(firstOpen){ph.classList.add('now');chip.textContent='▶ 現在做這裡';chip.className='chip now';firstOpen=false;}
+      else{chip.textContent='等待中';chip.className='chip wait';}
+    });
+  }
+  var target=new Date('2027-03-01T00:00:00+08:00');
+  document.getElementById('days').textContent=Math.max(0,Math.ceil((target-new Date())/86400000));
+  update();
+})();
+</script>
+</body>
+</html>
