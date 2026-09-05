@@ -197,37 +197,55 @@ find ~/.claude/skills/ -type l ! -exec test -e {} \; -print   # 列出斷掉的 
 
 ### ✅ 規則 1｜斷線排除 SOP（她要求的重點產出）
 
-網頁顯示 `Can't reach your computer` 時，**判斷一律在 Mac 上做，不在網頁上做**：
+**先看網頁那端的錯誤訊息說什麼，兩種訊息代表不同問題，不要混為一談：**
+
+| 訊息 | 意思 | 修法 |
+|---|---|---|
+| `Can't reach your computer` | 叫不到你的 Mac，原因待查 | 走 SOP 逐項排除 |
+| `Remote control session is offline` | **遙控通道掉了** | Mac 上跑 `/remote-control` |
+
+**判斷一律在 Mac 上做，不在網頁上做**：
 
 ```
 1. 走到 Mac 前面，看那個 claude 終端機視窗
 
-2. 視窗還在嗎？
+2. 訊息是 Remote control session is offline？
+   是 → 在 Mac 的 claude 打 /remote-control，結束
+   否 → 往下
+
+3. 視窗還在嗎？
    不在 → 重開終端機、cd 專案資料夾、claude、/resume
    在   → 往下
 
-3. 左上角那行寫什麼？
+4. 左上角那行寫什麼？
    API Usage Billing 或 Login expired → /login，選第 1 項
    Claude Max → 往下
 
-4. 打字有反應嗎？
+5. 打字有反應嗎？
    沒反應 → Ctrl+C 兩下，重來
    有反應 → 檢查 Wi-Fi，或網頁那端重整一次
 ```
 
-四種斷線成因對照：
+五種斷線成因對照：
 
 | 狀況 | 徵兆 | 怎麼救 |
 |---|---|---|
 | Mac 睡著或斷網 | 螢幕黑、Wi-Fi 異常 | 叫醒、連網 |
 | claude 程式沒了 | 找不到那個終端機視窗 | 重開視窗 + `/resume` |
-| **登入過期**（本次） | 視窗在、有 `Login expired` | `/login` 選 1 |
+| **登入過期**（本次第一段） | 視窗在、有 `Login expired` | `/login` 選 1 |
+| **遙控通道離線**（本次第二段） | 網頁顯示 `Remote control session is offline` | `/remote-control` |
 | 終端機真的卡住 | 視窗在、打字沒反應 | `Ctrl+C` 兩下 |
+
+**⚠️ 最容易誤判的一點：`/login` 和 `/remote-control` 修的是兩件不同的事。**
+`/login` 修「你是誰」（身分認證），`/remote-control` 修「網頁怎麼找到你的 Mac」（遙控通道）。
+**登入修好之後，遙控通道不會自動接回來，必須另外跑一次 `/remote-control`。**
+本次對話就是先修好 `/login`，過一陣子又跳出 `Remote control session is offline`，才發現是第二層問題。
 
 ### ✅ 規則 2｜連線機制三條核心觀念
 1. 每個終端機視窗 = 一個獨立 session。一個視窗同時只能跑一個 session。
 2. 憑證是所有 session 共用的。所以過期時會**一起**掛掉；反過來，**任一視窗 `/login` 一次通常全部救回**。
 3. 復原方向是**單向的**：網頁那端叫不醒已結束的本機 session，一定要從 Mac `/resume` 發動。
+4. **遙控通道綁在某一個 claude session 上**。那個 session 一結束（`/exit`、關視窗、憑證過期被踢掉、電腦睡著），遙控就跟著斷，而且不會自己重連。要保持遙控可用，唯一做法是 Mac 上留一個 claude 視窗長期開著。
 
 ### ✅ 規則 3｜工作分工（她明確表達不滿後訂下的）
 | 任務類型 | 交給誰 |
