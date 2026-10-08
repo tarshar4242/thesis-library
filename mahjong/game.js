@@ -80,21 +80,54 @@ function decompose(tiles) {
 const isWinning = (tiles) => decompose(tiles).length > 0;
 const waitsOf = (hand) => ALL_KINDS.filter(t => isWinning(hand.concat(t)));
 
-// ---------- 台數計算 ----------
+// ---------- 台數計算 (依明星3缺1「見花見字」台數表) ----------
+// 莊家與連莊拉莊的台數依付錢的人而不同，在 Game.win() 另外處理
 function scoreHand(game, seat, ctx) {
   const p = game.players[seat];
   const concealed = ctx.tsumo ? p.hand.slice() : p.hand.concat(ctx.winTile);
   const menqing = p.melds.every(m => m.type === 'ankong');
-  const seatWind = game.seatWind(seat);
   const allTiles = concealed.concat(...p.melds.map(m => m.tiles));
   const suits = new Set(allTiles.filter(isSuited).map(t => t[0]));
   const hasHonor = allTiles.some(isHonor);
+  const fl = p.flowers;
+
+  // 與牌型拆法無關的台
+  const common = [];
+  const add = (list, name, tai) => list.push({ name, tai });
+  if (ctx.tianhu) add(common, '天胡', 24);
+  if (ctx.dihu) add(common, '地胡', 16);
+  if (fl.length === 8) add(common, '八仙過海', 8);
+  if (fl.length) add(common, '見花見台', fl.length);
+  if (['f1', 'f2', 'f3', 'f4'].every(f => fl.includes(f))) add(common, '春夏秋冬', 2);
+  if (['f5', 'f6', 'f7', 'f8'].every(f => fl.includes(f))) add(common, '梅蘭竹菊', 2);
+  if (p.ting) add(common, p.ting, { 天聽: 8, 地聽: 4, 聽牌: 1 }[p.ting]);
+  const kongs = p.melds.filter(m => m.type === 'kong').length;
+  const ankongs = p.melds.filter(m => m.type === 'ankong').length;
+  if (kongs) add(common, '槓牌', kongs);
+  if (ankongs) add(common, '暗槓', ankongs * 2);
+  if (ctx.replacementDraw) add(common, '槓上開花', 1);
+  if (ctx.robKong) add(common, '搶槓胡', 1);
+  if (ctx.tsumo && ctx.lastTile) add(common, '海底撈月', 1);
+
+  const decs = decompose(concealed);
+  // 八仙過海可以直接喊胡，手牌不必成胡
+  if (!decs.length) return { tai: common.reduce((a, b) => a + b.tai, 0), breakdown: common };
+
+  if (menqing && ctx.tsumo) add(common, '門清自摸', 3);
+  else if (ctx.tsumo) add(common, '自摸', 1);
+  else if (menqing) add(common, '門清', 1);
+  if (!fl.length && !hasHonor) add(common, '無字無花', 2);
+
+  // 胡牌前只聽一張 = 獨聽
+  const before = ctx.tsumo ? (() => { const h = p.hand.slice(); removeTiles(h, [ctx.winTile]); return h; })() : p.hand;
+  const singleWait = waitsOf(before).length === 1;
+  const quanqiu = p.melds.length === 5 && p.melds.every(m => m.type !== 'ankong') && !ctx.tsumo;
+  if (quanqiu) add(common, '全求', 2);
+  else if (singleWait) add(common, '獨聽', 1);
 
   let best = null;
-  for (const d of decompose(concealed)) {
-    const items = [];
-    const add = (name, tai) => items.push({ name, tai });
-
+  for (const d of decs) {
+    const items = common.slice();
     const sets = p.melds.map(m => ({
       kind: m.type === 'chi' ? 'chow' : 'pung',
       tile: m.type === 'chi' ? sortTiles(m.tiles)[0] : m.tiles[0],
@@ -110,47 +143,31 @@ function scoreHand(game, seat, ctx) {
     }
     sets.push(...handSets);
 
-    if (ctx.tianhu) add('天胡', 16);
-    if (ctx.dihu) add('地胡', 8);
-    if (seat === game.dealer) add('莊家', 1);
-    if (ctx.tsumo) add('自摸', 1);
-    if (menqing) add('門清', 1);
-    if (menqing && ctx.tsumo) add('門清自摸', 1);
-    if (p.melds.length === 5 && p.melds.every(m => m.type !== 'ankong') && !ctx.tsumo) add('全求人', 2);
-    if (sets.every(s => s.kind === 'chow') && !hasHonor && p.flowers.length === 0 && !ctx.tsumo) add('平胡', 2);
-    if (sets.every(s => s.kind === 'pung')) add('對對胡', 4);
+    if (sets.every(s => s.kind === 'chow') && !hasHonor && !fl.length && !singleWait && !ctx.tsumo) add(items, '平胡', 2);
+    if (sets.every(s => s.kind === 'pung')) add(items, '碰碰胡', 4);
 
-    if (!suits.size) add('字一色', 16);
-    else if (suits.size === 1 && !hasHonor) add('清一色', 8);
-    else if (suits.size === 1) add('混一色', 4);
+    if (suits.size === 0 || (suits.size === 1 && !hasHonor)) add(items, '清一色', 8);
+    else if (suits.size === 1) add(items, '混一色', 4);
 
     const dragonPungs = sets.filter(s => s.kind === 'pung' && DRAGONS.includes(s.tile)).length;
-    if (dragonPungs === 3) add('大三元', 8);
-    else if (dragonPungs === 2 && DRAGONS.includes(d.pair)) add('小三元', 4);
-    else if (dragonPungs) add('三元刻', dragonPungs);
+    if (dragonPungs === 3) add(items, '大三元', 8);
+    else if (dragonPungs === 2 && DRAGONS.includes(d.pair)) add(items, '小三元', 4);
+    else if (dragonPungs) add(items, '三元牌', dragonPungs);
 
-    const windPungs = sets.filter(s => s.kind === 'pung' && WINDS.includes(s.tile)).map(s => s.tile);
-    if (windPungs.length === 4) add('大四喜', 16);
-    else if (windPungs.length === 3 && WINDS.includes(d.pair)) add('小四喜', 8);
-    else {
-      if (windPungs.includes(game.roundWind)) add('圈風刻', 1);
-      if (windPungs.includes(seatWind)) add('門風刻', 1);
-    }
+    const windPungs = sets.filter(s => s.kind === 'pung' && WINDS.includes(s.tile)).length;
+    if (windPungs === 4) add(items, '大四喜', 16);
+    else if (windPungs === 3 && WINDS.includes(d.pair)) add(items, '小四喜', 8);
+    else if (windPungs) add(items, '見風見台', windPungs);
 
     const anke = sets.filter(s => s.kind === 'pung' && s.concealed).length;
-    if (anke >= 5) add('五暗刻', 8);
-    else if (anke === 4) add('四暗刻', 5);
-    else if (anke === 3) add('三暗刻', 2);
-
-    if (p.flowers.length) add('花牌', p.flowers.length);
-    if (ctx.kongDraw) add('槓上開花', 1);
-    if (ctx.robKong) add('搶槓', 1);
-    if (ctx.lastTile) add(ctx.tsumo ? '海底撈月' : '河底撈魚', 1);
+    if (anke >= 5) add(items, '五暗刻', 8);
+    else if (anke === 4) add(items, '四暗刻', 5);
+    else if (anke === 3) add(items, '三暗刻', 2);
 
     const tai = items.reduce((a, b) => a + b.tai, 0);
     if (!best || tai > best.tai) best = { tai, breakdown: items };
   }
-  return best || { tai: 0, breakdown: [] };
+  return best;
 }
 
 // ---------- 電腦 AI ----------
@@ -213,7 +230,7 @@ function shanten(tiles) {
       combine(g + 1, m + om, part + op, pair || opr);
     }
   })(0, 0, 0, 0);
-  return best - 1;
+  return best;
 }
 
 function aiChooseDiscard(hand, game, seat) {
@@ -240,6 +257,7 @@ class Game {
     this.roundWind = 'z1';
     this.handNo = 1;
     this.rotations = 0;
+    this.streak = 0; // 連莊次數，上限 10
     this.log = [];
     this.version = 0;
     this.dead = false;
@@ -259,7 +277,7 @@ class Game {
   startHand() {
     this.wall = buildWall();
     for (const p of this.players) {
-      p.hand = []; p.melds = []; p.flowers = []; p.discards = []; p.lastDraw = null;
+      p.hand = []; p.melds = []; p.flowers = []; p.discards = []; p.lastDraw = null; p.ting = null;
     }
     for (let i = 0; i < 4; i++) {
       const p = this.players[(this.dealer + i) % 4];
@@ -279,7 +297,7 @@ class Game {
     this.finished = false;
     this.pending = null;
     this.claimHappened = false;
-    this.kongDraw = false;
+    this.discardCount = 0;
     this.addLog(`── 第 ${this.handNo} 局開始，莊家：${this.players[this.dealer].name} ──`);
     this.drawTile(this.dealer);
     this.update();
@@ -299,6 +317,7 @@ class Game {
       }
       p.hand.push(t);
       p.lastDraw = t;
+      this.replacementDraw = fromBack; // 槓或補花後補進的牌，胡了算槓上開花
       return t;
     }
   }
@@ -307,11 +326,19 @@ class Game {
     if (this.finished || this.phase !== 'action' || this.turn !== seat) return null;
     const p = this.players[seat];
     const c = countOf(p.hand);
+    // 八張花全拿 (八仙過海) 可直接喊胡
+    const tsumo = p.lastDraw != null && (isWinning(p.hand) || p.flowers.length === 8);
+    // 聽牌後手牌鎖住：只能自摸或打出摸進的牌
+    if (p.ting) return { discard: true, tsumo, ankong: [], addkong: [], ting: [], locked: p.lastDraw };
     return {
       discard: true,
-      tsumo: p.lastDraw != null && isWinning(p.hand),
+      tsumo,
       ankong: Object.keys(c).filter(t => c[t] === 4),
       addkong: p.melds.filter(m => m.type === 'pon' && c[m.tiles[0]]).map(m => m.tiles[0]),
+      // 打出哪幾張後會聽牌 (可宣告聽牌)
+      ting: [...new Set(p.hand)].filter(t => {
+        const rest = p.hand.slice(); removeTiles(rest, [t]); return shanten(rest) === 0;
+      }),
     };
   }
 
@@ -323,20 +350,20 @@ class Game {
         type: m.type,
         tiles: m.type === 'ankong' && p.seat !== seat ? [HIDDEN, HIDDEN, HIDDEN, HIDDEN] : m.tiles,
       })),
-      flowers: p.flowers, discards: p.discards,
+      flowers: p.flowers, discards: p.discards, ting: p.ting,
     }));
     let me = null;
     if (seat >= 0) {
       const p = this.players[seat];
       const pend = this.phase === 'reaction' && this.pending && this.pending[seat];
       me = {
-        seat, hand: sortTiles(p.hand), lastDraw: p.lastDraw, melds: p.melds, flowers: p.flowers,
+        seat, hand: sortTiles(p.hand), lastDraw: p.lastDraw, melds: p.melds, flowers: p.flowers, ting: p.ting,
         options: this.actionOptions(seat),
         reaction: pend && !pend.resp ? pend.opts : null,
       };
     }
     return {
-      roundWind: this.roundWind, handNo: this.handNo, dealer: this.dealer,
+      roundWind: this.roundWind, handNo: this.handNo, dealer: this.dealer, streak: this.streak,
       turn: this.turn, phase: this.phase, finished: this.finished,
       wallLeft: this.wall.length, players, me,
     };
@@ -352,11 +379,19 @@ class Game {
 
     if (a.type === 'discard') {
       if (!p.hand.includes(a.tile)) return { error: '手上沒有這張牌' };
+      if (p.ting && a.tile !== p.lastDraw) return { error: '聽牌後只能打出摸進的牌' };
+      if (a.ting) {
+        if (p.ting || !opts.ting.includes(a.tile)) return { error: '打這張不會聽牌' };
+        // 天聽：莊家第一張就聽；地聽：海底打進八張內且四家沒吃碰槓
+        const clean = !this.claimHappened;
+        p.ting = seat === this.dealer && this.discardCount === 0 && clean ? '天聽'
+          : this.discardCount < 8 && clean ? '地聽' : '聽牌';
+      }
       removeTiles(p.hand, [a.tile]);
       p.discards.push(a.tile);
       p.lastDraw = null;
-      this.kongDraw = false;
-      this.addLog(`${p.name} 打出 ${nm(a.tile)}`);
+      this.discardCount++;
+      this.addLog(`${p.name} 打出 ${nm(a.tile)}${a.ting ? `，宣告${p.ting}！` : ''}`);
       this.hooks.onSfx('discard');
       this.openReactions(a.tile, seat);
       return {};
@@ -407,7 +442,6 @@ class Game {
   kongReplace(seat) {
     this.claimHappened = true;
     if (!this.drawTile(seat, true)) return this.exhaust();
-    this.kongDraw = true;
     this.turn = seat;
     this.phase = 'action';
     this.update();
@@ -421,7 +455,7 @@ class Game {
       const cnt = p.hand.filter(t => t === tile).length;
       const opts = {};
       if (isWinning(p.hand.concat(tile))) opts.hu = true;
-      if (this.wall.length) {
+      if (this.wall.length && !p.ting) {
         if (cnt >= 2) opts.pon = true;
         if (cnt >= 3) opts.kong = true;
         if (i === (from + 1) % 4 && isSuited(tile)) {
@@ -450,8 +484,11 @@ class Game {
     // 真人 20 秒沒反應就自動「過」
     this.reactionTimer = setTimeout(() => {
       if (this.dead || this.phase !== 'reaction' || this.pending !== pending) return;
-      for (const s in this.pending) if (!this.pending[s].resp) this.pending[s].resp = { type: 'pass' };
-      this.resolveReactions();
+      for (const s in this.pending) {
+        if (!this.pending[s].resp && !this.players[s].isAI) this.pending[s].resp = { type: 'pass' };
+      }
+      if (Object.values(this.pending).every(x => x.resp)) this.resolveReactions();
+      else this.update();
     }, 20000);
     this.update();
   }
@@ -464,6 +501,9 @@ class Game {
       (a.type === 'kong' && o.kong) ||
       (a.type === 'chi' && o.chi && Array.isArray(a.tiles) && o.chi.some(c => c.join() === sortTiles(a.tiles).join()));
     if (!ok) return { error: '不能這樣做' };
+    // 天聽、地聽不得過水：能胡卻不胡就降為一般聽牌
+    const p = this.players[seat];
+    if (a.type === 'pass' && o.hu && (p.ting === '天聽' || p.ting === '地聽')) p.ting = '聽牌';
     pend.resp = a;
     if (Object.values(this.pending).every(x => x.resp)) this.resolveReactions();
     else this.update();
@@ -517,7 +557,6 @@ class Game {
     }
     this.turn = seat;
     this.phase = 'action';
-    this.kongDraw = false;
     this.update();
   }
 
@@ -526,7 +565,6 @@ class Game {
     if (!this.drawTile(seat)) return this.exhaust();
     this.turn = seat;
     this.phase = 'action';
-    this.kongDraw = false;
     this.update();
   }
 
@@ -535,13 +573,27 @@ class Game {
     ctx.lastTile = this.wall.length === 0;
     ctx.tianhu = ctx.tsumo && seat === this.dealer && !this.claimHappened && this.players.every(x => !x.discards.length);
     ctx.dihu = ctx.tsumo && seat !== this.dealer && !this.claimHappened && !p.discards.length && !ctx.tianhu;
-    const { tai, breakdown } = scoreHand(this, seat, ctx);
-    const points = 1 + tai;
-    if (ctx.tsumo) {
-      for (const o of this.players) if (o !== p) { o.score -= points; p.score += points; }
-    } else {
-      this.players[ctx.from].score -= points;
-      p.score += points;
+    ctx.replacementDraw = ctx.tsumo && this.replacementDraw;
+    const { tai: baseTai, breakdown } = scoreHand(this, seat, ctx);
+
+    // 莊家 1 台 + 連N拉N 共 2N 台：莊家胡牌、或莊家付錢時才算
+    const dealerTai = 1 + 2 * this.streak;
+    const dealerItems = [{ name: '莊家', tai: 1 }];
+    if (this.streak) dealerItems.push({ name: `連${this.streak}拉${this.streak}`, tai: 2 * this.streak });
+    const payers = ctx.tsumo ? this.players.filter(o => o !== p) : [this.players[ctx.from]];
+    let points = 0;
+    for (const o of payers) {
+      const pay = 1 + baseTai + (seat === this.dealer || o.seat === this.dealer ? dealerTai : 0); // 底 1 + 台數
+      o.score -= pay; p.score += pay; points += pay;
+    }
+    let tai = baseTai;
+    if (seat === this.dealer || (!ctx.tsumo && ctx.from === this.dealer)) {
+      breakdown.unshift(...dealerItems);
+      tai += dealerTai;
+    } else if (ctx.tsumo) {
+      breakdown.push({ name: '莊家另付', tai: dealerTai });
+    }
+    if (!ctx.tsumo) {
       p.hand.push(ctx.winTile);
       // 胡的那張牌從放槍者那邊移走 (搶槓則從他手上拿走要加槓的牌)
       if (ctx.robKong) removeTiles(this.players[ctx.from].hand, [ctx.winTile]);
@@ -577,7 +629,10 @@ class Game {
     this.update();
     this.nextHandTimer = setTimeout(() => {
       if (this.dead) return;
-      if (!dealerStays) {
+      if (dealerStays && this.streak < 10) {
+        this.streak++;
+      } else {
+        this.streak = 0;
         this.dealer = (this.dealer + 1) % 4;
         this.rotations++;
         if (this.rotations % 4 === 0) this.roundWind = WINDS[(WINDS.indexOf(this.roundWind) + 1) % 4];
@@ -609,9 +664,11 @@ class Game {
     const o = this.actionOptions(seat);
     if (!o) return;
     if (o.tsumo) return this.doAction(seat, { type: 'tsumo' });
+    if (p.ting) return this.doAction(seat, { type: 'discard', tile: o.locked });
     if (o.ankong.length) return this.doAction(seat, { type: 'ankong', tile: o.ankong[0] });
     if (o.addkong.length) return this.doAction(seat, { type: 'addkong', tile: o.addkong[0] });
-    return this.doAction(seat, { type: 'discard', tile: aiChooseDiscard(p.hand, this, seat) });
+    const tile = aiChooseDiscard(p.hand, this, seat);
+    return this.doAction(seat, { type: 'discard', tile, ting: o.ting.includes(tile) });
   }
 
   aiReact(seat) {
@@ -642,4 +699,4 @@ class Game {
   }
 }
 
-module.exports = { Game, decompose, isWinning, waitsOf, scoreHand, sortTiles };
+module.exports = { Game, decompose, isWinning, waitsOf, scoreHand, shanten, sortTiles };

@@ -22,7 +22,6 @@ function nm(t) { return NAMES[t] || t; }
 let mySeat = -1;
 let isHost = false;
 let lastView = null;
-let tingMode = false; // 按下「聽牌」後，下一張打出的牌同時宣告聽牌
 
 // ---------- 音效 (Web Audio 合成，免外部檔) ----------
 let audioCtx = null;
@@ -215,8 +214,7 @@ socket.on('state', ({ view, lobby, log }) => {
 
 function render(v) {
   // 頂欄
-  $('roundInfo').textContent = `${WINDLABEL[v.roundWind]}風圈 · 第${v.handNo}局 · 莊家:${v.players[v.dealer].name}` +
-    (v.streak ? ` 連${v.streak}拉${v.streak}` : '');
+  $('roundInfo').textContent = `${WINDLABEL[v.roundWind]}風圈 · 第${v.handNo}局 · 莊家:${v.players[v.dealer].name}`;
   $('wallInfo').textContent = `牌牆剩 ${v.wallLeft} 張`;
 
   // 中央資訊
@@ -248,7 +246,7 @@ function renderOpponent(rel, p, v) {
   const flowers = p.flowers.map(g).join('');
   area.innerHTML =
     `<div class="player-card ${isTurn ? 'turn' : ''} ${isDealer ? 'dealer' : ''}">
-      <div><span class="pwind">${WINDLABEL[p.wind]}${isDealer ? '莊' : ''}</span><span class="pname">${p.name}</span>${p.ting ? `<span class="ting-badge">${p.ting}</span>` : ''}</div>
+      <div><span class="pwind">${WINDLABEL[p.wind]}${isDealer ? '莊' : ''}</span><span class="pname">${p.name}</span></div>
       <div class="pscore">${p.score >= 0 ? '+' : ''}${p.score}</div>
       <div class="mini-hand">${backs}</div>
       ${melds ? `<div class="opp-melds">${melds}</div>` : ''}
@@ -263,7 +261,7 @@ function renderMe(v, p) {
   area.innerHTML =
     `<div class="player-card ${isTurn ? 'turn' : ''} ${isDealer ? 'dealer' : ''}">
       <span class="pwind">${WINDLABEL[p.wind]}${isDealer ? '莊' : ''}</span>
-      <span class="pname">${p.name}(你)</span>${p.ting ? `<span class="ting-badge">${p.ting}</span>` : ''}
+      <span class="pname">${p.name}(你)</span>
       <span class="pscore">　${p.score >= 0 ? '+' : ''}${p.score}</span>
     </div>`;
 
@@ -272,11 +270,6 @@ function renderMe(v, p) {
   const handEl = $('myHand');
   handEl.innerHTML = '';
   const canDiscard = me.options && me.options.discard && v.turn === mySeat && v.phase === 'action';
-  if (!canDiscard) tingMode = false;
-  // 哪些牌現在可以點：聽牌後只能打摸進的牌；聽牌模式只能打會聽的牌
-  const clickable = (t) => canDiscard &&
-    (!me.options.locked || t === me.options.locked) &&
-    (!tingMode || me.options.ting.includes(t));
 
   // 把剛摸到的牌抽出放到最右邊突顯
   const rest = me.hand.slice();
@@ -285,9 +278,9 @@ function renderMe(v, p) {
     rest.splice(rest.indexOf(me.lastDraw), 1);
     drawnTile = me.lastDraw;
   }
-  rest.forEach((t) => handEl.appendChild(makeTile(t, clickable(t))));
+  rest.forEach((t) => handEl.appendChild(makeTile(t, canDiscard)));
   if (drawnTile) {
-    const el = makeTile(drawnTile, clickable(drawnTile));
+    const el = makeTile(drawnTile, canDiscard);
     el.classList.add('drawn');
     handEl.appendChild(el);
   }
@@ -301,14 +294,12 @@ function renderMe(v, p) {
 
 function makeTile(t, clickable) {
   const el = document.createElement('div');
-  el.className = 'tile' + (clickable ? (tingMode ? ' ting-ok' : '') : ' disabled');
+  el.className = 'tile' + (clickable ? '' : ' disabled');
   el.textContent = g(t);
   el.title = nm(t);
   if (clickable) {
     el.onclick = () => {
-      const ting = tingMode;
-      tingMode = false;
-      socket.emit('action', { type: 'discard', tile: t, ting }, (r) => {
+      socket.emit('action', { type: 'discard', tile: t }, (r) => {
         if (r.error) flashHint(r.error);
       });
     };
@@ -335,12 +326,9 @@ function renderActions(v) {
     if (o.tsumo) bar.appendChild(btn('🀄 自摸胡', 'act-hu', () => act({ type: 'tsumo' })));
     (o.ankong || []).forEach(t => bar.appendChild(btn(`暗槓 ${g(t)}`, 'act-kong', () => act({ type: 'ankong', tile: t }))));
     (o.addkong || []).forEach(t => bar.appendChild(btn(`加槓 ${g(t)}`, 'act-kong', () => act({ type: 'addkong', tile: t }))));
-    if (o.ting && o.ting.length) {
-      bar.appendChild(btn(tingMode ? '取消聽牌' : '聽牌', 'act-ting', () => { tingMode = !tingMode; render(lastView); }));
-    }
     const hint = document.createElement('span');
     hint.className = 'hint';
-    hint.textContent = o.locked ? '已聽牌，打出摸進的牌' : tingMode ? '選一張發亮的牌打出，宣告聽牌' : '點選手牌打出';
+    hint.textContent = '點選手牌打出';
     bar.appendChild(hint);
     return;
   }
@@ -439,16 +427,14 @@ socket.on('result', (res) => {
 });
 
 // ---------- 規則 ----------
-// 依明星3缺1「見花見字」台數表
 const RULES = [
-  ['莊家', 1], ['連N拉N', '2N'], ['自摸', 1], ['門清', 1], ['門清自摸', 3],
-  ['見花見台(每張)', 1], ['春夏秋冬', 2], ['梅蘭竹菊', 2], ['八仙過海', 8],
-  ['見風見台(每組)', 1], ['三元牌(每組)', 1], ['無字無花', 2],
-  ['平胡', 2], ['碰碰胡', 4], ['全求', 2], ['獨聽', 1],
-  ['混一色', 4], ['清一色(含字一色)', 8], ['小三元', 4], ['大三元', 8],
-  ['小四喜', 8], ['大四喜', 16], ['三暗刻', 2], ['四暗刻', 5], ['五暗刻', 8],
-  ['槓牌(每組)', 1], ['暗槓(每組)', 2], ['槓上開花', 1], ['搶槓胡', 1], ['海底撈月', 1],
-  ['聽牌', 1], ['地聽', 4], ['天聽', 8], ['地胡', 16], ['天胡', 24],
+  ['自摸', 1], ['門清', 1], ['門清自摸', '+1'], ['平胡', 2], ['全求人', 2],
+  ['對對胡(碰碰胡)', 4], ['混一色', 4], ['清一色', 8], ['字一色', 16],
+  ['三元刻(每組)', 1], ['小三元', 4], ['大三元', 8],
+  ['小四喜', 8], ['大四喜', 16], ['圈風刻', 1], ['門風刻', 1],
+  ['三暗刻', 2], ['四暗刻', 5], ['五暗刻', 8],
+  ['花牌(每張)', 1], ['槓上開花', 1], ['搶槓', 1], ['海底/河底', 1],
+  ['天胡', 16], ['地胡', 8],
 ];
 $('btnRules').onclick = () => {
   $('rulesBody').innerHTML = RULES.map(([n, t]) =>
