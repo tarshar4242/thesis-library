@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>台式麻將 · 網路 / AI 對戰</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- 大廳 / 進入畫面 -->
+  <div id="lobby" class="screen">
+    <div class="lobby-card">
+      <h1>🀄 台式十六張麻將</h1>
+      <p class="subtitle">支援線上連線對戰與 AI 電腦對戰</p>
+
+      <label>你的暱稱
+        <input id="nameInput" maxlength="8" placeholder="輸入暱稱" />
+      </label>
+
+      <div class="lobby-actions">
+        <button id="btnQuick" class="primary">🤖 單人對 AI（立即開始）</button>
+        <button id="btnCreate">➕ 建立連線房間</button>
+        <div class="join-row">
+          <input id="roomInput" maxlength="4" placeholder="房號" />
+          <button id="btnJoin">🔗 加入房間</button>
+        </div>
+      </div>
+      <p id="lobbyMsg" class="msg"></p>
+
+      <div id="connectInfo" class="connect-info">
+        <div class="ci-label">📡 邀請同區網好友連線</div>
+        <div class="ci-row">
+          <span id="connectAddr" class="ci-addr">偵測中…</span>
+          <button id="btnCopyAddr" class="small">複製</button>
+        </div>
+        <div id="connectAlt" class="ci-alt"></div>
+        <div class="ci-hint">請好友在瀏覽器開啟此網址（需與你在同一個 Wi-Fi / 區域網路）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 房間等待畫面 -->
+  <div id="waiting" class="screen hidden">
+    <div class="lobby-card">
+      <h2>房間 <span id="waitRoomId" class="roomcode"></span></h2>
+      <p class="subtitle">把房號分享給朋友，湊不滿的座位開局時由 AI 補上</p>
+      <ul id="seatList" class="seat-list"></ul>
+      <button id="btnStart" class="primary hidden">開始遊戲</button>
+      <p id="waitMsg" class="msg">等待房主開始…</p>
+      <button id="btnLeave" class="ghost">離開</button>
+    </div>
+  </div>
+
+  <!-- 牌桌 -->
+  <div id="table" class="screen hidden">
+    <div class="topbar">
+      <span id="roundInfo"></span>
+      <span id="wallInfo"></span>
+      <button id="btnSound" class="ghost small">🔊 音效</button>
+      <button id="btnRules" class="ghost small">規則/台數</button>
+    </div>
+
+    <div class="board">
+      <div class="seat-area top" data-rel="2"></div>
+      <div class="seat-area left" data-rel="3"></div>
+      <div class="center">
+        <div id="discardTop" class="discard-pile"></div>
+        <div class="mid-row">
+          <div id="discardLeft" class="discard-pile vert"></div>
+          <div id="centerInfo" class="center-info"></div>
+          <div id="discardRight" class="discard-pile vert"></div>
+        </div>
+        <div id="discardBottom" class="discard-pile"></div>
+      </div>
+      <div class="seat-area right" data-rel="1"></div>
+      <div class="seat-area bottom" data-rel="0"></div>
+    </div>
+
+    <div class="myarea">
+      <div id="myMelds" class="melds"></div>
+      <div id="myFlowers" class="flowers"></div>
+      <div id="myHand" class="hand"></div>
+      <div id="actionBar" class="action-bar"></div>
+    </div>
+
+    <div id="logPanel" class="log-panel">
+      <div class="log-header">
+        <span>📋 出牌記錄</span>
+        <button id="btnLogToggle" class="log-toggle" title="收合/展開">－</button>
+      </div>
+      <div id="logBody" class="log-body"></div>
+    </div>
+  </div>
+
+  <!-- 結算彈窗 -->
+  <div id="resultModal" class="modal hidden">
+    <div class="modal-card">
+      <h2 id="resultTitle"></h2>
+      <div id="resultBody"></div>
+      <p class="msg">下一局即將開始…</p>
+    </div>
+  </div>
+
+  <!-- 規則彈窗 -->
+  <div id="rulesModal" class="modal hidden">
+    <div class="modal-card">
+      <h2>常見台數</h2>
+      <div class="rules-grid" id="rulesBody"></div>
+      <button id="btnCloseRules" class="primary">關閉</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>

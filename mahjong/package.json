@@ -1,0 +1,15 @@
+{
+  "name": "taiwan-mahjong",
+  "version": "1.0.0",
+  "description": "台式十六張麻將：區網連線對戰與 AI 電腦對戰",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/simulate.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1"
+  }
+}
