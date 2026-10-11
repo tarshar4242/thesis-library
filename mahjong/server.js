@@ -24,7 +24,11 @@ function lanUrls() {
   // 192.168.x.x 通常是家裡 Wi-Fi，排最前面
   return urls.sort((a, b) => (b.includes('//192.168.') - a.includes('//192.168.')));
 }
-app.get('/api/serverinfo', (req, res) => res.json({ port: PORT, urls: lanUrls() }));
+// 放上雲端時 (Render 會自動提供 RENDER_EXTERNAL_URL) 改給公開網址，好友不必同一個 Wi-Fi
+const PUBLIC_URL = process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || '';
+app.get('/api/serverinfo', (req, res) => res.json(
+  PUBLIC_URL ? { port: PORT, urls: [PUBLIC_URL], public: true } : { port: PORT, urls: lanUrls() }
+));
 
 // ---------- 房間 ----------
 const rooms = new Map();
@@ -155,5 +159,6 @@ io.on('connection', (socket) => {
 server.listen(PORT, '0.0.0.0', () => {
   console.log('🀄 台式十六張麻將 已啟動');
   console.log(`   本機遊玩：http://localhost:${PORT}`);
-  for (const u of lanUrls()) console.log(`   區網好友：${u}`);
+  if (PUBLIC_URL) console.log(`   公開網址：${PUBLIC_URL}`);
+  else for (const u of lanUrls()) console.log(`   區網好友：${u}`);
 });

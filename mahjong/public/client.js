@@ -139,6 +139,10 @@ async function loadServerInfo() {
     const urls = info.urls && info.urls.length ? info.urls : [`http://localhost:${info.port}`];
     primaryAddr = urls[0];
     $('connectAddr').textContent = primaryAddr;
+    if (info.public) {
+      document.querySelector('.ci-label').textContent = '📡 邀請好友連線';
+      document.querySelector('.ci-hint').textContent = '把網址傳給好友，用瀏覽器打開就能加入，不必同一個 Wi-Fi';
+    }
     // 其餘網路介面位址 (點擊即複製)
     const alt = $('connectAlt');
     alt.innerHTML = '';
