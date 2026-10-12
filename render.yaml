@@ -1,0 +1,11 @@
+# Render 部署設定：台式十六張麻將 (mahjong/ 資料夾)
+services:
+  - type: web
+    name: tarshar-mahjong
+    runtime: node
+    plan: free
+    rootDir: mahjong
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/serverinfo
+    autoDeploy: true
