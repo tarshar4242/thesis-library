@@ -357,3 +357,100 @@ body.theme-jade #lobby .lobby-card label, body.theme-jade #lobby .ci-label, body
 #lobby .msg { margin-top: 8px; min-height: 0; }
 #lobby .msg:empty { display: none; }
 #lobby .connect-info { margin-top: 18px; }
+
+/* =========================================================
+   牌桌氣氛：公仔、對話框、喊牌大字、慶祝、設定面板
+   ========================================================= */
+.player-card { position: relative; }
+.avatar-wrap { position: relative; display: inline-block; }
+.player-card > .avatar-wrap { display: block; margin: 0 auto 2px; width: 46px; }
+.player-card.me-card { display: inline-flex; align-items: center; gap: 6px; }
+.player-card.me-card > .avatar-wrap { margin: 0; width: 34px; }
+.avatar {
+  width: 46px; height: 46px; border-radius: 50%; background: #fff8e8; object-fit: cover;
+  border: 2px solid #f0c04a; box-shadow: 0 3px 8px rgba(0,0,0,.35); display: block;
+}
+.me-card .avatar { width: 34px; height: 34px; }
+.avatar.thinking { animation: think 1.6s ease-in-out infinite; }
+.avatar.happy { animation: hop .5s ease-out 2; }
+.avatar.win { animation: winJump .7s ease-in-out infinite; box-shadow: 0 0 18px #ffd96a; }
+.avatar.sad { animation: shiver .25s linear infinite; filter: saturate(.6); }
+@keyframes think { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+@keyframes hop { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-12px) scale(1.12); } 100% { transform: translateY(0) scale(1); } }
+@keyframes winJump { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-14px) rotate(-8deg) scale(1.15); } }
+@keyframes shiver { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-2px); } 75% { transform: translateX(2px); } }
+
+.bubble {
+  position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, -4px);
+  background: #fff; color: #b3122a; font-weight: 900; font-size: 15px; white-space: nowrap;
+  padding: 3px 10px; border-radius: 12px; border: 2px solid #f0c04a; z-index: 30;
+  box-shadow: 0 4px 10px rgba(0,0,0,.3); animation: bubblePop .35s cubic-bezier(.2,1.6,.4,1);
+}
+.bubble::after { content: ''; position: absolute; left: 50%; top: 100%; margin-left: -6px; border: 6px solid transparent; border-top-color: #f0c04a; }
+.bubble.big { font-size: 18px; }
+@keyframes bubblePop { from { transform: translate(-50%, 6px) scale(.3); opacity: 0; } to { transform: translate(-50%, -4px) scale(1); opacity: 1; } }
+
+#fxLayer { position: fixed; inset: 0; pointer-events: none; z-index: 150; overflow: hidden; }
+.fx-callout {
+  position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%);
+  font-size: 110px; font-weight: 900; letter-spacing: 6px; color: #ffd96a;
+  -webkit-text-stroke: 4px #8b0a1e; text-shadow: 0 8px 0 #8b0a1e, 0 14px 30px rgba(0,0,0,.5);
+  animation: callPop 1.1s ease-out forwards;
+}
+.fx-callout.mood-cute { color: #ffb3d1; -webkit-text-stroke-color: #c2185b; text-shadow: 0 8px 0 #c2185b, 0 14px 30px rgba(0,0,0,.4); }
+.fx-callout.fx-hu, .fx-callout.fx-tsumo { font-size: 150px; }
+.fx-callout.fx-ting { color: #b8ffe0; -webkit-text-stroke-color: #0f7a55; text-shadow: 0 8px 0 #0f7a55, 0 14px 30px rgba(0,0,0,.4); }
+@keyframes callPop {
+  0% { transform: translate(-50%, -50%) scale(.2) rotate(-12deg); opacity: 0; }
+  25% { transform: translate(-50%, -50%) scale(1.25) rotate(4deg); opacity: 1; }
+  40% { transform: translate(-50%, -50%) scale(1) rotate(0); }
+  80% { opacity: 1; }
+  100% { transform: translate(-50%, -70%) scale(1.05); opacity: 0; }
+}
+.fx-piece {
+  position: absolute; top: -40px; width: 10px; height: 16px; border-radius: 2px;
+  animation: fall linear forwards;
+}
+.fx-piece.emoji { width: auto; height: auto; font-size: 30px; }
+@keyframes fall {
+  to { transform: translate(var(--drift), 110vh) rotate(var(--spin)); }
+}
+
+/* 牌桌角落品牌 */
+.table-brand {
+  position: fixed; left: 12px; bottom: 8px; font-size: 12px; font-weight: 700; color: #ffe6b8;
+  opacity: .55; pointer-events: none; z-index: 5;
+}
+body:has(#table.hidden) .table-brand { display: none; }
+
+/* 大廳的設定連結 */
+.link-btn {
+  display: block; margin: 14px auto 0; background: none !important; border: none !important;
+  color: var(--lb-accent) !important; font-size: 14px; text-decoration: underline; padding: 4px;
+}
+
+/* 設定面板 */
+.settings-card { background: #fff8e8 !important; color: #4a1c0f; border: 2px solid #f0c04a !important; max-width: 400px; text-align: left; }
+.settings-card h2 { color: #b3122a !important; text-align: center; }
+.set-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 2px; border-bottom: 1px dashed #ecd9a8; font-weight: 700; }
+.set-row.col { flex-direction: column; align-items: stretch; gap: 8px; }
+.switch { position: relative; width: 50px; height: 28px; margin: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch i { position: absolute; inset: 0; background: #d9cdb2; border-radius: 28px; transition: .2s; cursor: pointer; }
+.switch i::before { content: ''; position: absolute; width: 22px; height: 22px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.switch input:checked + i { background: #e23b3b; }
+.switch input:checked + i::before { transform: translateX(22px); }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg button { flex: 1; background: #fff; color: #8a4b2a; border: 1.5px solid #e6c98a; padding: 9px 6px; font-size: 14px; }
+.seg button.on { background: linear-gradient(135deg,#ffd96a,#f0a91e); color: #6a1d00; border-color: #f0a91e; }
+.settings-card #btnCloseSettings { width: 100%; margin-top: 16px; }
+
+@media (max-width: 720px) {
+  .fx-callout { font-size: 72px; }
+  .fx-callout.fx-hu, .fx-callout.fx-tsumo { font-size: 96px; }
+  .avatar { width: 34px; height: 34px; }
+  .player-card > .avatar-wrap { width: 34px; }
+  .table-brand { display: none; }
+}
+.fx-callout { paint-order: stroke fill; -webkit-text-stroke-width: 10px; }
+.fx-callout { white-space: nowrap; }

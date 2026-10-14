@@ -77,7 +77,7 @@ function startGame(room) {
   room.game = new Game(seats, {
     onUpdate: () => broadcastState(room),
     onResult: (res) => io.to(room.id).emit('result', res),
-    onSfx: (type) => io.to(room.id).emit('sfx', { type }),
+    onSfx: (type, seat) => io.to(room.id).emit('sfx', { type, seat }),
   });
   room.game.startHand();
 }

@@ -17,7 +17,7 @@
         <h1>台式十六張麻將</h1>
         <p class="subtitle">揪好友線上開桌，或跟電腦切磋牌技</p>
         <div class="mascots">
-          <img src="img/opera.svg" alt="京劇公仔" /><img src="img/cat.svg" alt="招財貓" />
+          <img src="img/opera.jpg" alt="京劇公仔" /><img src="img/cat.svg" alt="招財貓" />
           <img src="img/panda.svg" alt="熊貓" /><img src="img/tiger.svg" alt="小老虎" />
         </div>
       </div>
@@ -46,6 +46,7 @@
           <div id="connectAlt" class="ci-alt"></div>
           <div class="ci-hint">請好友在瀏覽器開啟此網址（需與你在同一個 Wi-Fi / 區域網路）</div>
         </div>
+        <button class="link-btn btn-settings">⚙️ 音樂、語音與氣氛設定</button>
       </div>
 
       <footer class="brand">Learn AI with Tarshar🍀<span class="brand-sep">|</span>2026</footer>
@@ -70,7 +71,7 @@
     <div class="topbar">
       <span id="roundInfo"></span>
       <span id="wallInfo"></span>
-      <button id="btnSound" class="ghost small">🔊 音效</button>
+      <button class="ghost small btn-settings">⚙️ 設定</button>
       <button id="btnRules" class="ghost small">規則/台數</button>
     </div>
 
@@ -106,6 +107,27 @@
     </div>
   </div>
 
+  <div class="table-brand">Learn AI with Tarshar🍀<span class="brand-sep">|</span>2026</div>
+
+  <!-- 設定彈窗 -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-card settings-card">
+      <h2>⚙️ 設定</h2>
+      <div class="set-row"><span>🔊 音效</span><label class="switch"><input type="checkbox" id="setSfx"><i></i></label></div>
+      <div class="set-row"><span>🗣️ 語音喊牌</span><label class="switch"><input type="checkbox" id="setVoice"><i></i></label></div>
+      <div class="set-row"><span>🎵 背景音樂</span><label class="switch"><input type="checkbox" id="setBgm"><i></i></label></div>
+      <div class="set-row col"><span>曲風</span>
+        <div class="seg" id="setMusic"><button data-v="guzheng">🪕 國樂古箏</button><button data-v="festive">🥁 過年鑼鼓</button><button data-v="jazz">🎷 輕鬆爵士</button></div>
+      </div>
+      <div class="set-row col"><span>🎉 氣氛</span>
+        <div class="seg" id="setMood"><button data-v="cute">🌸 可愛</button><button data-v="festive">🧨 過年</button></div>
+      </div>
+      <button id="btnCloseSettings" class="primary">完成</button>
+    </div>
+  </div>
+
+  <div id="fxLayer"></div>
+
   <!-- 結算彈窗 -->
   <div id="resultModal" class="modal hidden">
     <div class="modal-card">
@@ -126,12 +148,13 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    // 封面主題：網址 ?theme=red|cream|jade 可切換，預設奶茶米白
+    // 封面主題：網址 ?theme=red|cream|jade 可切換，預設喜氣紅金
     (function () {
-      var t = new URLSearchParams(location.search).get('theme') || 'cream';
+      var t = new URLSearchParams(location.search).get('theme') || 'red';
       document.body.classList.add('theme-' + t);
     })();
   </script>
+  <script src="fx.js"></script>
   <script src="client.js"></script>
 </body>
 </html>

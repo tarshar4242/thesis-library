@@ -392,7 +392,8 @@ class Game {
       p.lastDraw = null;
       this.discardCount++;
       this.addLog(`${p.name} 打出 ${nm(a.tile)}${a.ting ? `，宣告${p.ting}！` : ''}`);
-      this.hooks.onSfx('discard');
+      if (a.ting) this.hooks.onSfx('ting', seat);
+      this.hooks.onSfx('discard', seat);
       this.openReactions(a.tile, seat);
       return {};
     }
@@ -406,7 +407,7 @@ class Game {
       removeTiles(p.hand, [a.tile, a.tile, a.tile, a.tile]);
       p.melds.push({ type: 'ankong', tiles: [a.tile, a.tile, a.tile, a.tile] });
       this.addLog(`${p.name} 暗槓`);
-      this.hooks.onSfx('ankong');
+      this.hooks.onSfx('ankong', seat);
       this.kongReplace(seat);
       return {};
     }
@@ -435,7 +436,7 @@ class Game {
     meld.tiles.push(t);
     removeTiles(p.hand, [t]);
     this.addLog(`${p.name} 加槓 ${nm(t)}`);
-    this.hooks.onSfx('addkong');
+    this.hooks.onSfx('addkong', seat);
     this.kongReplace(seat);
   }
 
@@ -539,21 +540,21 @@ class Game {
       removeTiles(p.hand, [tile, tile, tile]);
       p.melds.push({ type: 'kong', tiles: [tile, tile, tile, tile], from });
       this.addLog(`${p.name} 槓 ${nm(tile)}`);
-      this.hooks.onSfx('kong');
+      this.hooks.onSfx('kong', seat);
       return this.kongReplace(seat);
     }
     if (a.type === 'pon') {
       removeTiles(p.hand, [tile, tile]);
       p.melds.push({ type: 'pon', tiles: [tile, tile, tile], from });
       this.addLog(`${p.name} 碰 ${nm(tile)}`);
-      this.hooks.onSfx('pon');
+      this.hooks.onSfx('pon', seat);
     } else {
       const combo = sortTiles(a.tiles);
       const others = combo.slice(); others.splice(others.indexOf(tile), 1);
       removeTiles(p.hand, others);
       p.melds.push({ type: 'chi', tiles: combo, from });
       this.addLog(`${p.name} 吃 ${combo.map(nm).join('')}`);
-      this.hooks.onSfx('chi');
+      this.hooks.onSfx('chi', seat);
     }
     this.turn = seat;
     this.phase = 'action';
@@ -601,7 +602,7 @@ class Game {
     }
     const typeLabel = ctx.tsumo ? '自摸' : ctx.robKong ? '搶槓胡' : '胡牌';
     this.addLog(`${p.name} ${typeLabel}！${tai} 台`);
-    this.hooks.onSfx('hu');
+    this.hooks.onSfx(ctx.tsumo ? 'tsumo' : 'hu', seat);
     this.endHand({
       kind: 'win', typeLabel,
       from: ctx.tsumo ? null : this.players[ctx.from].name,
