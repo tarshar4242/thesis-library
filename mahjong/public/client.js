@@ -26,7 +26,6 @@ let tingMode = false; // 按下「聽牌」後，下一張打出的牌同時宣�
 
 // ---------- 音效 (Web Audio 合成，免外部檔) ----------
 let audioCtx = null;
-let soundOn = true;
 function ensureAudio() {
   if (!audioCtx) {
     try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
@@ -38,7 +37,7 @@ function ensureAudio() {
 // 播放一段音符：freqs 依序，每個 dur 秒
 function playNotes(notes, type = 'triangle', gain = 0.18) {
   const ctx = ensureAudio();
-  if (!ctx || !soundOn) return;
+  if (!ctx || !FX.settings.sfx) return;
   let t = ctx.currentTime;
   for (const [freq, dur] of notes) {
     const osc = ctx.createOscillator();
@@ -57,7 +56,7 @@ function playNotes(notes, type = 'triangle', gain = 0.18) {
 // 木頭敲擊感的短噪音 (打牌聲)
 function playClack(gain = 0.14) {
   const ctx = ensureAudio();
-  if (!ctx || !soundOn) return;
+  if (!ctx || !FX.settings.sfx) return;
   const dur = 0.08;
   const buf = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
   const data = buf.getChannelData(0);
@@ -76,8 +75,13 @@ const SFX = {
   ankong: () => playNotes([[240, 0.10], [200, 0.10], [160, 0.16]], 'square', 0.16),
   addkong: () => playNotes([[240, 0.10], [200, 0.10], [160, 0.16]], 'square', 0.16),
   hu: () => playNotes([[523, 0.12], [659, 0.12], [784, 0.12], [1047, 0.22]], 'triangle', 0.2), // 胡：勝利琶音
+  tsumo: () => playNotes([[523, 0.12], [659, 0.12], [784, 0.12], [1047, 0.22]], 'triangle', 0.2),
+  ting: () => playNotes([[880, 0.08], [1175, 0.14]], 'sine', 0.16),                 // 聽：清脆叮咚
 };
-socket.on('sfx', ({ type }) => { (SFX[type] || (() => {}))(); });
+socket.on('sfx', ({ type, seat }) => {
+  (SFX[type] || (() => {}))();
+  if (type !== 'discard') FX.callout(type, seat);
+});
 // 首次互動時解鎖音訊 (瀏覽器政策)
 window.addEventListener('pointerdown', () => ensureAudio(), { once: true });
 
@@ -220,7 +224,7 @@ socket.on('state', ({ view, lobby, log }) => {
 function render(v) {
   // 頂欄
   $('roundInfo').textContent = `${WINDLABEL[v.roundWind]}風圈 · 第${v.handNo}局 · 莊家:${v.players[v.dealer].name}` +
-    (v.streak ? ` 連${v.streak}拉${v.streak}` : '');
+    (v.streak ? ` 🔥連${v.streak}拉${v.streak}` : '');
   $('wallInfo').textContent = `牌牆剩 ${v.wallLeft} 張`;
 
   // 中央資訊
@@ -251,7 +255,8 @@ function renderOpponent(rel, p, v) {
   const melds = p.melds.map(m => `<span class="mtile">${m.tiles.map(g).join('')}</span>`).join(' ');
   const flowers = p.flowers.map(g).join('');
   area.innerHTML =
-    `<div class="player-card ${isTurn ? 'turn' : ''} ${isDealer ? 'dealer' : ''}">
+    `<div class="player-card ${isTurn ? 'turn' : ''} ${isDealer ? 'dealer' : ''}" data-seat="${p.seat}">
+      ${FX.avatarHtml(p.seat, isTurn)}
       <div><span class="pwind">${WINDLABEL[p.wind]}${isDealer ? '莊' : ''}</span><span class="pname">${p.name}</span>${p.ting ? `<span class="ting-badge">${p.ting}</span>` : ''}</div>
       <div class="pscore">${p.score >= 0 ? '+' : ''}${p.score}</div>
       <div class="mini-hand">${backs}</div>
@@ -265,7 +270,8 @@ function renderMe(v, p) {
   const isTurn = v.turn === p.seat && !v.finished;
   const isDealer = v.dealer === p.seat;
   area.innerHTML =
-    `<div class="player-card ${isTurn ? 'turn' : ''} ${isDealer ? 'dealer' : ''}">
+    `<div class="player-card me-card ${isTurn ? 'turn' : ''} ${isDealer ? 'dealer' : ''}" data-seat="${p.seat}">
+      ${FX.avatarHtml(p.seat, isTurn)}
       <span class="pwind">${WINDLABEL[p.wind]}${isDealer ? '莊' : ''}</span>
       <span class="pname">${p.name}(你)</span>${p.ting ? `<span class="ting-badge">${p.ting}</span>` : ''}
       <span class="pscore">　${p.score >= 0 ? '+' : ''}${p.score}</span>
@@ -438,6 +444,7 @@ socket.on('result', (res) => {
       `<div style="margin-top:12px">${scoreRow}</div>`;
   }
   modal.classList.remove('hidden');
+  FX.celebrate(res, lastView);
   clearTimeout(window._resultTimer);
   window._resultTimer = setTimeout(() => modal.classList.add('hidden'), 6500);
 });
@@ -461,8 +468,3 @@ $('btnRules').onclick = () => {
 };
 $('btnCloseRules').onclick = () => $('rulesModal').classList.add('hidden');
 
-$('btnSound').onclick = () => {
-  soundOn = !soundOn;
-  $('btnSound').textContent = soundOn ? '🔊 音效' : '🔇 靜音';
-  if (soundOn) { ensureAudio(); SFX.chi(); }
-};

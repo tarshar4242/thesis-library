@@ -9,33 +9,47 @@
 <body>
   <!-- 大廳 / 進入畫面 -->
   <div id="lobby" class="screen">
-    <div class="lobby-card">
-      <h1>🀄 台式十六張麻將</h1>
-      <p class="subtitle">支援線上連線對戰與 AI 電腦對戰</p>
-
-      <label>你的暱稱
-        <input id="nameInput" maxlength="8" placeholder="輸入暱稱" />
-      </label>
-
-      <div class="lobby-actions">
-        <button id="btnQuick" class="primary">🤖 單人對 AI（立即開始）</button>
-        <button id="btnCreate">➕ 建立連線房間</button>
-        <div class="join-row">
-          <input id="roomInput" maxlength="4" placeholder="房號" />
-          <button id="btnJoin">🔗 加入房間</button>
+    <div class="lobby-wrap">
+      <div class="hero">
+        <div class="hero-tiles">
+          <span class="htile red">中</span><span class="htile green">發</span><span class="htile">東</span><span class="htile blue">萬</span>
+        </div>
+        <h1>台式十六張麻將</h1>
+        <p class="subtitle">揪好友線上開桌，或跟電腦切磋牌技</p>
+        <div class="mascots">
+          <img src="img/opera.jpg" alt="京劇公仔" /><img src="img/cat.svg" alt="招財貓" />
+          <img src="img/panda.svg" alt="熊貓" /><img src="img/tiger.svg" alt="小老虎" />
         </div>
       </div>
-      <p id="lobbyMsg" class="msg"></p>
 
-      <div id="connectInfo" class="connect-info">
-        <div class="ci-label">📡 邀請同區網好友連線</div>
-        <div class="ci-row">
-          <span id="connectAddr" class="ci-addr">偵測中…</span>
-          <button id="btnCopyAddr" class="small">複製</button>
+      <div class="lobby-card">
+        <label>你的暱稱
+          <input id="nameInput" maxlength="8" placeholder="輸入暱稱" />
+        </label>
+
+        <div class="lobby-actions">
+          <button id="btnQuick" class="primary">🤖 單人對 AI（立即開始）</button>
+          <button id="btnCreate" class="secondary">➕ 建立連線房間</button>
+          <div class="join-row">
+            <input id="roomInput" maxlength="4" placeholder="房號" />
+            <button id="btnJoin" class="secondary">🔗 加入房間</button>
+          </div>
         </div>
-        <div id="connectAlt" class="ci-alt"></div>
-        <div class="ci-hint">請好友在瀏覽器開啟此網址（需與你在同一個 Wi-Fi / 區域網路）</div>
+        <p id="lobbyMsg" class="msg"></p>
+
+        <div id="connectInfo" class="connect-info">
+          <div class="ci-label">📡 邀請同區網好友連線</div>
+          <div class="ci-row">
+            <span id="connectAddr" class="ci-addr">偵測中…</span>
+            <button id="btnCopyAddr" class="small">複製</button>
+          </div>
+          <div id="connectAlt" class="ci-alt"></div>
+          <div class="ci-hint">請好友在瀏覽器開啟此網址（需與你在同一個 Wi-Fi / 區域網路）</div>
+        </div>
+        <button class="link-btn btn-settings">⚙️ 音樂、語音與氣氛設定</button>
       </div>
+
+      <footer class="brand">Learn AI with Tarshar🍀<span class="brand-sep">|</span>2026</footer>
     </div>
   </div>
 
@@ -49,6 +63,7 @@
       <p id="waitMsg" class="msg">等待房主開始…</p>
       <button id="btnLeave" class="ghost">離開</button>
     </div>
+    <footer class="brand">Learn AI with Tarshar🍀<span class="brand-sep">|</span>2026</footer>
   </div>
 
   <!-- 牌桌 -->
@@ -56,7 +71,7 @@
     <div class="topbar">
       <span id="roundInfo"></span>
       <span id="wallInfo"></span>
-      <button id="btnSound" class="ghost small">🔊 音效</button>
+      <button class="ghost small btn-settings">⚙️ 設定</button>
       <button id="btnRules" class="ghost small">規則/台數</button>
     </div>
 
@@ -92,6 +107,27 @@
     </div>
   </div>
 
+  <div class="table-brand">Learn AI with Tarshar🍀<span class="brand-sep">|</span>2026</div>
+
+  <!-- 設定彈窗 -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-card settings-card">
+      <h2>⚙️ 設定</h2>
+      <div class="set-row"><span>🔊 音效</span><label class="switch"><input type="checkbox" id="setSfx"><i></i></label></div>
+      <div class="set-row"><span>🗣️ 語音喊牌</span><label class="switch"><input type="checkbox" id="setVoice"><i></i></label></div>
+      <div class="set-row"><span>🎵 背景音樂</span><label class="switch"><input type="checkbox" id="setBgm"><i></i></label></div>
+      <div class="set-row col"><span>曲風</span>
+        <div class="seg" id="setMusic"><button data-v="guzheng">🪕 國樂古箏</button><button data-v="festive">🥁 過年鑼鼓</button><button data-v="jazz">🎷 輕鬆爵士</button></div>
+      </div>
+      <div class="set-row col"><span>🎉 氣氛</span>
+        <div class="seg" id="setMood"><button data-v="cute">🌸 可愛</button><button data-v="festive">🧨 過年</button></div>
+      </div>
+      <button id="btnCloseSettings" class="primary">完成</button>
+    </div>
+  </div>
+
+  <div id="fxLayer"></div>
+
   <!-- 結算彈窗 -->
   <div id="resultModal" class="modal hidden">
     <div class="modal-card">
@@ -111,6 +147,14 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // 封面主題：網址 ?theme=red|cream|jade 可切換，預設喜氣紅金
+    (function () {
+      var t = new URLSearchParams(location.search).get('theme') || 'red';
+      document.body.classList.add('theme-' + t);
+    })();
+  </script>
+  <script src="fx.js"></script>
   <script src="client.js"></script>
 </body>
 </html>
