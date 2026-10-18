@@ -854,3 +854,15 @@ html[data-inset] .modal { padding-top: calc(16px + var(--it)); padding-bottom: c
   html, html[data-inset="none"] { --ib: 84px; }
   html[data-inset="mid"], html[data-inset="deep"] { --ib: 110px; }
 }
+.build-tag { margin-top: 8px; font-size: 11px; color: #b89a6a; text-align: center; }
+/* 觸控手機：底部留白不依賴設定是否載入，一律生效 */
+@media (pointer: coarse) {
+  #table { padding-bottom: calc(4px + env(safe-area-inset-bottom) + var(--ib)) !important; }
+  #lobby { padding-bottom: calc(12px + env(safe-area-inset-bottom) + var(--ib)) !important; }
+}
+@media (hover: none) {
+  html, html[data-inset="none"] { --ib: 84px; }
+  html[data-inset="mid"], html[data-inset="deep"] { --ib: 110px; }
+  #table { padding-bottom: calc(4px + env(safe-area-inset-bottom) + var(--ib)) !important; }
+  #lobby { padding-bottom: calc(12px + env(safe-area-inset-bottom) + var(--ib)) !important; }
+}
