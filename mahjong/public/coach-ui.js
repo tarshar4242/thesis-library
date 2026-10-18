@@ -76,7 +76,8 @@ const Coach = (() => {
   function syncToggle() {
     const b = $('btnCoach');
     if (b) {
-      b.textContent = on() ? '✅ 碰碰陪打中（點一下請它休息）' : '🐦 請碰碰來陪打';
+      b.textContent = on() ? '✅ 碰碰陪打中' : '🐦 請碰碰陪打';
+      b.title = on() ? '點一下請碰碰休息' : '';
       b.classList.toggle('on', on());
     }
     const sw = $('setCoach');
