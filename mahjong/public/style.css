@@ -762,3 +762,50 @@ body:has(#table.hidden) .table-brand { display: none; }
   .mj-tile b { font-size: 13px; }
 }
 #lobby .lobby-wrap { margin: auto; }
+
+/* =========================================================
+   首頁外框：把內容框成一張喜帖，填滿整個畫面，不留大片空白
+   ========================================================= */
+#lobby { padding: 12px; align-items: stretch; }
+#lobby .lobby-wrap {
+  margin: auto; width: 100%; max-width: 480px;
+  min-height: calc(100vh - 24px); min-height: calc(100dvh - 24px); max-height: 900px;
+  justify-content: space-evenly; gap: 8px;
+  padding: 22px 16px 14px; border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,217,106,.18), transparent 55%),
+    linear-gradient(180deg, rgba(120,6,24,.55), rgba(90,0,16,.65));
+  border: 2px solid #ffd96a;
+  box-shadow: inset 0 0 0 5px rgba(139,10,30,.9), inset 0 0 0 7px rgba(255,217,106,.55), 0 18px 40px rgba(40,0,0,.45);
+}
+/* 四個角的金色回紋 */
+#lobby .lobby-wrap::before, #lobby .lobby-wrap::after {
+  content: ''; position: absolute; width: 34px; height: 34px; pointer-events: none;
+  border: 3px solid #ffd96a; opacity: .9;
+}
+#lobby .lobby-wrap::before { top: 12px; left: 12px; border-right: none; border-bottom: none; border-radius: 10px 0 0 0; }
+#lobby .lobby-wrap::after { bottom: 12px; right: 12px; border-left: none; border-top: none; border-radius: 0 0 10px 0; }
+.lobby-corner { position: absolute; width: 34px; height: 34px; border: 3px solid #ffd96a; opacity: .9; pointer-events: none; }
+.lobby-corner.tr { top: 12px; right: 12px; border-left: none; border-bottom: none; border-radius: 0 10px 0 0; }
+.lobby-corner.bl { bottom: 12px; left: 12px; border-right: none; border-top: none; border-radius: 0 0 0 10px; }
+#lobby .brand { margin-top: 2px; }
+
+/* 畫面夠高時，元件放大一點，填得更飽滿 */
+@media (min-height: 740px) {
+  .title-block h1 { font-size: 38px; }
+  .title-block .subtitle { font-size: 14px; }
+  .namecard { padding: 14px 16px; }
+  .namecard-avatar img { width: 72px; height: 72px; }
+  .role { padding: 8px 2px 6px !important; }
+  .role img { width: 48px; height: 48px; }
+  .role-title { font-size: 14px; margin-bottom: 8px; }
+  .mj-tile { padding: 14px 4px 12px !important; }
+  .mj-icon { font-size: 28px; }
+  .mj-tile b { font-size: 15px; }
+  .sticky-note { padding: 12px 12px; }
+  .sticky-note img { width: 50px; height: 50px; }
+}
+.role { min-width: 0; }
+.role img { max-width: 100%; height: auto; aspect-ratio: 1; }
+@media (min-height: 740px) { .title-seal { margin-right: -158px; top: 4px; } }
+@media (max-width: 360px) { .title-seal { margin-right: -128px; } }
