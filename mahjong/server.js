@@ -1,4 +1,5 @@
 /* 台式麻將 伺服器 (後端重建版) */
+console.log('🀄 伺服器啟動中…');
 const path = require('path');
 const os = require('os');
 const http = require('http');
@@ -184,6 +185,8 @@ io.on('connection', (socket) => {
   });
 });
 
+server.on('error', (err) => { console.error('❌ 伺服器無法啟動:', err.message); process.exit(1); });
+console.log(`   準備在 port ${PORT} 開門，AI 教練：${coachAI.available() ? '已設定金鑰' : '未設定'}，工作區：${coachAI.health().workspaceSet ? '已設定' : '未設定'}`);
 server.listen(PORT, '0.0.0.0', () => {
   console.log('🀄 台式十六張麻將 已啟動');
   console.log(`   本機遊玩：http://localhost:${PORT}`);
