@@ -95,7 +95,7 @@ function show(name) {
 // ---------- 大廳 ----------
 $('btnQuick').onclick = () => {
   const name = getName();
-  socket.emit('quickPlay', { name, avatar: Lobby.avatar() }, (r) => {
+  socket.emit('quickPlay', { name, avatar: Lobby.avatar(), difficulty: Lobby.level() }, (r) => {
     if (r.error) return setMsg('lobbyMsg', r.error);
     mySeat = r.seat; isHost = true;
     show('table');
@@ -103,7 +103,7 @@ $('btnQuick').onclick = () => {
 };
 $('btnCreate').onclick = () => {
   const name = getName();
-  socket.emit('createRoom', { name, avatar: Lobby.avatar() }, (r) => {
+  socket.emit('createRoom', { name, avatar: Lobby.avatar(), difficulty: Lobby.level() }, (r) => {
     if (r.error) return setMsg('lobbyMsg', r.error);
     mySeat = r.seat; isHost = true;
     $('waitRoomId').textContent = r.roomId;
@@ -199,7 +199,9 @@ $('btnCopyAddr').onclick = () => {
 loadServerInfo();
 
 // ---------- 房間大廳更新 ----------
+const LEVEL_LABEL = { easy: '🐣 小白版', hard: '🀄 高手版' };
 socket.on('lobby', (lobby) => {
+  $('waitLevel').textContent = `電腦難度：${LEVEL_LABEL[lobby.difficulty] || LEVEL_LABEL.easy}（開桌的人決定）`;
   const list = $('seatList');
   list.innerHTML = '';
   lobby.seats.forEach((s) => {
@@ -227,7 +229,7 @@ socket.on('state', ({ view, lobby, log }) => {
 function render(v) {
   // 頂欄
   $('roundInfo').textContent = `${WINDLABEL[v.roundWind]}風圈 · 第${v.handNo}局 · 莊家:${v.players[v.dealer].name}` +
-    (v.streak ? ` 🔥連${v.streak}拉${v.streak}` : '');
+    (v.streak ? ` 🔥連${v.streak}拉${v.streak}` : '') + (v.difficulty === 'easy' ? ' · 🐣小白' : ' · 🀄高手');
   $('wallInfo').textContent = `牌牆剩 ${v.wallLeft} 張`;
 
   // 中央資訊

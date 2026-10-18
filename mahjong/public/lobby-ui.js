@@ -14,6 +14,8 @@ const Lobby = (() => {
 
   let role = ROLES[load('mjRole', '')] ? load('mjRole', '') : 'dan';
   let taken = [];
+  let level = load('mjLevel', 'easy') === 'hard' ? 'hard' : 'easy';
+  const paintLevel = () => document.querySelectorAll('#levelPicker button').forEach(b => b.classList.toggle('on', b.dataset.v === level));
   let inviteText = '';
 
   function paint() {
@@ -49,6 +51,10 @@ const Lobby = (() => {
 
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('#rolePicker .role').forEach(b => { b.onclick = () => choose(b.dataset.role); });
+    document.querySelectorAll('#levelPicker button').forEach(b => {
+      b.onclick = () => { level = b.dataset.v; store('mjLevel', level); paintLevel(); };
+    });
+    paintLevel();
     const name = $('nameInput');
     name.value = load('mjName', '');
     name.addEventListener('change', () => store('mjName', name.value.trim()));
@@ -64,8 +70,9 @@ const Lobby = (() => {
       socket.emit('peekRoom', { roomId: id }, (r) => {
         if (!r || r.error) { $('lobbyMsg').textContent = r ? r.error : ''; return; }
         markTaken(r.taken);
+        const lv = r.difficulty === 'hard' ? '這桌是高手版' : '這桌是小白版';
         $('lobbyMsg').textContent = r.started ? '這桌已經開打了' : r.full ? '這桌已經坐滿了'
-          : r.taken.length ? '灰色的角色已經有人選了' : '';
+          : lv + (r.taken.length ? '，灰色的角色已經有人選了' : '');
       });
     });
 
@@ -81,5 +88,5 @@ const Lobby = (() => {
     paint();
   });
 
-  return { avatar: () => role, name: () => $('nameInput').value.trim(), markTaken, setInvite, remember: () => store('mjName', $('nameInput').value.trim()) };
+  return { level: () => level, avatar: () => role, name: () => $('nameInput').value.trim(), markTaken, setInvite, remember: () => store('mjName', $('nameInput').value.trim()) };
 })();

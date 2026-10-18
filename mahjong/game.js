@@ -233,21 +233,39 @@ function shanten(tiles) {
   return best;
 }
 
+// 電腦難度：小白版會失誤、少吃碰、偶爾漏胡；高手版精算並會防守
+const LEVELS = {
+  easy: { misplay: 0.3, callRate: 0.5, huRate: 0.75, defend: false },
+  hard: { misplay: 0, callRate: 1, huRate: 1, defend: true },
+};
+const levelOf = (game) => LEVELS[game.difficulty] || LEVELS.hard;
+
 function aiChooseDiscard(hand, game, seat) {
-  let best = null, bestS = Infinity, bestV = Infinity;
-  for (const t of new Set(hand)) {
+  const lv = levelOf(game);
+  const tiles = [...new Set(hand)];
+  // 小白版：有一定機率隨手打一張（像真人看錯牌）
+  if (lv.misplay && Math.random() < lv.misplay) return tiles[Math.floor(Math.random() * tiles.length)];
+  // 高手版：有人宣告聽牌時，牌還差很遠就優先打他打過的牌（現物），不放槍
+  const tingers = lv.defend ? game.players.filter(p => p.seat !== seat && p.ting) : [];
+  const cands = tiles.map(t => {
     const rest = hand.slice(); rest.splice(rest.indexOf(t), 1);
-    const s = shanten(rest);
     let v = tileValue(hand, t);
     if (isHonor(t) && (DRAGONS.includes(t) || t === game.roundWind || t === game.seatWind(seat))) v += 0.5;
-    if (s < bestS || (s === bestS && v < bestV)) { bestS = s; bestV = v; best = t; }
-  }
-  return best;
+    return { t, s: shanten(rest), v, danger: tingers.filter(p => !p.discards.includes(t)).length };
+  });
+  const minS = Math.min(...cands.map(c => c.s));
+  const defending = tingers.length > 0 && minS >= 2;
+  const key = (c) => defending ? [c.danger, c.s, c.v] : [c.s, c.v];
+  const less = (a, b) => { for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] < b[i]; return false; };
+  let best = cands[0];
+  for (const c of cands) if (less(key(c), key(best))) best = c;
+  return best.t;
 }
 
 // ---------- 牌局 ----------
 class Game {
-  constructor(seats, hooks) {
+  constructor(seats, hooks, opts = {}) {
+    this.difficulty = opts.difficulty === 'easy' ? 'easy' : 'hard';
     this.players = seats.map((s, i) => ({
       seat: i, name: s.name, avatar: s.avatar, isAI: s.isAI, score: 0,
       hand: [], melds: [], flowers: [], discards: [], lastDraw: null,
@@ -365,7 +383,7 @@ class Game {
     return {
       roundWind: this.roundWind, handNo: this.handNo, dealer: this.dealer, streak: this.streak,
       turn: this.turn, phase: this.phase, finished: this.finished,
-      wallLeft: this.wall.length, players, me,
+      wallLeft: this.wall.length, players, me, difficulty: this.difficulty,
     };
   }
 
@@ -664,19 +682,22 @@ class Game {
     const p = this.players[seat];
     const o = this.actionOptions(seat);
     if (!o) return;
-    if (o.tsumo) return this.doAction(seat, { type: 'tsumo' });
+    const lv = levelOf(this);
+    if (o.tsumo && Math.random() < lv.huRate) return this.doAction(seat, { type: 'tsumo' });
     if (p.ting) return this.doAction(seat, { type: 'discard', tile: o.locked });
     if (o.ankong.length) return this.doAction(seat, { type: 'ankong', tile: o.ankong[0] });
     if (o.addkong.length) return this.doAction(seat, { type: 'addkong', tile: o.addkong[0] });
     const tile = aiChooseDiscard(p.hand, this, seat);
-    return this.doAction(seat, { type: 'discard', tile, ting: o.ting.includes(tile) });
+    return this.doAction(seat, { type: 'discard', tile, ting: o.ting.includes(tile) && Math.random() < lv.huRate });
   }
 
   aiReact(seat) {
     const o = this.pending[seat].opts;
     const t = this.ctx.tile;
     const hand = this.players[seat].hand;
-    if (o.hu) return { type: 'hu' };
+    const lv = levelOf(this);
+    if (o.hu && Math.random() < lv.huRate) return { type: 'hu' };
+    if (Math.random() >= lv.callRate) return { type: 'pass' };
     if (o.kong) return { type: 'kong' };
     // 吃碰之後要打一張，所以比較「吃碰再打最好的一張」是否比現在更接近聽牌
     const now = shanten(hand);
