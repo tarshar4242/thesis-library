@@ -717,3 +717,48 @@ body:has(#table.hidden) .table-brand { display: none; }
   .center-info .big { font-size: 30px; }
   .center-info .turn-name { font-size: 14px; }
 }
+
+/* =========================================================
+   首頁一頁看完：不用往下拉
+   ========================================================= */
+#lobby { padding-top: 10px; padding-bottom: 10px; }
+.lobby-wrap { gap: 10px; }
+.title-block { padding-top: 0; }
+.title-block h1 { font-size: 34px; letter-spacing: 5px; }
+.title-block .subtitle { font-size: 13px; margin-top: 2px; }
+.title-seal { margin-right: -150px; width: 30px; height: 48px; font-size: 13px; top: -4px; }
+.namecard { padding: 10px 14px 10px 14px; gap: 12px; }
+.namecard-avatar img { width: 64px; height: 64px; border-radius: 12px; }
+.namecard-role { margin-bottom: 0; }
+.namecard-label input { margin-top: 2px; padding: 3px 2px !important; font-size: 18px !important; }
+.role-title { font-size: 13px; margin: 0 0 6px 4px; }
+.role-row { grid-template-columns: repeat(6, 1fr); gap: 6px; }
+.role { padding: 6px 2px 4px !important; border-radius: 12px !important; }
+.role img { width: 44px; height: 44px; }
+.role b { display: none; }
+.role small { font-size: 12px; font-weight: 800; color: #4a1c0f; }
+.role.on { transform: translateY(-2px); }
+.role.taken::after { font-size: 9px; }
+.tile-actions { gap: 8px; }
+.mj-tile { padding: 9px 4px 8px !important; gap: 2px; box-shadow: 0 4px 0 #c8bd96, 0 6px 12px rgba(0,0,0,.3); }
+#btnQuick.mj-tile { box-shadow: 0 4px 0 #b8800e, 0 6px 12px rgba(0,0,0,.3); }
+.mj-icon { font-size: 22px; }
+.mj-tile b { font-size: 14px; }
+.mj-tile small { font-size: 11px; }
+.sticky-note { width: 100%; transform: rotate(-1deg); padding: 8px 10px; gap: 8px; margin-top: 4px; }
+.sticky-note::before { top: -8px; height: 14px; }
+.sticky-note img { width: 40px; height: 40px; }
+.sticky-note > div { flex: 1; min-width: 0; }
+.sticky-note b { font-size: 14px; }
+.sticky-note span { font-size: 12px; margin: 0; }
+.sticky-note .coach-toggle { flex: none; padding: 7px 10px; font-size: 13px; white-space: nowrap; }
+#lobby .link-btn { margin: 0; padding: 2px; font-size: 13px; }
+#lobby .brand { margin-top: 0; }
+@media (max-width: 480px) {
+  .title-block h1 { font-size: 30px; }
+  .title-seal { margin-right: -132px; }
+  .namecard-avatar img { width: 58px; height: 58px; }
+  .role img { width: 42px; height: 42px; }
+  .mj-tile b { font-size: 13px; }
+}
+#lobby .lobby-wrap { margin: auto; }
