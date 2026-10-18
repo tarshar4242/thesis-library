@@ -1,10 +1,10 @@
 /* 首頁名片：選角色、記住稱呼、桌號查詢、邀請卡 */
 const Lobby = (() => {
   const ROLES = {
-    sheng: { img: 'img/sheng.svg', label: '生 · 小生' },
+    sheng: { img: 'img/sheng.jpg', label: '生 · 小生' },
     dan: { img: 'img/opera.jpg', label: '旦 · 花旦' },
-    jing: { img: 'img/jing.svg', label: '淨 · 花臉' },
-    chou: { img: 'img/chou.svg', label: '丑 · 小丑' },
+    jing: { img: 'img/jing.jpg', label: '淨 · 花臉' },
+    chou: { img: 'img/chou.jpg', label: '丑 · 小丑' },
   };
   const $ = (id) => document.getElementById(id);
   const load = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
