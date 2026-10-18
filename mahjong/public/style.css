@@ -513,3 +513,133 @@ body:has(#table.hidden) .table-brand { display: none; }
 .coach { bottom: 185px; pointer-events: none; }
 .coach > * { pointer-events: auto; }
 @media (max-width: 720px) { .coach { bottom: auto; } }
+
+/* =========================================================
+   我家三缺一：玩家名片風首頁
+   ========================================================= */
+.title-block { position: relative; text-align: center; padding-top: 6px; }
+.title-block h1 {
+  font-size: 44px; letter-spacing: 8px; margin: 0; color: var(--lb-title);
+  text-shadow: var(--lb-title-shadow); font-weight: 900;
+}
+.title-block .subtitle { margin: 4px 0 0; color: var(--lb-sub); font-size: 15px; letter-spacing: 2px; }
+.title-block.small h1 { font-size: 28px; letter-spacing: 5px; }
+.title-seal {
+  position: absolute; right: 50%; margin-right: -170px; top: -2px; transform: rotate(12deg);
+  width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;
+  border: 3px solid #ffd96a; border-radius: 8px; color: #ffd96a; font-weight: 900; font-size: 15px;
+  writing-mode: vertical-rl; letter-spacing: 2px; background: rgba(139,10,30,.5);
+}
+
+/* 玩家名片 */
+.namecard {
+  position: relative; width: 100%; display: flex; gap: 16px; align-items: center;
+  background: linear-gradient(135deg, #fffaf0, #fff1d6); color: #4a1c0f;
+  border-radius: 18px; padding: 18px 18px 18px 16px; border: 2px solid #f0c04a;
+  box-shadow: 0 12px 30px rgba(60,0,0,.4);
+}
+.namecard::before {
+  content: ''; position: absolute; left: 0; top: 14px; bottom: 14px; width: 6px; border-radius: 0 6px 6px 0; background: #c8102e;
+}
+.namecard-avatar img {
+  width: 92px; height: 92px; border-radius: 16px; object-fit: cover; background: #fdf6ec;
+  border: 3px solid #ffd96a; box-shadow: 0 4px 10px rgba(0,0,0,.2); display: block;
+}
+.namecard-body { flex: 1; min-width: 0; }
+.namecard-role { font-size: 13px; font-weight: 800; color: #c8102e; letter-spacing: 1px; margin-bottom: 4px; }
+.namecard-label { margin: 0 !important; color: #8a4b2a !important; font-weight: 700; font-size: 14px; }
+.namecard-label input {
+  margin-top: 6px; background: transparent !important; border: none !important; border-bottom: 2px dashed #d9b46a !important;
+  border-radius: 0 !important; padding: 6px 2px !important; font-size: 20px !important; font-weight: 800; color: #4a1c0f !important;
+}
+.namecard-stamp {
+  position: absolute; right: 12px; top: 10px; transform: rotate(-10deg);
+  color: #c8102e; border: 2px solid #c8102e; border-radius: 6px; padding: 1px 6px;
+  font-size: 12px; font-weight: 900; opacity: .75; letter-spacing: 2px;
+}
+
+/* 角色挑選 */
+.role-picker { width: 100%; }
+.role-title { color: var(--lb-sub); font-size: 14px; font-weight: 700; margin: 0 0 8px 4px; }
+.role-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.role {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px 6px !important;
+  background: rgba(255,248,232,.92) !important; color: #4a1c0f !important; border: 2px solid transparent !important;
+  border-radius: 14px !important; box-shadow: 0 4px 10px rgba(0,0,0,.2);
+}
+.role img { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; background: #fdf6ec; }
+.role b { font-size: 18px; line-height: 1.1; }
+.role small { font-size: 11px; color: #8a4b2a; }
+.role.on { border-color: #ffd96a !important; background: #fff !important; transform: translateY(-3px); box-shadow: 0 0 0 3px rgba(255,217,106,.5), 0 8px 16px rgba(0,0,0,.25); }
+.role.taken { opacity: .35; filter: grayscale(1); cursor: not-allowed; }
+.role.taken::after { content: '已有人選'; font-size: 11px; color: #c8102e; font-weight: 800; }
+
+/* 麻將牌大按鈕 */
+.tile-actions { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.mj-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 6px 14px !important;
+  background: linear-gradient(180deg, #fffdf6, #f1e9d2) !important; color: #4a1c0f !important;
+  border: 1px solid #d9cfae !important; border-radius: 14px !important;
+  box-shadow: 0 6px 0 #c8bd96, 0 10px 18px rgba(0,0,0,.3); transition: transform .12s, box-shadow .12s;
+}
+.mj-tile:hover { transform: translateY(-3px); }
+.mj-tile:active { transform: translateY(4px); box-shadow: 0 2px 0 #c8bd96, 0 4px 8px rgba(0,0,0,.3); }
+.mj-icon { font-size: 30px; line-height: 1; }
+.mj-tile b { font-size: 16px; }
+.mj-tile small { font-size: 12px; color: #8a4b2a; font-weight: 600; }
+#btnQuick.mj-tile { background: linear-gradient(180deg, #ffe58a, #f3b82c) !important; border-color: #d99a1a !important; box-shadow: 0 6px 0 #b8800e, 0 10px 18px rgba(0,0,0,.3); }
+
+.join-box { width: 100%; display: flex; gap: 8px; }
+.join-box input {
+  flex: 1; margin: 0; font-size: 20px; letter-spacing: 6px; text-transform: uppercase; text-align: center;
+  background: #fffdf6; color: #4a1c0f; border: 2px solid #f0c04a; border-radius: 12px;
+}
+.join-box button { padding: 0 22px; font-size: 17px; background: #c8102e; color: #fff; border-radius: 12px; }
+#lobby .msg { color: #ffe6b8; text-align: center; }
+
+/* 碰碰便利貼 */
+.sticky-note {
+  width: 92%; display: flex; gap: 12px; align-items: center; transform: rotate(-1.5deg);
+  background: #fff3a8; color: #5a4400; padding: 12px 14px; border-radius: 4px 4px 18px 4px;
+  box-shadow: 0 10px 18px rgba(0,0,0,.3); position: relative;
+}
+.sticky-note::before {
+  content: ''; position: absolute; top: -10px; left: 50%; width: 70px; height: 20px; margin-left: -35px;
+  background: rgba(255,255,255,.55); transform: rotate(2deg);
+}
+.sticky-note img { width: 62px; height: 62px; flex-shrink: 0; }
+.sticky-note b { display: block; font-size: 15px; }
+.sticky-note span { display: block; font-size: 13px; margin: 2px 0 8px; }
+.sticky-note .coach-toggle { margin: 0; width: auto; padding: 8px 14px; font-size: 14px; border-style: solid !important; }
+#lobby .link-btn { color: #ffe6b8 !important; }
+
+/* 等人入座 */
+.wait-card { text-align: center; }
+.wait-card h2 { font-size: 26px; }
+.wait-card .roomcode { font-size: 32px; letter-spacing: 6px; }
+.seat-who { display: inline-flex; align-items: center; gap: 10px; }
+.seat-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #fdf6ec; border: 2px solid #f0c04a; }
+.seat-avatar.empty-seat { display: inline-flex; align-items: center; justify-content: center; color: #b89a6a; font-weight: 800; margin-right: 10px; vertical-align: middle; }
+.invite-card { text-align: left; margin: 16px 0 12px; }
+.line-btn {
+  display: block; margin-top: 10px; text-align: center; text-decoration: none; font-weight: 800;
+  background: #06c755; color: #fff; padding: 10px; border-radius: 10px;
+}
+
+@media (max-width: 480px) {
+  .title-block h1 { font-size: 34px; letter-spacing: 5px; }
+  .title-seal { margin-right: -140px; width: 38px; height: 38px; font-size: 13px; }
+  .namecard-avatar img { width: 74px; height: 74px; }
+  .role img { width: 46px; height: 46px; }
+  .mj-tile b { font-size: 14px; }
+  .mj-icon { font-size: 26px; }
+}
+.title-seal { writing-mode: horizontal-tb; flex-direction: column; width: 40px; height: 64px; font-size: 18px; line-height: 1.15; letter-spacing: 0; overflow: visible; }
+.title-seal b { display: block; }
+.namecard-label input:focus { outline: none; border-bottom-color: #c8102e !important; }
+@media (max-width: 480px) { .title-seal { width: 32px; height: 52px; font-size: 14px; margin-right: -150px; } }
+/* 邀請卡移到等待畫面後的配色 */
+#waiting .invite-card { background: #fff6e0; border: 1.5px dashed #e7b85a; border-radius: 12px; padding: 12px; }
+#waiting .ci-label, #waiting .ci-hint { color: #8a4b2a; }
+#waiting .ci-addr { background: #4a1c0f; color: #ffd96a; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+#waiting #btnCopyAddr { background: #c8102e; color: #fff; border: none; white-space: nowrap; flex: none; }
