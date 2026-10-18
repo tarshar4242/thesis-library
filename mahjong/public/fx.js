@@ -286,7 +286,14 @@ const FX = (() => {
       paint();
     };
     bindSwitch('setSfx', 'sfx');
-    bindSwitch('setCoach', 'coach', () => Coach.syncToggle());
+    // 碰碰三種模式：關閉／隨時陪打／需要再叫
+    $('setCoachMode').querySelectorAll('button').forEach(b => {
+      b.onclick = () => {
+        settings.coach = b.dataset.v !== 'off';
+        if (settings.coach) settings.coachMode = b.dataset.v;
+        save(); Coach.syncToggle();
+      };
+    });
     bindSwitch('setBgm', 'bgm', syncMusic);
     bindSwitch('setVoice', 'voice', () => settings.voice && speak('碰'));
     bindSeg('setMusic', 'music', () => { if (settings.bgm) startMusic(); });

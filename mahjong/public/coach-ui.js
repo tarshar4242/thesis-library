@@ -8,6 +8,9 @@ const Coach = (() => {
   const saveLearned = () => { try { localStorage.setItem('mjLearned', JSON.stringify(learned)); } catch (e) {} };
 
   const on = () => FX.settings.coach;
+  // 需要再叫：平常只顯示一顆「叫碰碰」按鈕，按了才給這一手的建議
+  const onCall = () => FX.settings.coachMode === 'call';
+  let calledKey = null;
 
   function show(text, lesson) {
     $('coachPanel').classList.remove('hidden');
@@ -65,6 +68,13 @@ const Coach = (() => {
     const myTurn = v.phase === 'action' && v.turn === me.seat && !v.finished;
     const react = v.phase === 'reaction' && me.reaction;
     const key = [v.handNo, v.turn, v.phase, me.hand.join(''), JSON.stringify(me.reaction), v.finished].join('|');
+    if (onCall()) {
+      if (key !== lastKey) { lastKey = key; calledKey = null; highlight = null; }
+      panel.classList.toggle('calling', calledKey !== key);
+      paintHighlight();
+      return;
+    }
+    panel.classList.remove('calling');
     if (key === lastKey) { paintHighlight(); return; }
     lastKey = key;
     if (!myTurn) { highlight = null; paintHighlight(); }
@@ -80,8 +90,8 @@ const Coach = (() => {
       b.title = on() ? '點一下請碰碰休息' : '';
       b.classList.toggle('on', on());
     }
-    const sw = $('setCoach');
-    if (sw) sw.checked = on();
+    const mode = !on() ? 'off' : onCall() ? 'call' : 'auto';
+    document.querySelectorAll('#setCoachMode button').forEach(x => x.classList.toggle('on', x.dataset.v === mode));
     lastKey = '';
     if (typeof lastView !== 'undefined' && lastView) onView(lastView);
     else $('coachPanel').classList.add('hidden');
@@ -93,6 +103,9 @@ const Coach = (() => {
       if (FX.settings.coach) FX.speak('嗨，我是碰碰，開打後我會在旁邊陪你！');
     };
     $('coachMin').onclick = () => $('coachPanel').classList.toggle('mini');
+    $('coachCall').onclick = () => { calledKey = lastKey; $('coachPanel').classList.remove('calling', 'mini'); ask(); };
+    // 收合時點文字就展開
+    $('coachText').onclick = () => $('coachPanel').classList.remove('mini');
     $('coachAvatar').onclick = () => $('coachPanel').classList.toggle('mini');
     // 問碰碰的輸入框平常收起來，按了才展開
     $('coachAskBtn').onclick = () => {

@@ -128,6 +128,7 @@
     <!-- 新手教練碰碰 -->
     <div id="coachPanel" class="coach hidden">
       <img id="coachAvatar" class="coach-avatar" src="img/pengpeng.svg" alt="碰碰">
+      <button id="coachCall" class="coach-call" type="button">🐦 叫碰碰幫我看這手牌</button>
       <div class="coach-bubble">
         <div class="coach-head"><b>🐦 碰碰教練</b><span><button id="coachAskBtn" class="coach-min hidden" type="button">💬 問碰碰</button> <button id="coachMin" class="coach-min" title="收合">－</button></span></div>
         <div id="coachText" class="coach-text">嗨！我是碰碰，開打後我會在旁邊陪你🐦</div>
@@ -154,7 +155,9 @@
   <div id="settingsModal" class="modal hidden">
     <div class="modal-card settings-card">
       <h2>⚙️ 設定<button type="button" class="settings-x" aria-label="關閉">✕</button></h2>
-      <div class="set-row"><span>🔰 新手教練碰碰</span><label class="switch"><input type="checkbox" id="setCoach"><i></i></label></div>
+      <div class="set-row col"><span>🔰 新手教練碰碰</span>
+        <div class="seg" id="setCoachMode"><button data-v="off">關閉</button><button data-v="auto">隨時陪打</button><button data-v="call">需要再叫</button></div>
+      </div>
       <div class="set-row"><span>🔊 音效</span><label class="switch"><input type="checkbox" id="setSfx"><i></i></label></div>
       <div class="set-row"><span>🗣️ 語音喊牌</span><label class="switch"><input type="checkbox" id="setVoice"><i></i></label></div>
       <div class="set-row"><span>🎵 背景音樂</span><label class="switch"><input type="checkbox" id="setBgm"><i></i></label></div>
