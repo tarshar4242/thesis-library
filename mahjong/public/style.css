@@ -849,3 +849,8 @@ html[data-inset] #lobby {
 html[data-inset] #lobby .lobby-wrap { min-height: calc(100dvh - 24px - var(--it) - var(--ib) - env(safe-area-inset-bottom)); }
 html[data-inset] .modal { padding-top: calc(16px + var(--it)); padding-bottom: calc(16px + var(--ib)); }
 .modal-card.settings-card { max-height: 100%; overflow-y: auto; }
+/* 觸控手機：不管選哪一段，底部一定留足空白，瀏覽器工具列不可以蓋到任何東西 */
+@media (pointer: coarse) {
+  html, html[data-inset="none"] { --ib: 84px; }
+  html[data-inset="mid"], html[data-inset="deep"] { --ib: 110px; }
+}
