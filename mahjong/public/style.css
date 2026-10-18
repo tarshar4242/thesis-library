@@ -769,7 +769,7 @@ body:has(#table.hidden) .table-brand { display: none; }
 #lobby { padding: 12px; align-items: stretch; }
 #lobby .lobby-wrap {
   margin: auto; width: 100%; max-width: 480px;
-  min-height: calc(100vh - 24px); min-height: calc(100dvh - 24px); max-height: 900px;
+  min-height: calc(var(--app-h) - 24px); max-height: 900px;
   justify-content: space-evenly; gap: 8px;
   padding: 22px 16px 14px; border-radius: 22px;
   background:
@@ -814,7 +814,7 @@ body:has(#table.hidden) .table-brand { display: none; }
 @media (max-width: 720px) and (pointer: coarse) {
   #table { padding-bottom: calc(env(safe-area-inset-bottom) + 78px); }
   #lobby { padding-bottom: calc(env(safe-area-inset-bottom) + 78px); }
-  #lobby .lobby-wrap { min-height: calc(100dvh - 102px - env(safe-area-inset-bottom)); }
+  #lobby .lobby-wrap { min-height: calc(var(--app-h) - 102px - env(safe-area-inset-bottom)); }
 }
 /* 矮螢幕：底部空白少留一點，碰碰區塊再精簡 */
 @media (max-width: 720px) and (max-height: 720px) and (pointer: coarse) {
@@ -846,7 +846,7 @@ html[data-inset] #lobby {
   padding-top: calc(12px + var(--it));
   padding-bottom: calc(12px + env(safe-area-inset-bottom) + var(--ib));
 }
-html[data-inset] #lobby .lobby-wrap { min-height: calc(100dvh - 24px - var(--it) - var(--ib) - env(safe-area-inset-bottom)); }
+html[data-inset] #lobby .lobby-wrap { min-height: calc(var(--app-h) - 24px - var(--it) - var(--ib) - env(safe-area-inset-bottom)); }
 html[data-inset] .modal { padding-top: calc(16px + var(--it)); padding-bottom: calc(16px + var(--ib)); }
 .modal-card.settings-card { max-height: 100%; overflow-y: auto; }
 /* 觸控手機：不管選哪一段，底部一定留足空白，瀏覽器工具列不可以蓋到任何東西 */
@@ -866,3 +866,12 @@ html[data-inset] .modal { padding-top: calc(16px + var(--it)); padding-bottom: c
   #table { padding-bottom: calc(4px + env(safe-area-inset-bottom) + var(--ib)) !important; }
   #lobby { padding-bottom: calc(12px + env(safe-area-inset-bottom) + var(--ib)) !important; }
 }
+
+/* 畫面高度：手機瀏覽器的 100vh 會把網址列、工具列的高度也算進去，導致內容超出看得到的範圍。
+   改用實際看得到的高度 (--app-h 由 fx.js 依 window.innerHeight 設定，沒有 JS 時用 100svh) */
+:root { --app-h: 100vh; }
+@supports (height: 100svh) { :root { --app-h: 100svh; } }
+body, .screen { min-height: var(--app-h); }
+#table { height: var(--app-h); min-height: 0; }
+#lobby { height: var(--app-h); min-height: 0; }
+#waiting { height: var(--app-h); min-height: 0; }

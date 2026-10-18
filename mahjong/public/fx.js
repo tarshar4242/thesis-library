@@ -14,6 +14,13 @@ const FX = (() => {
   }
   const applyInset = () => { document.documentElement.dataset.inset = settings.inset; };
   applyInset();
+  // 實際看得到的畫面高度 (扣掉網址列、工具列)，手機轉向或工具列收合時跟著更新
+  const fitHeight = () => {
+    document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px');
+  };
+  fitHeight();
+  window.addEventListener('resize', fitHeight);
+  window.addEventListener('orientationchange', () => setTimeout(fitHeight, 300));
 
   // 京劇四角色：生、旦 (Tarshar 的公仔)、淨、丑
   const ROLE_IMG = { sheng: 'sheng.jpg', dan: 'opera.jpg', jing: 'jing.jpg', chou: 'chou.jpg', qingyi: 'qingyi.jpg', huadan: 'huadan.jpg' };
