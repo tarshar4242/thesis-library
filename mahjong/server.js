@@ -14,7 +14,16 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static(path.join(__dirname, 'public')));
+// 每次部署換一個版本號，網頁的 css/js 網址跟著變，手機就不會一直用舊的快取
+const fs = require('fs');
+const BUILD = (process.env.RENDER_GIT_COMMIT || String(Date.now())).slice(0, 8);
+const indexHtml = fs.readFileSync(path.join(__dirname, 'public', 'index.html'), 'utf8')
+  .replace(/(href|src)="([\w-]+\.(?:css|js))"/g, `$1="$2?v=${BUILD}"`)
+  .replace('__BUILD__', BUILD);
+app.get(['/', '/index.html'], (req, res) => { res.set('Cache-Control', 'no-cache'); res.type('html').send(indexHtml); });
+app.use(express.static(path.join(__dirname, 'public'), {
+  setHeaders: (res, p) => { if (/\.(css|js)$/.test(p)) res.setHeader('Cache-Control', 'no-cache'); },
+}));
 
 // 列出本機的區網位址，給大廳的「邀請好友」使用
 function lanUrls() {
