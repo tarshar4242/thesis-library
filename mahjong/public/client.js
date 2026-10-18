@@ -244,6 +244,7 @@ function render(v) {
   }
 
   renderActions(v);
+  Coach.onView(v);
 }
 
 function renderOpponent(rel, p, v) {
@@ -314,6 +315,7 @@ function makeTile(t, clickable) {
   el.className = 'tile' + (clickable ? (tingMode ? ' ting-ok' : '') : ' disabled');
   el.textContent = g(t);
   el.title = nm(t);
+  el.dataset.tile = t;
   if (clickable) {
     el.onclick = () => {
       const ting = tingMode;

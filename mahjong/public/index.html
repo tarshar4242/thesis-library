@@ -46,6 +46,7 @@
           <div id="connectAlt" class="ci-alt"></div>
           <div class="ci-hint">請好友在瀏覽器開啟此網址（需與你在同一個 Wi-Fi / 區域網路）</div>
         </div>
+        <button id="btnCoach" class="coach-toggle">🔰 新手教練模式：關閉</button>
         <button class="link-btn btn-settings">⚙️ 音樂、語音與氣氛設定</button>
       </div>
 
@@ -113,6 +114,7 @@
   <div id="settingsModal" class="modal hidden">
     <div class="modal-card settings-card">
       <h2>⚙️ 設定</h2>
+      <div class="set-row"><span>🔰 新手教練碰碰</span><label class="switch"><input type="checkbox" id="setCoach"><i></i></label></div>
       <div class="set-row"><span>🔊 音效</span><label class="switch"><input type="checkbox" id="setSfx"><i></i></label></div>
       <div class="set-row"><span>🗣️ 語音喊牌</span><label class="switch"><input type="checkbox" id="setVoice"><i></i></label></div>
       <div class="set-row"><span>🎵 背景音樂</span><label class="switch"><input type="checkbox" id="setBgm"><i></i></label></div>
@@ -123,6 +125,20 @@
         <div class="seg" id="setMood"><button data-v="cute">🌸 可愛</button><button data-v="festive">🧨 過年</button></div>
       </div>
       <button id="btnCloseSettings" class="primary">完成</button>
+    </div>
+  </div>
+
+  <!-- 新手教練碰碰 -->
+  <div id="coachPanel" class="coach hidden">
+    <img id="coachAvatar" class="coach-avatar" src="img/pengpeng.svg" alt="碰碰">
+    <div class="coach-bubble">
+      <div class="coach-head"><b>碰碰教練</b><button id="coachMin" class="coach-min" title="收合">－</button></div>
+      <div id="coachText" class="coach-text">嗨！我是碰碰，開打後我會在旁邊陪你🐦</div>
+      <div id="coachLesson" class="coach-lesson hidden"></div>
+      <form id="coachAskForm" class="coach-ask hidden">
+        <input id="coachQ" maxlength="100" placeholder="問碰碰…例如：什麼是聽牌？" autocomplete="off">
+        <button type="submit">問</button>
+      </form>
     </div>
   </div>
 
@@ -156,5 +172,6 @@
   </script>
   <script src="fx.js"></script>
   <script src="client.js"></script>
+  <script src="coach-ui.js"></script>
 </body>
 </html>

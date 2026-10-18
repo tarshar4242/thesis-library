@@ -1,7 +1,7 @@
 /* 牌桌氣氛：公仔、喊牌特效、慶祝動畫、背景音樂、語音喊牌 */
 const FX = (() => {
   // ---------- 設定 (存在這台瀏覽器) ----------
-  const DEFAULTS = { sfx: true, bgm: false, music: 'guzheng', voice: true, mood: 'festive' };
+  const DEFAULTS = { sfx: true, bgm: false, music: 'guzheng', voice: true, mood: 'festive', coach: false };
   let settings = { ...DEFAULTS };
   try { settings = { ...DEFAULTS, ...JSON.parse(localStorage.getItem('mjSettings') || '{}') }; } catch (e) {}
   function save() { try { localStorage.setItem('mjSettings', JSON.stringify(settings)); } catch (e) {} }
@@ -269,6 +269,7 @@ const FX = (() => {
       paint();
     };
     bindSwitch('setSfx', 'sfx');
+    bindSwitch('setCoach', 'coach', () => Coach.syncToggle());
     bindSwitch('setBgm', 'bgm', syncMusic);
     bindSwitch('setVoice', 'voice', () => settings.voice && speak('碰'));
     bindSeg('setMusic', 'music', () => { if (settings.bgm) startMusic(); });
@@ -281,5 +282,5 @@ const FX = (() => {
   }
   document.addEventListener('DOMContentLoaded', initSettings);
 
-  return { settings, mascot, avatarHtml, callout, celebrate, burst };
+  return { settings, save, speak, mascot, avatarHtml, callout, celebrate, burst };
 })();

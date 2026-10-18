@@ -9,9 +9,10 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "node test/simulate.js"
+    "test": "node test/simulate.js && node test/coach.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.135.0",
     "express": "^4.21.2",
     "socket.io": "^4.8.1"
   }
