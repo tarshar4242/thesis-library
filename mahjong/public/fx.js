@@ -295,6 +295,9 @@ const FX = (() => {
     const open = () => $('settingsModal').classList.remove('hidden');
     document.querySelectorAll('.btn-settings').forEach(b => { b.onclick = open; });
     $('btnCloseSettings').onclick = () => $('settingsModal').classList.add('hidden');
+    document.querySelector('.settings-x').onclick = $('btnCloseSettings').onclick;
+    // 點彈窗外面的暗處也能關
+    $('settingsModal').addEventListener('click', (e) => { if (e.target.id === 'settingsModal') $('btnCloseSettings').onclick(); });
     // 瀏覽器規定要先點一下畫面才能出聲，點了之後若有開背景音樂就開始播
     window.addEventListener('pointerdown', () => { if (settings.bgm && !bgm) startMusic(); }, { once: true });
   }

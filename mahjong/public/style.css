@@ -875,3 +875,21 @@ body, .screen { min-height: var(--app-h); }
 #table { height: var(--app-h); min-height: 0; }
 #lobby { height: var(--app-h); min-height: 0; }
 #waiting { height: var(--app-h); min-height: 0; }
+
+/* 設定視窗：手機上一眼看完，「完成」固定在底部 */
+#settingsModal { padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important; }
+.settings-card { padding: 16px 18px 0 !important; }
+.settings-card h2 { position: relative; margin-bottom: 6px; font-size: 20px; }
+.settings-x {
+  position: absolute; right: -4px; top: -4px; width: 34px; height: 34px; padding: 0; border-radius: 50%;
+  background: #f4e7c5; color: #8a5a33; font-size: 16px; line-height: 34px;
+}
+.set-row { padding: 6px 2px; font-size: 14px; }
+.set-row.col { gap: 5px; }
+.switch { transform: scale(.85); transform-origin: right center; }
+.seg button { padding: 6px 4px; font-size: 13px; }
+.settings-card #btnCloseSettings {
+  position: sticky; bottom: 0; margin-top: 10px; padding: 12px;
+  box-shadow: 0 -10px 14px #fff8e8;
+}
+.settings-card .build-tag { padding-bottom: 10px; }
