@@ -17,7 +17,11 @@ const SYSTEM = `你是台式十六張麻將遊戲裡的新手教練「碰碰」�
 - 你看不到對手的手牌，不要假裝知道。`;
 
 let client = null;
-if (process.env.ANTHROPIC_API_KEY) client = new Anthropic();
+// 金鑰沒有綁定工作區時，要用 anthropic-workspace-id 標頭指定 (ID 以 wrkspc_ 開頭)
+const WORKSPACE_ID = (process.env.ANTHROPIC_WORKSPACE_ID || '').trim();
+if (process.env.ANTHROPIC_API_KEY) {
+  client = new Anthropic(WORKSPACE_ID ? { defaultHeaders: { 'anthropic-workspace-id': WORKSPACE_ID } } : {});
+}
 // 測試時可以換成假的 client
 function setClient(c) { client = c; }
 
@@ -88,7 +92,7 @@ function note(error, reason) {
 }
 
 function health() {
-  return { available: !!client, model: MODEL, usedToday: used, dailyLimit: DAILY_LIMIT, lastOk, lastError };
+  return { available: !!client, model: MODEL, workspaceSet: !!WORKSPACE_ID, usedToday: used, dailyLimit: DAILY_LIMIT, lastOk, lastError };
 }
 
 module.exports = { say, available, allow, forget, setClient, health, MODEL };

@@ -13,6 +13,9 @@ services:
       # 新手教練碰碰的 AI 功能；在 Render 後台 Environment 填入，不寫進程式碼
       - key: ANTHROPIC_API_KEY
         sync: false
+      # 金鑰沒有綁定工作區時要填 (wrkspc_ 開頭)
+      - key: ANTHROPIC_WORKSPACE_ID
+        sync: false
       # 每天最多呼叫 AI 幾次，保護免費額度
       - key: COACH_DAILY_LIMIT
         value: "300"
