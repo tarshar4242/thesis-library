@@ -454,3 +454,62 @@ body:has(#table.hidden) .table-brand { display: none; }
 }
 .fx-callout { paint-order: stroke fill; -webkit-text-stroke-width: 10px; }
 .fx-callout { white-space: nowrap; }
+
+/* =========================================================
+   新手教練碰碰
+   ========================================================= */
+.coach-toggle {
+  width: 100%; margin-top: 14px; font-size: 16px; padding: 13px;
+  background: #fff !important; color: #1f8a4c !important; border: 2px dashed #7cc79a !important;
+}
+.coach-toggle.on { background: linear-gradient(135deg,#7ad7a0,#2fae6a) !important; color: #fff !important; border-style: solid !important; }
+
+.coach {
+  position: fixed; left: 12px; bottom: 34px; z-index: 120; width: 320px;
+  display: flex; align-items: flex-end; gap: 6px; pointer-events: auto;
+}
+.coach-avatar {
+  width: 78px; height: 78px; flex-shrink: 0; cursor: pointer;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,.4)); animation: coachBob 2.6s ease-in-out infinite;
+}
+@keyframes coachBob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-6px) rotate(3deg); } }
+.coach-bubble {
+  position: relative; flex: 1; background: #fffdf3; color: #4a2c12; border: 2px solid #f0c04a;
+  border-radius: 16px; padding: 8px 12px 10px; box-shadow: 0 10px 26px rgba(0,0,0,.4); font-size: 14px; line-height: 1.55;
+}
+.coach-bubble::before {
+  content: ''; position: absolute; left: -10px; bottom: 22px;
+  border: 8px solid transparent; border-right-color: #f0c04a;
+}
+.coach-head { display: flex; justify-content: space-between; align-items: center; color: #b3122a; font-size: 13px; margin-bottom: 2px; }
+.coach-min { background: #f4e7c5; color: #8a5a33; padding: 0 8px; font-size: 14px; border-radius: 6px; line-height: 20px; }
+.coach-text { font-weight: 600; }
+.coach-text.pop { animation: coachPop .35s ease-out; }
+.coach-text.thinking::after { content: ' ✍️'; animation: blink 1s steps(2) infinite; }
+@keyframes coachPop { from { transform: scale(.94); opacity: .3; } to { transform: scale(1); opacity: 1; } }
+@keyframes blink { 50% { opacity: 0; } }
+.coach-lesson { margin-top: 6px; padding: 6px 8px; background: #eef8ef; border-radius: 8px; font-size: 12.5px; color: #2c5e3a; }
+.coach-ask { display: flex; gap: 6px; margin-top: 8px; }
+.coach-ask input { margin: 0; padding: 7px 10px; font-size: 13px; background: #fff; color: #4a2c12; border: 1.5px solid #e6c98a; border-radius: 8px; }
+.coach-ask button { padding: 7px 12px; font-size: 13px; background: linear-gradient(135deg,#ffd96a,#f0a91e); color: #6a1d00; }
+.coach.mini .coach-bubble { display: none; }
+.coach.mini .coach-avatar { width: 56px; height: 56px; }
+
+/* 碰碰推薦打的牌 */
+.tile.coach-pick { position: relative; box-shadow: 0 0 0 3px #3fd17f, 0 0 18px #3fd17f; transform: translateY(-8px); }
+.tile.coach-pick::after {
+  content: '🐦打這張'; position: absolute; left: 50%; top: -26px; transform: translateX(-50%);
+  font-size: 12px; font-weight: 800; color: #fff; background: #2fae6a; padding: 1px 6px; border-radius: 8px; white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .coach { left: 6px; right: 6px; top: 58px; bottom: auto; width: auto; align-items: flex-start; }
+  .coach-avatar { width: 48px; height: 48px; }
+  .coach-bubble { font-size: 13px; padding: 6px 10px 8px; }
+  .coach-bubble::before { bottom: auto; top: 14px; }
+  .coach.mini { right: auto; }
+}
+/* 碰碰放在手牌上方的左下角空位，不擋手牌 */
+.coach { bottom: 185px; pointer-events: none; }
+.coach > * { pointer-events: auto; }
+@media (max-width: 720px) { .coach { bottom: auto; } }

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- 碰碰：新手教練小麻雀 -->
+  <path d="M14 62 Q6 52 12 40 Q18 50 24 52 Z" fill="#8a5a33"/>
+  <ellipse cx="50" cy="58" rx="36" ry="34" fill="#b9814f" stroke="#5e3a1c" stroke-width="3"/>
+  <ellipse cx="54" cy="70" rx="22" ry="19" fill="#fff4e3"/>
+  <path d="M22 60 Q30 74 44 76 Q34 64 30 54 Z" fill="#8a5a33" stroke="#5e3a1c" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M20 34 Q50 14 80 34" stroke="#e23b3b" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <path d="M78 33 L90 26 M78 35 L90 40" stroke="#e23b3b" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="40" cy="48" r="7" fill="#fff"/><circle cx="64" cy="48" r="7" fill="#fff"/>
+  <circle cx="41" cy="49" r="4" fill="#2b1a0a"/><circle cx="63" cy="49" r="4" fill="#2b1a0a"/>
+  <circle cx="42.5" cy="47.5" r="1.4" fill="#fff"/><circle cx="64.5" cy="47.5" r="1.4" fill="#fff"/>
+  <path d="M46 55 L58 55 L52 63 Z" fill="#f5a623" stroke="#b86e00" stroke-width="1.5" stroke-linejoin="round"/>
+  <circle cx="31" cy="58" r="5" fill="#ff8fa3" opacity=".55"/><circle cx="73" cy="58" r="5" fill="#ff8fa3" opacity=".55"/>
+  <path d="M40 66 Q52 80 64 66" stroke="#3a6fd8" stroke-width="2" fill="none"/>
+  <rect x="58" y="72" width="13" height="8" rx="3" fill="#f5c542" stroke="#b8860b" stroke-width="1.5"/>
+  <circle cx="71" cy="76" r="2" fill="#b8860b"/>
+  <path d="M42 90 L40 97 M48 91 L48 98 M58 91 L60 97" stroke="#f5a623" stroke-width="3" stroke-linecap="round"/>
+</svg>

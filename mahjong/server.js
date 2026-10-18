@@ -5,6 +5,8 @@ const http = require('http');
 const express = require('express');
 const { Server } = require('socket.io');
 const { Game } = require('./game');
+const coach = require('./coach');
+const coachAI = require('./coach-ai');
 
 const PORT = Number(process.env.PORT) || 4100;
 const app = express();
@@ -26,9 +28,10 @@ function lanUrls() {
 }
 // 放上雲端時 (Render 會自動提供 RENDER_EXTERNAL_URL) 改給公開網址，好友不必同一個 Wi-Fi
 const PUBLIC_URL = process.env.PUBLIC_URL || process.env.RENDER_EXTERNAL_URL || '';
-app.get('/api/serverinfo', (req, res) => res.json(
-  PUBLIC_URL ? { port: PORT, urls: [PUBLIC_URL], public: true } : { port: PORT, urls: lanUrls() }
-));
+app.get('/api/serverinfo', (req, res) => res.json({
+  ...(PUBLIC_URL ? { port: PORT, urls: [PUBLIC_URL], public: true } : { port: PORT, urls: lanUrls() }),
+  coachAI: coachAI.available(),
+}));
 
 // ---------- 房間 ----------
 const rooms = new Map();
@@ -129,7 +132,29 @@ io.on('connection', (socket) => {
     reply(cb, room.game.doAction(socket.data.seat, action) || {});
   });
 
+  // 新手教練碰碰：先回範本台詞，有 AI 時再補上更生動的說法
+  let coachSeq = 0;
+  socket.on('coachAsk', ({ question, learned } = {}, cb) => {
+    const room = rooms.get(socket.data.roomId);
+    if (!room || !room.game) return reply(cb, { error: '遊戲尚未開始' });
+    const facts = coach.analyze(room.game, socket.data.seat);
+    const draft = coach.template(facts, Array.isArray(learned) ? learned : []);
+    const id = ++coachSeq;
+    const wantsAI = coachAI.available() && coachAI.allow(socket.id);
+    reply(cb, {
+      id, text: question ? (wantsAI ? '我想想喔…🤔' : '我現在只會看牌給建議，問問題要等主人開通 AI 喔🙏') : draft.text,
+      lesson: draft.lesson, highlight: facts.situation === 'discard' || facts.situation === 'locked' ? facts.suggest : null,
+      situation: facts.situation, ai: wantsAI,
+    });
+    if (!wantsAI) return;
+    coachAI.say(facts, { draft: draft.text, lesson: draft.lesson, question }).then(text => {
+      if (text) socket.emit('coachSay', { id, text });
+      else if (question) socket.emit('coachSay', { id, text: '哎呀我剛剛恍神了，再問我一次好嗎？😅' });
+    });
+  });
+
   socket.on('disconnect', () => {
+    coachAI.forget(socket.id);
     const room = rooms.get(socket.data.roomId);
     if (!room) return;
     const seat = socket.data.seat;
