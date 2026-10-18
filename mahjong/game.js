@@ -249,7 +249,7 @@ function aiChooseDiscard(hand, game, seat) {
 class Game {
   constructor(seats, hooks) {
     this.players = seats.map((s, i) => ({
-      seat: i, name: s.name, isAI: s.isAI, score: 0,
+      seat: i, name: s.name, avatar: s.avatar, isAI: s.isAI, score: 0,
       hand: [], melds: [], flowers: [], discards: [], lastDraw: null,
     }));
     this.hooks = hooks;
@@ -344,7 +344,7 @@ class Game {
 
   getView(seat) {
     const players = this.players.map(p => ({
-      seat: p.seat, name: p.name, wind: this.seatWind(p.seat), score: p.score,
+      seat: p.seat, name: p.name, avatar: p.avatar, wind: this.seatWind(p.seat), score: p.score,
       handCount: p.hand.length,
       melds: p.melds.map(m => ({
         type: m.type,

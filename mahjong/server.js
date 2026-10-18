@@ -39,7 +39,15 @@ app.get('/api/coach-health', (req, res) => res.json(coachAI.health()));
 
 // ---------- 房間 ----------
 const rooms = new Map();
-const AI_NAMES = ['電腦-東', '電腦-南', '電腦-西', '電腦-北'];
+// 京劇四角色：每桌每個角色只能一個人用；電腦玩家拿剩下的
+const ROLES = ['sheng', 'dan', 'jing', 'chou'];
+const AI_NAMES = { sheng: '電腦小生', dan: '電腦花旦', jing: '電腦花臉', chou: '電腦小丑' };
+const takenRoles = (room) => room.seats.filter(Boolean).map(s => s.avatar);
+const pickRole = (room, wanted) => {
+  const taken = takenRoles(room);
+  if (ROLES.includes(wanted) && !taken.includes(wanted)) return wanted;
+  return ROLES.find(r => !taken.includes(r));
+};
 
 function newRoomId() {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -52,7 +60,7 @@ function newRoomId() {
 function lobbyOf(room) {
   return {
     roomId: room.id,
-    seats: room.seats.map((s, i) => ({ seat: i, name: s ? s.name : null })),
+    seats: room.seats.map((s, i) => ({ seat: i, name: s ? s.name : null, avatar: s ? s.avatar : null })),
   };
 }
 
@@ -71,15 +79,20 @@ function createRoom(socket, name) {
   return room;
 }
 
-function seatPlayer(socket, room, seat, name) {
-  room.seats[seat] = { name, socketId: socket.id, isAI: false };
+function seatPlayer(socket, room, seat, name, avatar) {
+  room.seats[seat] = { name, avatar: pickRole(room, avatar), socketId: socket.id, isAI: false };
   socket.data.roomId = room.id;
   socket.data.seat = seat;
   socket.join(room.id);
 }
 
 function startGame(room) {
-  const seats = room.seats.map((s, i) => s || { name: AI_NAMES[i], socketId: null, isAI: true });
+  const seats = room.seats.slice();
+  seats.forEach((s, i) => {
+    if (s) return;
+    const avatar = pickRole({ seats }, null);
+    seats[i] = { name: AI_NAMES[avatar], avatar, socketId: null, isAI: true };
+  });
   room.seats = seats;
   room.game = new Game(seats, {
     onUpdate: () => broadcastState(room),
@@ -93,37 +106,47 @@ const reply = (cb, data) => { if (typeof cb === 'function') cb(data); };
 const cleanName = (n) => String(n || '').trim().slice(0, 8) || '玩家' + Math.floor(Math.random() * 900 + 100);
 
 io.on('connection', (socket) => {
-  socket.on('quickPlay', ({ name } = {}, cb) => {
-    if (socket.data.roomId) return reply(cb, { error: '你已經在房間裡了' });
+  socket.on('quickPlay', ({ name, avatar } = {}, cb) => {
+    if (socket.data.roomId) return reply(cb, { error: '你已經入座了' });
     const room = createRoom(socket);
-    seatPlayer(socket, room, 0, cleanName(name));
+    seatPlayer(socket, room, 0, cleanName(name), avatar);
     reply(cb, { seat: 0, roomId: room.id });
     startGame(room);
   });
 
-  socket.on('createRoom', ({ name } = {}, cb) => {
-    if (socket.data.roomId) return reply(cb, { error: '你已經在房間裡了' });
+  socket.on('createRoom', ({ name, avatar } = {}, cb) => {
+    if (socket.data.roomId) return reply(cb, { error: '你已經入座了' });
     const room = createRoom(socket);
-    seatPlayer(socket, room, 0, cleanName(name));
+    seatPlayer(socket, room, 0, cleanName(name), avatar);
     reply(cb, { seat: 0, roomId: room.id });
     io.to(room.id).emit('lobby', lobbyOf(room));
   });
 
-  socket.on('joinRoom', ({ roomId, name } = {}, cb) => {
-    if (socket.data.roomId) return reply(cb, { error: '你已經在房間裡了' });
+  // 輸入桌號時先看看這桌哪些角色被選走了
+  socket.on('peekRoom', ({ roomId } = {}, cb) => {
     const room = rooms.get(String(roomId || '').toUpperCase());
-    if (!room) return reply(cb, { error: '找不到這個房號' });
+    if (!room) return reply(cb, { error: '找不到這個桌號' });
+    reply(cb, { taken: takenRoles(room), full: room.seats.every(Boolean), started: !!room.game });
+  });
+
+  socket.on('joinRoom', ({ roomId, name, avatar } = {}, cb) => {
+    if (socket.data.roomId) return reply(cb, { error: '你已經入座了' });
+    const room = rooms.get(String(roomId || '').toUpperCase());
+    if (!room) return reply(cb, { error: '找不到這個桌號' });
     if (room.game) return reply(cb, { error: '這桌已經開打了' });
     const seat = room.seats.findIndex(s => !s);
-    if (seat < 0) return reply(cb, { error: '房間已滿' });
-    seatPlayer(socket, room, seat, cleanName(name));
+    if (seat < 0) return reply(cb, { error: '這桌已經坐滿了' });
+    if (takenRoles(room).includes(avatar)) {
+      return reply(cb, { error: '這個角色已經有人選了，換一個吧', taken: takenRoles(room) });
+    }
+    seatPlayer(socket, room, seat, cleanName(name), avatar);
     reply(cb, { seat, roomId: room.id });
     io.to(room.id).emit('lobby', lobbyOf(room));
   });
 
   socket.on('startGame', (_data, cb) => {
     const room = rooms.get(socket.data.roomId);
-    if (!room) return reply(cb, { error: '房間不存在' });
+    if (!room) return reply(cb, { error: '這桌不存在' });
     if (room.hostId !== socket.id) return reply(cb, { error: '只有房主可以開始' });
     if (room.game) return reply(cb, { error: '已經開始了' });
     reply(cb, {});
@@ -190,7 +213,7 @@ io.on('connection', (socket) => {
 server.on('error', (err) => { console.error('❌ 伺服器無法啟動:', err.message); process.exit(1); });
 console.log(`   準備在 port ${PORT} 開門，AI 教練：${coachAI.available() ? '已設定金鑰' : '未設定'}，工作區：${coachAI.health().workspaceSet ? '已設定' : '未設定'}`);
 server.listen(PORT, '0.0.0.0', () => {
-  console.log('🀄 台式十六張麻將 已啟動');
+  console.log('🀄 我家三缺一 已啟動');
   console.log(`   本機遊玩：http://localhost:${PORT}`);
   if (PUBLIC_URL) console.log(`   公開網址：${PUBLIC_URL}`);
   else for (const u of lanUrls()) console.log(`   區網好友：${u}`);

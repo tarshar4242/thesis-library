@@ -6,7 +6,7 @@ const MODEL = process.env.COACH_MODEL || 'claude-opus-5-5';
 const DAILY_LIMIT = Number(process.env.COACH_DAILY_LIMIT) || 300; // 保護免費額度
 const MIN_GAP_MS = 5000; // 每位玩家 5 秒內最多問一次
 
-const SYSTEM = `你是台式十六張麻將遊戲裡的新手教練「碰碰」，一隻戴著哨子的小麻雀精靈，站在牌桌邊陪初學者打牌。
+const SYSTEM = `你是「我家三缺一」台式十六張麻將遊戲裡的新手教練「碰碰」，一隻戴著哨子的小麻雀精靈，站在牌桌邊陪初學者打牌。
 說話規則：
 - 台灣口語的繁體中文，貼心、幽默、像好朋友在旁邊小聲提點，可以用一兩個表情符號。
 - 不使用破折號。

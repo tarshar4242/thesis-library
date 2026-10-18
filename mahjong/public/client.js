@@ -95,7 +95,7 @@ function show(name) {
 // ---------- 大廳 ----------
 $('btnQuick').onclick = () => {
   const name = getName();
-  socket.emit('quickPlay', { name }, (r) => {
+  socket.emit('quickPlay', { name, avatar: Lobby.avatar() }, (r) => {
     if (r.error) return setMsg('lobbyMsg', r.error);
     mySeat = r.seat; isHost = true;
     show('table');
@@ -103,23 +103,25 @@ $('btnQuick').onclick = () => {
 };
 $('btnCreate').onclick = () => {
   const name = getName();
-  socket.emit('createRoom', { name }, (r) => {
+  socket.emit('createRoom', { name, avatar: Lobby.avatar() }, (r) => {
     if (r.error) return setMsg('lobbyMsg', r.error);
     mySeat = r.seat; isHost = true;
     $('waitRoomId').textContent = r.roomId;
+    Lobby.setInvite(r.roomId);
     $('btnStart').classList.remove('hidden');
-    $('waitMsg').textContent = '湊齊或直接開始，空位由 AI 補上';
+    $('waitMsg').textContent = '朋友到齊就按開打，沒來的位子由電腦補上';
     show('waiting');
   });
 };
 $('btnJoin').onclick = () => {
   const name = getName();
   const roomId = $('roomInput').value.trim().toUpperCase();
-  if (!roomId) return setMsg('lobbyMsg', '請輸入房號');
-  socket.emit('joinRoom', { roomId, name }, (r) => {
-    if (r.error) return setMsg('lobbyMsg', r.error);
+  if (!roomId) return setMsg('lobbyMsg', '請輸入朋友給的桌號');
+  socket.emit('joinRoom', { roomId, name, avatar: Lobby.avatar() }, (r) => {
+    if (r.error) { if (r.taken) Lobby.markTaken(r.taken); return setMsg('lobbyMsg', r.error); }
     mySeat = r.seat; isHost = false;
     $('waitRoomId').textContent = r.roomId;
+    Lobby.setInvite(r.roomId);
     $('btnStart').classList.add('hidden');
     show('waiting');
   });
@@ -128,6 +130,7 @@ $('btnStart').onclick = () => socket.emit('startGame', {}, (r) => { if (r.error)
 $('btnLeave').onclick = () => location.reload();
 
 function getName() {
+  Lobby.remember();
   let n = $('nameInput').value.trim();
   if (!n) n = '玩家' + Math.floor(Math.random() * 900 + 100);
   return n;
@@ -144,8 +147,8 @@ async function loadServerInfo() {
     primaryAddr = urls[0];
     $('connectAddr').textContent = primaryAddr;
     if (info.public) {
-      document.querySelector('.ci-label').textContent = '📡 邀請好友連線';
-      document.querySelector('.ci-hint').textContent = '把網址傳給好友，用瀏覽器打開就能加入，不必同一個 Wi-Fi';
+      document.querySelector('.ci-label').textContent = '📨 邀請卡：傳給朋友';
+      document.querySelector('.ci-hint').textContent = '朋友在哪裡都能玩，打開網址輸入桌號就能入座';
     }
     // 其餘網路介面位址 (點擊即複製)
     const alt = $('connectAlt');
@@ -202,10 +205,10 @@ socket.on('lobby', (lobby) => {
   lobby.seats.forEach((s) => {
     const li = document.createElement('li');
     if (s.name) {
-      li.innerHTML = `<span>座位 ${s.seat + 1}：<b>${s.name}</b></span>` +
+      li.innerHTML = `<span class="seat-who"><img class="seat-avatar" src="${FX.mascot(s.seat, s.avatar)}" alt=""><b>${s.name}</b></span>` +
         (s.seat === mySeat ? '<span class="badge">你</span>' : '');
     } else {
-      li.innerHTML = `<span class="empty">座位 ${s.seat + 1}：空（開局補 AI）</span>`;
+      li.innerHTML = `<span class="empty"><span class="seat-avatar empty-seat">？</span>空位，開打時由電腦補上</span>`;
     }
     list.appendChild(li);
   });
@@ -257,7 +260,7 @@ function renderOpponent(rel, p, v) {
   const flowers = p.flowers.map(g).join('');
   area.innerHTML =
     `<div class="player-card ${isTurn ? 'turn' : ''} ${isDealer ? 'dealer' : ''}" data-seat="${p.seat}">
-      ${FX.avatarHtml(p.seat, isTurn)}
+      ${FX.avatarHtml(p.seat, isTurn, p.avatar)}
       <div><span class="pwind">${WINDLABEL[p.wind]}${isDealer ? '莊' : ''}</span><span class="pname">${p.name}</span>${p.ting ? `<span class="ting-badge">${p.ting}</span>` : ''}</div>
       <div class="pscore">${p.score >= 0 ? '+' : ''}${p.score}</div>
       <div class="mini-hand">${backs}</div>
@@ -272,7 +275,7 @@ function renderMe(v, p) {
   const isDealer = v.dealer === p.seat;
   area.innerHTML =
     `<div class="player-card me-card ${isTurn ? 'turn' : ''} ${isDealer ? 'dealer' : ''}" data-seat="${p.seat}">
-      ${FX.avatarHtml(p.seat, isTurn)}
+      ${FX.avatarHtml(p.seat, isTurn, p.avatar)}
       <span class="pwind">${WINDLABEL[p.wind]}${isDealer ? '莊' : ''}</span>
       <span class="pname">${p.name}(你)</span>${p.ting ? `<span class="ting-badge">${p.ting}</span>` : ''}
       <span class="pscore">　${p.score >= 0 ? '+' : ''}${p.score}</span>

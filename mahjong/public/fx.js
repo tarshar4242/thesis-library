@@ -6,9 +6,10 @@ const FX = (() => {
   try { settings = { ...DEFAULTS, ...JSON.parse(localStorage.getItem('mjSettings') || '{}') }; } catch (e) {}
   function save() { try { localStorage.setItem('mjSettings', JSON.stringify(settings)); } catch (e) {} }
 
-  // 座位 0 (房主) 是京劇公仔
-  const MASCOTS = ['opera.jpg', 'cat.svg', 'panda.svg', 'tiger.svg'];
-  const mascot = (seat) => 'img/' + MASCOTS[seat % 4];
+  // 京劇四角色：生、旦 (Tarshar 的公仔)、淨、丑
+  const ROLE_IMG = { sheng: 'sheng.svg', dan: 'opera.jpg', jing: 'jing.svg', chou: 'chou.svg' };
+  const ORDER = ['dan', 'sheng', 'jing', 'chou'];
+  const mascot = (seat, avatar) => 'img/' + (ROLE_IMG[avatar] || ROLE_IMG[ORDER[seat % 4]]);
 
   const CALLS = {
     chi: '吃！', pon: '碰！', kong: '槓！', ankong: '暗槓！', addkong: '加槓！',
@@ -69,12 +70,12 @@ const FX = (() => {
     setTimeout(() => paint(seat), ms + 20);
   }
   // 給 client.js 重畫卡片時用
-  function avatarHtml(seat, isTurn) {
+  function avatarHtml(seat, isTurn, avatar) {
     const now = Date.now();
     const m = moods[seat] && moods[seat].until > now ? moods[seat].cls : '';
     const b = bubbles[seat] && bubbles[seat].until > now
       ? `<span class="bubble ${bubbles[seat].cls}">${bubbles[seat].text}</span>` : '';
-    return `<span class="avatar-wrap"><img class="avatar ${isTurn ? 'thinking' : ''} ${m}" src="${mascot(seat)}" alt="">${b}</span>`;
+    return `<span class="avatar-wrap"><img class="avatar ${isTurn ? 'thinking' : ''} ${m}" src="${mascot(seat, avatar)}" alt="">${b}</span>`;
   }
   function callout(type, seat) {
     const text = CALLS[type];
