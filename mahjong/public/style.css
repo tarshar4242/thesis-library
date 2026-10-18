@@ -905,3 +905,28 @@ body, .screen { min-height: var(--app-h); }
   background: #fffdf3; color: #2f7a4c; border: 2px dashed #7cc79a; border-radius: 14px;
 }
 .coach.calling .coach-avatar { width: 36px; height: 36px; }
+
+/* 首頁照步驟走：1 角色 → 2 碰碰 → 3 開打 */
+.step {
+  display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; margin-right: 6px;
+  border-radius: 50%; background: #ffd96a; color: #8b0a1e; font-style: normal; font-weight: 900; font-size: 12px;
+  vertical-align: 1px;
+}
+.step-title { width: 100%; color: var(--lb-sub); font-size: 13px; font-weight: 700; margin: 2px 0 -2px 8px; }
+@media (min-height: 740px) { .step-title { font-size: 14px; } }
+.sticky-note { transform: rotate(-.6deg); }
+.sticky-note .step { background: #c8102e; color: #fff; }
+.sticky-note b { margin-bottom: 6px; }
+.sticky-note .seg { gap: 5px; flex-wrap: nowrap; }
+.sticky-note .seg button {
+  flex: 1; padding: 7px 2px; font-size: 13px; white-space: nowrap; border-radius: 10px;
+  background: #fffdf3; color: #7a5a00; border: 1.5px solid #e6c98a;
+}
+.sticky-note .seg button.on { background: linear-gradient(135deg,#7ad7a0,#2fae6a); color: #fff; border-color: #2fae6a; }
+.sticky-note .seg button[data-v="off"].on { background: #e9dcc0; color: #6a5030; border-color: #cdb88a; }
+@media (max-height: 640px) {
+  #lobby .lobby-wrap { gap: 5px; padding-top: 16px; }
+  .title-block .subtitle { display: none; }
+  .namecard-avatar img { width: 50px; height: 50px; }
+  .mj-tile small { display: none; }
+}

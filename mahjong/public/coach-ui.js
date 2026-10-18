@@ -91,17 +91,13 @@ const Coach = (() => {
       b.classList.toggle('on', on());
     }
     const mode = !on() ? 'off' : onCall() ? 'call' : 'auto';
-    document.querySelectorAll('#setCoachMode button').forEach(x => x.classList.toggle('on', x.dataset.v === mode));
+    document.querySelectorAll('.coach-mode-seg button').forEach(x => x.classList.toggle('on', x.dataset.v === mode));
     lastKey = '';
     if (typeof lastView !== 'undefined' && lastView) onView(lastView);
     else $('coachPanel').classList.add('hidden');
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    $('btnCoach').onclick = () => {
-      FX.settings.coach = !FX.settings.coach; FX.save(); syncToggle();
-      if (FX.settings.coach) FX.speak('嗨，我是碰碰，開打後我會在旁邊陪你！');
-    };
     $('coachMin').onclick = () => $('coachPanel').classList.toggle('mini');
     $('coachCall').onclick = () => { calledKey = lastKey; $('coachPanel').classList.remove('calling', 'mini'); ask(); };
     // 收合時點文字就展開
