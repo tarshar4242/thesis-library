@@ -34,7 +34,8 @@
 
 1. 到 Render 後台，點 `tarshar-mahjong` 服務，左側選 **Environment**。
 2. 新增 `ANTHROPIC_API_KEY`，值貼上你的 Claude API 金鑰，按 **Save Changes**。服務會自動重新啟動。
-3. 回到遊戲，碰碰對話框下方出現「問碰碰」輸入框，就代表 AI 已經啟用。
+3. 如果金鑰沒有綁定工作區（Workspace），再新增 `ANTHROPIC_WORKSPACE_ID`，值是 Claude Console 裡工作區的 ID（`wrkspc_` 開頭）。
+4. 回到遊戲，碰碰對話框下方出現「問碰碰」輸入框，就代表 AI 已經啟用。打開 `/api/coach-health` 可以看到 AI 最近一次成功或失敗的原因（不會顯示金鑰）。
 
 保護額度的機制：金鑰只存在伺服器、每位玩家 5 秒內最多問一次、每天總共最多 300 次（`COACH_DAILY_LIMIT` 可調）。AI 沒回應或額度用完時，自動改用內建台詞，不影響遊戲。預設模型是 `claude-opus-5-5`，可用環境變數 `COACH_MODEL` 更換。
 
