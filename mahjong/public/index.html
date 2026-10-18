@@ -29,7 +29,7 @@
       </section>
 
       <section class="role-picker" id="rolePicker">
-        <div class="role-title">挑一個角色上桌</div>
+        <div class="role-title"><i class="step">1</i>挑一個角色上桌</div>
         <div class="role-row">
           <button class="role" data-role="sheng"><img src="img/sheng.jpg" alt=""><b>生</b><small>小生</small></button>
           <button class="role" data-role="qingyi"><img src="img/qingyi.jpg" alt=""><b>旦</b><small>青衣</small></button>
@@ -40,6 +40,15 @@
         </div>
       </section>
 
+      <div class="sticky-note">
+        <img src="img/pengpeng.svg" alt="碰碰">
+        <div>
+          <b><i class="step">2</i>要碰碰陪你打嗎？</b>
+          <div class="seg coach-mode-seg"><button data-v="off">不用</button><button data-v="auto">隨時陪打</button><button data-v="call">需要再叫</button></div>
+        </div>
+      </div>
+
+      <div class="step-title"><i class="step">3</i>準備好就開打</div>
       <section class="tile-actions">
         <button id="btnQuick" class="mj-tile"><span class="mj-icon">🀄</span><b>自己先練一圈</b><small>電腦陪你打</small></button>
         <button id="btnCreate" class="mj-tile"><span class="mj-icon">🏠</span><b>開一桌揪朋友</b><small>拿桌號邀好友</small></button>
@@ -50,17 +59,6 @@
         <button id="btnJoin">入座</button>
       </div>
       <p id="lobbyMsg" class="msg"></p>
-
-      <div class="sticky-note">
-        <img src="img/pengpeng.svg" alt="碰碰">
-        <div>
-          <b>不太會打？</b>
-          <span>碰碰在旁邊教你打</span>
-        </div>
-        <button id="btnCoach" class="coach-toggle">🐦 請碰碰陪打</button>
-        <div hidden>
-        </div>
-      </div>
 
       <button class="link-btn btn-settings">⚙️ 音樂、語音與畫面設定</button>
       <footer class="brand">Learn AI with Tarshar🍀<span class="brand-sep">|</span>2026</footer>
@@ -156,7 +154,7 @@
     <div class="modal-card settings-card">
       <h2>⚙️ 設定<button type="button" class="settings-x" aria-label="關閉">✕</button></h2>
       <div class="set-row col"><span>🔰 新手教練碰碰</span>
-        <div class="seg" id="setCoachMode"><button data-v="off">關閉</button><button data-v="auto">隨時陪打</button><button data-v="call">需要再叫</button></div>
+        <div class="seg coach-mode-seg" id="setCoachMode"><button data-v="off">關閉</button><button data-v="auto">隨時陪打</button><button data-v="call">需要再叫</button></div>
       </div>
       <div class="set-row"><span>🔊 音效</span><label class="switch"><input type="checkbox" id="setSfx"><i></i></label></div>
       <div class="set-row"><span>🗣️ 語音喊牌</span><label class="switch"><input type="checkbox" id="setVoice"><i></i></label></div>

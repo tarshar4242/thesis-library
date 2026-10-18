@@ -287,11 +287,13 @@ const FX = (() => {
     };
     bindSwitch('setSfx', 'sfx');
     // 碰碰三種模式：關閉／隨時陪打／需要再叫
-    $('setCoachMode').querySelectorAll('button').forEach(b => {
+    document.querySelectorAll('.coach-mode-seg button').forEach(b => {
       b.onclick = () => {
+        const was = settings.coach;
         settings.coach = b.dataset.v !== 'off';
         if (settings.coach) settings.coachMode = b.dataset.v;
         save(); Coach.syncToggle();
+        if (settings.coach && !was) speak('嗨，我是碰碰，開打後我會在旁邊陪你！');
       };
     });
     bindSwitch('setBgm', 'bgm', syncMusic);
