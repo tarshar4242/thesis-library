@@ -144,9 +144,11 @@ io.on('connection', (socket) => {
     const facts = coach.analyze(room.game, socket.data.seat);
     const draft = coach.template(facts, Array.isArray(learned) ? learned : []);
     const id = ++coachSeq;
-    const wantsAI = coachAI.available() && coachAI.allow(socket.id);
+    const hasAI = coachAI.available();
+    const wantsAI = hasAI && coachAI.allow(socket.id);
+    const busyText = hasAI ? '我剛講完話，喘口氣～過 5 秒再問我一次好嗎？🐦' : '我現在只會看牌給建議，問問題要等主人開通 AI 喔🙏';
     reply(cb, {
-      id, text: question ? (wantsAI ? '我想想喔…🤔' : '我現在只會看牌給建議，問問題要等主人開通 AI 喔🙏') : draft.text,
+      id, text: question ? (wantsAI ? '我想想喔…🤔' : busyText) : draft.text,
       lesson: draft.lesson, highlight: facts.situation === 'discard' || facts.situation === 'locked' ? facts.suggest : null,
       situation: facts.situation, ai: wantsAI,
     });
