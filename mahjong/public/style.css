@@ -930,3 +930,29 @@ body, .screen { min-height: var(--app-h); }
   .namecard-avatar img { width: 50px; height: 50px; }
   .mj-tile small { display: none; }
 }
+
+/* 電腦難度：小白／高手 */
+.level-seg { width: 100%; display: flex; gap: 8px; flex-wrap: nowrap; }
+.level-seg button {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1px;
+  padding: 7px 4px !important; font-size: 15px; font-weight: 800; border-radius: 12px !important;
+  background: rgba(255,248,232,.92) !important; color: #4a1c0f !important; border: 2px solid transparent !important;
+}
+.level-seg button small { font-size: 11px; font-weight: 600; color: #8a4b2a; }
+.level-seg button.on { background: #fff !important; border-color: #ffd96a !important; box-shadow: 0 0 0 3px rgba(255,217,106,.5); }
+.wait-level { margin: -4px 0 10px; color: #8a4b2a; font-weight: 700; font-size: 14px; }
+.level-seg button { flex-direction: row; justify-content: center; gap: 6px; padding: 6px 4px !important; font-size: 14px; }
+.level-seg button small { font-size: 11px; }
+#lobby .lobby-wrap { gap: 7px; }
+.sticky-note { padding-top: 6px !important; padding-bottom: 6px !important; }
+.sticky-note img { width: 40px !important; height: 40px !important; }
+@media (max-height: 820px) {
+  .level-seg button small { display: none; }
+  .mj-tile { padding: 8px 4px 7px !important; }
+  .mj-icon { font-size: 22px !important; }
+  .role img { width: 40px !important; height: 40px !important; }
+  .namecard { padding: 8px 12px !important; }
+  .namecard-avatar img { width: 56px !important; height: 56px !important; }
+  .title-block h1 { font-size: 30px !important; }
+}
+@media (max-height: 700px) { .step-title, .role-title { font-size: 12px !important; margin-bottom: 2px !important; } .mj-tile small { display: none; } }

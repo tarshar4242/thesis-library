@@ -70,6 +70,7 @@ function lobbyOf(room) {
   return {
     roomId: room.id,
     seats: room.seats.map((s, i) => ({ seat: i, name: s ? s.name : null, avatar: s ? s.avatar : null })),
+    difficulty: room.difficulty,
   };
 }
 
@@ -83,7 +84,7 @@ function broadcastState(room) {
 }
 
 function createRoom(socket, name) {
-  const room = { id: newRoomId(), seats: [null, null, null, null], hostId: socket.id, game: null };
+  const room = { id: newRoomId(), seats: [null, null, null, null], hostId: socket.id, game: null, difficulty: 'easy' };
   rooms.set(room.id, room);
   return room;
 }
@@ -107,25 +108,28 @@ function startGame(room) {
     onUpdate: () => broadcastState(room),
     onResult: (res) => io.to(room.id).emit('result', res),
     onSfx: (type, seat) => io.to(room.id).emit('sfx', { type, seat }),
-  });
+  }, { difficulty: room.difficulty });
   room.game.startHand();
 }
 
 const reply = (cb, data) => { if (typeof cb === 'function') cb(data); };
+const cleanLevel = (d) => (d === 'hard' ? 'hard' : 'easy');
 const cleanName = (n) => String(n || '').trim().slice(0, 8) || '玩家' + Math.floor(Math.random() * 900 + 100);
 
 io.on('connection', (socket) => {
-  socket.on('quickPlay', ({ name, avatar } = {}, cb) => {
+  socket.on('quickPlay', ({ name, avatar, difficulty } = {}, cb) => {
     if (socket.data.roomId) return reply(cb, { error: '你已經入座了' });
     const room = createRoom(socket);
+    room.difficulty = cleanLevel(difficulty);
     seatPlayer(socket, room, 0, cleanName(name), avatar);
     reply(cb, { seat: 0, roomId: room.id });
     startGame(room);
   });
 
-  socket.on('createRoom', ({ name, avatar } = {}, cb) => {
+  socket.on('createRoom', ({ name, avatar, difficulty } = {}, cb) => {
     if (socket.data.roomId) return reply(cb, { error: '你已經入座了' });
     const room = createRoom(socket);
+    room.difficulty = cleanLevel(difficulty);
     seatPlayer(socket, room, 0, cleanName(name), avatar);
     reply(cb, { seat: 0, roomId: room.id });
     io.to(room.id).emit('lobby', lobbyOf(room));
@@ -135,7 +139,7 @@ io.on('connection', (socket) => {
   socket.on('peekRoom', ({ roomId } = {}, cb) => {
     const room = rooms.get(String(roomId || '').toUpperCase());
     if (!room) return reply(cb, { error: '找不到這個桌號' });
-    reply(cb, { taken: takenRoles(room), full: room.seats.every(Boolean), started: !!room.game });
+    reply(cb, { taken: takenRoles(room), full: room.seats.every(Boolean), started: !!room.game, difficulty: room.difficulty });
   });
 
   socket.on('joinRoom', ({ roomId, name, avatar } = {}, cb) => {

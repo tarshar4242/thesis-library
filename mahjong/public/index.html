@@ -48,7 +48,8 @@
         </div>
       </div>
 
-      <div class="step-title"><i class="step">3</i>準備好就開打</div>
+      <div class="step-title"><i class="step">3</i>選電腦難度，準備開打</div>
+      <div class="seg level-seg" id="levelPicker"><button data-v="easy">🐣 小白<small>電腦會失誤，新手也能贏</small></button><button data-v="hard">🀄 高手<small>電腦精算又會防守</small></button></div>
       <section class="tile-actions">
         <button id="btnQuick" class="mj-tile"><span class="mj-icon">🀄</span><b>自己先練一圈</b><small>電腦陪你打</small></button>
         <button id="btnCreate" class="mj-tile"><span class="mj-icon">🏠</span><b>開一桌揪朋友</b><small>拿桌號邀好友</small></button>
@@ -71,6 +72,7 @@
       <header class="title-block small"><h1>我家三缺一</h1></header>
       <section class="lobby-card wait-card">
         <h2>第 <span id="waitRoomId" class="roomcode"></span> 桌</h2>
+        <p id="waitLevel" class="wait-level"></p>
         <p class="subtitle">等人入座中…沒人坐的位子，開打時由電腦補上</p>
         <ul id="seatList" class="seat-list"></ul>
         <button id="btnStart" class="primary hidden">人到齊了，開打！</button>
