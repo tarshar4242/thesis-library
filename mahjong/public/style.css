@@ -893,3 +893,15 @@ body, .screen { min-height: var(--app-h); }
   box-shadow: 0 -10px 14px #fff8e8;
 }
 .settings-card .build-tag { padding-bottom: 10px; }
+
+/* 碰碰：文字不再被截掉；「需要再叫」模式只顯示一顆按鈕 */
+.coach-bubble { min-width: 0; }
+.coach-text { overflow-wrap: anywhere; }
+.coach.mini .coach-text { cursor: pointer; }
+.coach-call { display: none; }
+.coach.calling .coach-bubble { display: none; }
+.coach.calling .coach-call {
+  display: block; flex: 1; padding: 10px 12px; font-size: 15px; font-weight: 800;
+  background: #fffdf3; color: #2f7a4c; border: 2px dashed #7cc79a; border-radius: 14px;
+}
+.coach.calling .coach-avatar { width: 36px; height: 36px; }
