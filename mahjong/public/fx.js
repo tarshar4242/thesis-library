@@ -6,6 +6,15 @@ const FX = (() => {
   try { settings = { ...DEFAULTS, ...JSON.parse(localStorage.getItem('mjSettings') || '{}') }; } catch (e) {}
   function save() { try { localStorage.setItem('mjSettings', JSON.stringify(settings)); } catch (e) {} }
 
+  // 畫面邊距：有些手機瀏覽器的網址列、工具列會浮在網頁上，讓玩家自己選要內縮多少
+  // none 貼齊｜mid 底部內縮 (Safari)｜deep 上下內縮 (LINE、FB 內建瀏覽器)
+  if (!settings.inset) {
+    settings.inset = /Line\/|FBAN|FBAV|Instagram/i.test(navigator.userAgent) ? 'deep'
+      : window.matchMedia('(pointer: coarse)').matches ? 'mid' : 'none';
+  }
+  const applyInset = () => { document.documentElement.dataset.inset = settings.inset; };
+  applyInset();
+
   // 京劇四角色：生、旦 (Tarshar 的公仔)、淨、丑
   const ROLE_IMG = { sheng: 'sheng.jpg', dan: 'opera.jpg', jing: 'jing.jpg', chou: 'chou.jpg', qingyi: 'qingyi.jpg', huadan: 'huadan.jpg' };
   const ORDER = ['dan', 'sheng', 'jing', 'chou'];
@@ -275,6 +284,7 @@ const FX = (() => {
     bindSwitch('setVoice', 'voice', () => settings.voice && speak('碰'));
     bindSeg('setMusic', 'music', () => { if (settings.bgm) startMusic(); });
     bindSeg('setMood', 'mood', () => burst(30));
+    bindSeg('setInset', 'inset', applyInset);
     const open = () => $('settingsModal').classList.remove('hidden');
     document.querySelectorAll('.btn-settings').forEach(b => { b.onclick = open; });
     $('btnCloseSettings').onclick = () => $('settingsModal').classList.add('hidden');
