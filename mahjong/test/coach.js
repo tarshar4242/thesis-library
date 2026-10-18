@@ -81,6 +81,18 @@ console.log('✓ 碰碰的建議測試通過');
   const warn = console.warn; console.warn = () => {};
   assert.strictEqual(await coachAI.say({}, {}), null, '連線失敗時退回範本');
   console.warn = warn;
+  // 帳號不支援 fallback 參數 (400) 時，拿掉再試一次
+  const SDK = require('@anthropic-ai/sdk'); const A = SDK.default || SDK;
+  let plainCalled = false;
+  coachAI.setClient({
+    beta: { messages: { create: async () => { throw new A.BadRequestError(400, { error: { message: 'fallbacks: Extra inputs are not permitted' } }, 'fallbacks: Extra inputs are not permitted', new Headers()); } } },
+    messages: { create: async (body) => { plainCalled = !body.fallbacks; return { stop_reason: 'end_turn', content: [{ type: 'text', text: '重試成功' }] }; } },
+  });
+  console.warn = () => {};
+  assert.strictEqual(await coachAI.say({}, {}), '重試成功');
+  console.warn = warn;
+  assert.ok(plainCalled, '重試時不能再帶 fallbacks');
+  assert.ok(coachAI.health().lastError.status === 400 && !JSON.stringify(coachAI.health()).includes('sk-ant'));
   // 額度保護：同一人 5 秒內只能問一次
   assert.strictEqual(coachAI.allow('s1'), true);
   assert.strictEqual(coachAI.allow('s1'), false);

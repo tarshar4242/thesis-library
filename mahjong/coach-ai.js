@@ -22,6 +22,7 @@ if (process.env.ANTHROPIC_API_KEY) client = new Anthropic();
 function setClient(c) { client = c; }
 
 let day = new Date().toDateString(), used = 0;
+let lastError = null, lastOk = null; // 給 /api/coach-health 看，不含金鑰
 const lastCall = new Map(); // socketId -> 時間
 
 function available() { return !!client; }
@@ -45,26 +46,49 @@ async function say(facts, { draft, lesson, question } = {}) {
   const content = question
     ? `玩家問你：「${String(question).slice(0, 200)}」\n目前牌況（JSON）：${JSON.stringify(data)}`
     : `請用碰碰的口吻改寫這次的出牌建議。\n${JSON.stringify(data)}`;
-  try {
-    const response = await client.beta.messages.create({
-      model: MODEL,
-      max_tokens: 1024,
-      betas: ['server-side-fallback-2026-07-01'],
-      fallbacks: 'default',
-      output_config: { effort: 'low' },
-      system: SYSTEM,
-      messages: [{ role: 'user', content }],
-    }, { timeout: 15000, maxRetries: 1 });
-    if (response.stop_reason === 'refusal') return null;
-    const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('').trim();
-    return text || null;
-  } catch (error) {
-    if (error instanceof Anthropic.RateLimitError) console.warn('[碰碰] API 請求太頻繁，先用範本台詞');
-    else if (error instanceof Anthropic.AuthenticationError) console.warn('[碰碰] API 金鑰無效，請檢查 ANTHROPIC_API_KEY');
-    else if (error instanceof Anthropic.APIError) console.warn(`[碰碰] API 錯誤 ${error.status}: ${error.message}`);
-    else console.warn('[碰碰] 連線失敗:', error.message);
-    return null;
+  const body = {
+    model: MODEL,
+    max_tokens: 1024,
+    output_config: { effort: 'low' },
+    system: SYSTEM,
+    messages: [{ role: 'user', content }],
+  };
+  // 先帶「拒答時自動換模型」；帳號不支援這個參數 (400) 時拿掉再試一次
+  for (const withFallback of [true, false]) {
+    try {
+      const response = withFallback
+        ? await client.beta.messages.create({ ...body, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }, { timeout: 15000, maxRetries: 1 })
+        : await client.messages.create(body, { timeout: 15000, maxRetries: 1 });
+      if (response.stop_reason === 'refusal') { note(null, 'refusal'); return null; }
+      const text = response.content.filter(b => b.type === 'text').map(b => b.text).join('').trim();
+      if (text) { lastOk = new Date().toISOString(); return text; }
+      note(null, `empty response (stop_reason: ${response.stop_reason})`);
+      return null;
+    } catch (error) {
+      note(error);
+      if (withFallback && error instanceof Anthropic.BadRequestError) continue;
+      return null;
+    }
   }
+  return null;
 }
 
-module.exports = { say, available, allow, forget, setClient, MODEL };
+function note(error, reason) {
+  if (error instanceof Anthropic.RateLimitError) console.warn('[碰碰] API 請求太頻繁，先用範本台詞');
+  else if (error instanceof Anthropic.AuthenticationError) console.warn('[碰碰] API 金鑰無效，請檢查 ANTHROPIC_API_KEY');
+  else if (error instanceof Anthropic.APIError) console.warn(`[碰碰] API 錯誤 ${error.status}: ${error.message}`);
+  else if (error) console.warn('[碰碰] 連線失敗:', error.message);
+  else console.warn('[碰碰]', reason);
+  lastError = {
+    at: new Date().toISOString(),
+    status: error && error.status || null,
+    type: error ? error.constructor.name : 'NoText',
+    message: String(error ? error.message : reason).replace(/sk-ant-[\w-]+/g, '[hidden]').slice(0, 300),
+  };
+}
+
+function health() {
+  return { available: !!client, model: MODEL, usedToday: used, dailyLimit: DAILY_LIMIT, lastOk, lastError };
+}
+
+module.exports = { say, available, allow, forget, setClient, health, MODEL };

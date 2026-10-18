@@ -33,6 +33,9 @@ app.get('/api/serverinfo', (req, res) => res.json({
   coachAI: coachAI.available(),
 }));
 
+// 碰碰 AI 的狀態 (不含金鑰)，方便排查
+app.get('/api/coach-health', (req, res) => res.json(coachAI.health()));
+
 // ---------- 房間 ----------
 const rooms = new Map();
 const AI_NAMES = ['電腦-東', '電腦-南', '電腦-西', '電腦-北'];
