@@ -7,7 +7,7 @@ const FX = (() => {
   function save() { try { localStorage.setItem('mjSettings', JSON.stringify(settings)); } catch (e) {} }
 
   // 京劇四角色：生、旦 (Tarshar 的公仔)、淨、丑
-  const ROLE_IMG = { sheng: 'sheng.svg', dan: 'opera.jpg', jing: 'jing.svg', chou: 'chou.svg' };
+  const ROLE_IMG = { sheng: 'sheng.jpg', dan: 'opera.jpg', jing: 'jing.jpg', chou: 'chou.jpg' };
   const ORDER = ['dan', 'sheng', 'jing', 'chou'];
   const mascot = (seat, avatar) => 'img/' + (ROLE_IMG[avatar] || ROLE_IMG[ORDER[seat % 4]]);
 
