@@ -9,20 +9,8 @@ const Coach = (() => {
 
   const on = () => FX.settings.coach;
 
-  // 手機畫面小，說完話一陣子就縮成頭像，不擋牌桌
-  let miniTimer = null;
-  const isPhone = () => window.matchMedia('(max-width: 720px)').matches;
-  function autoMini() {
-    clearTimeout(miniTimer);
-    if (!isPhone()) return;
-    miniTimer = setTimeout(() => {
-      if (document.activeElement !== $('coachQ')) $('coachPanel').classList.add('mini');
-    }, 9000);
-  }
-
   function show(text, lesson) {
-    $('coachPanel').classList.remove('hidden', 'mini');
-    autoMini();
+    $('coachPanel').classList.remove('hidden');
     const el = $('coachText');
     el.textContent = text;
     el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
@@ -104,17 +92,24 @@ const Coach = (() => {
       if (FX.settings.coach) FX.speak('嗨，我是碰碰，開打後我會在旁邊陪你！');
     };
     $('coachMin').onclick = () => $('coachPanel').classList.toggle('mini');
-    $('coachAvatar').onclick = () => $('coachPanel').classList.remove('mini');
+    $('coachAvatar').onclick = () => $('coachPanel').classList.toggle('mini');
+    // 問碰碰的輸入框平常收起來，按了才展開
+    $('coachAskBtn').onclick = () => {
+      const f = $('coachAskForm');
+      f.classList.toggle('hidden');
+      if (!f.classList.contains('hidden')) { $('coachPanel').classList.remove('mini'); $('coachQ').focus(); }
+    };
     $('coachAskForm').onsubmit = (e) => {
       e.preventDefault();
       const q = $('coachQ').value.trim();
       if (!q) return;
       $('coachQ').value = '';
+      $('coachAskForm').classList.add('hidden');
       ask(q);
     };
     fetch('/api/serverinfo').then(r => r.json()).then(info => {
       aiReady = !!info.coachAI;
-      $('coachAskForm').classList.toggle('hidden', !aiReady);
+      $('coachAskBtn').classList.toggle('hidden', !aiReady);
     }).catch(() => {});
     syncToggle();
   });

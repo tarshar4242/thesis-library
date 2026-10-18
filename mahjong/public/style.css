@@ -643,3 +643,77 @@ body:has(#table.hidden) .table-brand { display: none; }
 #waiting .ci-label, #waiting .ci-hint { color: #8a4b2a; }
 #waiting .ci-addr { background: #4a1c0f; color: #ffd96a; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 #waiting #btnCopyAddr { background: #c8102e; color: #fff; border: none; white-space: nowrap; flex: none; }
+
+/* =========================================================
+   牌桌版面 v2：碰碰獨立一區，不蓋住任何資訊
+   ========================================================= */
+.role-row { grid-template-columns: repeat(3, 1fr); }
+.hand-count { display: none; font-size: 11px; color: #cfe0cf; margin-top: 2px; white-space: nowrap; }
+
+#table { height: 100vh; height: 100dvh; }
+.coach {
+  position: relative; left: auto; right: auto; top: auto; bottom: auto; z-index: 5;
+  width: 100%; max-width: 920px; margin: 6px auto 0; flex-shrink: 0;
+  align-items: center; gap: 8px; pointer-events: auto;
+}
+.coach-avatar { width: 48px; height: 48px; }
+.coach-bubble { padding: 6px 12px 8px; }
+.coach-bubble::before { top: 50%; bottom: auto; margin-top: -8px; }
+.coach-head > span { display: flex; gap: 6px; }
+.coach-text { max-height: 4.7em; overflow-y: auto; }
+.coach-lesson { max-height: 3.2em; overflow-y: auto; }
+/* 收合：只留一行 */
+.coach.mini .coach-bubble { display: block; }
+.coach.mini .coach-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: none; }
+.coach.mini .coach-lesson, .coach.mini .coach-ask { display: none; }
+.coach.mini .coach-avatar { width: 36px; height: 36px; }
+
+@media (max-width: 720px) {
+  #table { padding: 4px 4px calc(4px + env(safe-area-inset-bottom)); }
+  .topbar { padding: 2px 4px 4px; font-size: 12px; gap: 6px; flex-wrap: nowrap; }
+  #roundInfo { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #wallInfo { white-space: nowrap; }
+  .topbar .lbl { display: none; }
+  .topbar button { padding: 4px 9px; flex: none; }
+
+  .board { grid-template-columns: 78px 1fr 78px; grid-template-rows: auto 1fr auto; padding: 4px; gap: 4px; }
+  .player-card { min-width: 0; padding: 4px 6px; font-size: 12px; }
+  .mini-hand { display: none; }
+  .hand-count { display: block; }
+  .opp-melds .mtile { font-size: 20px; }
+  .opp-flowers { font-size: 16px; }
+  .discard-pile .dtile { font-size: 26px; }
+  .discard-pile.vert { width: 58px; }
+
+  .coach { margin-top: 4px; }
+  .coach-avatar { width: 40px; height: 40px; }
+  .coach-bubble { font-size: 13px; line-height: 1.45; padding: 4px 10px 6px; }
+  .coach-head { font-size: 12px; }
+
+  .myarea { padding: 2px 0 0; }
+  .hand { gap: 3px; margin: 14px 0 4px; }
+  .tile { font-size: 31px; padding: 2px 3px 0; border-radius: 6px; border-bottom-width: 3px; }
+  .tile.drawn { margin-left: 8px; }
+  .tile:hover { transform: none; box-shadow: none; }
+  .tile.coach-pick { transform: translateY(-6px); }
+  .tile.coach-pick::after { top: -20px; font-size: 10px; }
+  .action-bar { min-height: 0; margin-top: 2px; }
+  .action-bar:empty { display: none; }
+  .action-bar button { font-size: 15px; padding: 9px 16px; }
+}
+@media (max-width: 720px) {
+  .board { overflow: hidden; grid-template-columns: 84px 1fr 84px; }
+  .player-card { font-size: 11px; line-height: 1.3; }
+  .player-card .pwind { font-size: 10px; padding: 0 3px; }
+  .avatar, .player-card > .avatar-wrap { width: 30px; height: 30px; }
+  .me-card .avatar, .player-card.me-card > .avatar-wrap { width: 26px; height: 26px; }
+  .player-card.me-card { padding: 2px 10px; }
+  .opp-melds { gap: 2px; margin-top: 2px; }
+  .opp-melds .mtile { font-size: 15px; }
+  .opp-flowers { font-size: 13px; margin-top: 1px; }
+  .discard-pile { gap: 1px; padding: 2px; }
+  .discard-pile .dtile { font-size: 22px; }
+  .discard-pile.vert { width: 48px; }
+  .center-info .big { font-size: 30px; }
+  .center-info .turn-name { font-size: 14px; }
+}
