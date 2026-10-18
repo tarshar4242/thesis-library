@@ -2,7 +2,9 @@
 const Lobby = (() => {
   const ROLES = {
     sheng: { img: 'img/sheng.jpg', label: '生 · 小生' },
-    dan: { img: 'img/opera.jpg', label: '旦 · 花旦' },
+    qingyi: { img: 'img/qingyi.jpg', label: '旦 · 青衣' },
+    huadan: { img: 'img/huadan.jpg', label: '旦 · 花旦' },
+    dan: { img: 'img/opera.jpg', label: '旦 · 貴妃' },
     jing: { img: 'img/jing.jpg', label: '淨 · 花臉' },
     chou: { img: 'img/chou.jpg', label: '丑 · 小丑' },
   };

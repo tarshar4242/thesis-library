@@ -19,7 +19,7 @@
       <section class="namecard">
         <div class="namecard-avatar"><img id="myAvatar" src="img/opera.jpg" alt=""></div>
         <div class="namecard-body">
-          <div class="namecard-role" id="myRoleName">旦 · 花旦</div>
+          <div class="namecard-role" id="myRoleName">旦 · 貴妃</div>
           <label class="namecard-label">怎麼稱呼你？
             <input id="nameInput" maxlength="8" placeholder="例如：小D" autocomplete="off" />
           </label>
@@ -31,7 +31,9 @@
         <div class="role-title">挑一個角色上桌</div>
         <div class="role-row">
           <button class="role" data-role="sheng"><img src="img/sheng.jpg" alt=""><b>生</b><small>小生</small></button>
-          <button class="role" data-role="dan"><img src="img/opera.jpg" alt=""><b>旦</b><small>花旦</small></button>
+          <button class="role" data-role="qingyi"><img src="img/qingyi.jpg" alt=""><b>旦</b><small>青衣</small></button>
+          <button class="role" data-role="huadan"><img src="img/huadan.jpg" alt=""><b>旦</b><small>花旦</small></button>
+          <button class="role" data-role="dan"><img src="img/opera.jpg" alt=""><b>旦</b><small>貴妃</small></button>
           <button class="role" data-role="jing"><img src="img/jing.jpg" alt=""><b>淨</b><small>花臉</small></button>
           <button class="role" data-role="chou"><img src="img/chou.jpg" alt=""><b>丑</b><small>小丑</small></button>
         </div>
@@ -93,8 +95,8 @@
     <div class="topbar">
       <span id="roundInfo"></span>
       <span id="wallInfo"></span>
-      <button class="ghost small btn-settings">⚙️ 設定</button>
-      <button id="btnRules" class="ghost small">規則/台數</button>
+      <button class="ghost small btn-settings">⚙️<span class="lbl"> 設定</span></button>
+      <button id="btnRules" class="ghost small">📖<span class="lbl"> 規則/台數</span></button>
     </div>
 
     <div class="board">
@@ -111,6 +113,20 @@
       </div>
       <div class="seat-area right" data-rel="1"></div>
       <div class="seat-area bottom" data-rel="0"></div>
+    </div>
+
+    <!-- 新手教練碰碰 -->
+    <div id="coachPanel" class="coach hidden">
+      <img id="coachAvatar" class="coach-avatar" src="img/pengpeng.svg" alt="碰碰">
+      <div class="coach-bubble">
+        <div class="coach-head"><b>🐦 碰碰教練</b><span><button id="coachAskBtn" class="coach-min hidden" type="button">💬 問碰碰</button> <button id="coachMin" class="coach-min" title="收合">－</button></span></div>
+        <div id="coachText" class="coach-text">嗨！我是碰碰，開打後我會在旁邊陪你🐦</div>
+        <div id="coachLesson" class="coach-lesson hidden"></div>
+        <form id="coachAskForm" class="coach-ask hidden">
+          <input id="coachQ" maxlength="100" placeholder="問碰碰…例如：什麼是聽牌？" autocomplete="off">
+          <button type="submit">問</button>
+        </form>
+      </div>
     </div>
 
     <div class="myarea">
@@ -146,20 +162,6 @@
         <div class="seg" id="setMood"><button data-v="cute">🌸 可愛</button><button data-v="festive">🧨 過年</button></div>
       </div>
       <button id="btnCloseSettings" class="primary">完成</button>
-    </div>
-  </div>
-
-  <!-- 新手教練碰碰 -->
-  <div id="coachPanel" class="coach hidden">
-    <img id="coachAvatar" class="coach-avatar" src="img/pengpeng.svg" alt="碰碰">
-    <div class="coach-bubble">
-      <div class="coach-head"><b>碰碰教練</b><button id="coachMin" class="coach-min" title="收合">－</button></div>
-      <div id="coachText" class="coach-text">嗨！我是碰碰，開打後我會在旁邊陪你🐦</div>
-      <div id="coachLesson" class="coach-lesson hidden"></div>
-      <form id="coachAskForm" class="coach-ask hidden">
-        <input id="coachQ" maxlength="100" placeholder="問碰碰…例如：什麼是聽牌？" autocomplete="off">
-        <button type="submit">問</button>
-      </form>
     </div>
   </div>
 

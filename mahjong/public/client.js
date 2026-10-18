@@ -264,6 +264,7 @@ function renderOpponent(rel, p, v) {
       <div><span class="pwind">${WINDLABEL[p.wind]}${isDealer ? '莊' : ''}</span><span class="pname">${p.name}</span>${p.ting ? `<span class="ting-badge">${p.ting}</span>` : ''}</div>
       <div class="pscore">${p.score >= 0 ? '+' : ''}${p.score}</div>
       <div class="mini-hand">${backs}</div>
+      <div class="hand-count">🀫 剩 ${p.handCount} 張</div>
       ${melds ? `<div class="opp-melds">${melds}</div>` : ''}
       ${flowers ? `<div class="opp-flowers">${flowers}</div>` : ''}
     </div>`;

@@ -39,9 +39,9 @@ app.get('/api/coach-health', (req, res) => res.json(coachAI.health()));
 
 // ---------- 房間 ----------
 const rooms = new Map();
-// 京劇四角色：每桌每個角色只能一個人用；電腦玩家拿剩下的
-const ROLES = ['sheng', 'dan', 'jing', 'chou'];
-const AI_NAMES = { sheng: '電腦小生', dan: '電腦花旦', jing: '電腦花臉', chou: '電腦小丑' };
+// 京劇角色（生、三位旦、淨、丑）：每桌每個角色只能一個人用；電腦玩家拿剩下的
+const ROLES = ['sheng', 'dan', 'jing', 'chou', 'qingyi', 'huadan'];
+const AI_NAMES = { sheng: '電腦小生', dan: '電腦貴妃', jing: '電腦花臉', chou: '電腦小丑', qingyi: '電腦青衣', huadan: '電腦花旦' };
 const takenRoles = (room) => room.seats.filter(Boolean).map(s => s.avatar);
 const pickRole = (room, wanted) => {
   const taken = takenRoles(room);
