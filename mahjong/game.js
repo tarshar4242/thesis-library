@@ -624,8 +624,9 @@ class Game {
     this.endHand({
       kind: 'win', typeLabel,
       from: ctx.tsumo ? null : this.players[ctx.from].name,
+      fromSeat: ctx.tsumo ? null : ctx.from,
       winners: [{
-        name: p.name, hand: sortTiles(p.hand), melds: p.melds, flowers: p.flowers,
+        seat, name: p.name, hand: sortTiles(p.hand), melds: p.melds, flowers: p.flowers,
         tai, points, breakdown,
       }],
     }, seat === this.dealer);

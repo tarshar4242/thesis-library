@@ -8,6 +8,7 @@ const { Server } = require('socket.io');
 const { Game } = require('./game');
 const coach = require('./coach');
 const coachAI = require('./coach-ai');
+const stats = require('./stats');
 
 const PORT = Number(process.env.PORT) || 4100;
 const app = express();
@@ -45,6 +46,9 @@ app.get('/api/serverinfo', (req, res) => res.json({
 
 // 碰碰 AI 的狀態 (不含金鑰)，方便排查
 app.get('/api/coach-health', (req, res) => res.json(coachAI.health()));
+
+// 戰績：真人在各難度的胡牌率（給 /stats.html 看）
+app.get('/api/stats', (req, res) => res.json(stats.summary()));
 
 // ---------- 房間 ----------
 const rooms = new Map();
@@ -106,10 +110,28 @@ function startGame(room) {
   room.seats = seats;
   room.game = new Game(seats, {
     onUpdate: () => broadcastState(room),
-    onResult: (res) => io.to(room.id).emit('result', res),
+    onResult: (res) => { io.to(room.id).emit('result', res); recordHand(room, res); },
     onSfx: (type, seat) => io.to(room.id).emit('sfx', { type, seat }),
   }, { difficulty: room.difficulty });
   room.game.startHand();
+}
+
+// 每局結束記一筆：難度、誰是真人、有沒有開碰碰、誰胡誰放槍
+function recordHand(room, res) {
+  const g = room.game;
+  if (!g) return;
+  const win = res.kind === 'win' ? res.winners[0] : null;
+  stats.add({
+    t: new Date().toISOString(), room: room.id, difficulty: g.difficulty, handNo: g.handNo,
+    kind: res.kind, winner: win ? win.seat : null, from: win ? res.fromSeat : null,
+    tsumo: !!(win && res.fromSeat == null), tai: win ? win.tai : null,
+    players: g.players.map((p, i) => {
+      const s = room.seats[i];
+      const sock = s && s.socketId && io.sockets.sockets.get(s.socketId);
+      const human = !!sock && !p.isAI;
+      return { seat: i, human, name: human ? p.name : null, avatar: p.avatar, coach: human ? (sock.data.coach || 'off') : null };
+    }),
+  });
 }
 
 const reply = (cb, data) => { if (typeof cb === 'function') cb(data); };
@@ -193,6 +215,11 @@ io.on('connection', (socket) => {
       if (text) socket.emit('coachSay', { id, text });
       else if (question) socket.emit('coachSay', { id, text: '哎呀我剛剛恍神了，再問我一次好嗎？😅' });
     });
+  });
+
+  // 玩家目前的碰碰模式：off／auto／call（戰績用）
+  socket.on('myCoach', ({ mode } = {}) => {
+    socket.data.coach = ['off', 'auto', 'call'].includes(mode) ? mode : 'off';
   });
 
   socket.on('disconnect', () => {
