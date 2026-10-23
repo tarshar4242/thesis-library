@@ -91,11 +91,14 @@ const Coach = (() => {
       b.classList.toggle('on', on());
     }
     const mode = !on() ? 'off' : onCall() ? 'call' : 'auto';
+    if (typeof socket !== 'undefined') socket.emit('myCoach', { mode });
     document.querySelectorAll('.coach-mode-seg button').forEach(x => x.classList.toggle('on', x.dataset.v === mode));
     lastKey = '';
     if (typeof lastView !== 'undefined' && lastView) onView(lastView);
     else $('coachPanel').classList.add('hidden');
   }
+
+  socket.on('connect', () => socket.emit('myCoach', { mode: !on() ? 'off' : onCall() ? 'call' : 'auto' }));
 
   document.addEventListener('DOMContentLoaded', () => {
     $('coachMin').onclick = () => $('coachPanel').classList.toggle('mini');

@@ -422,7 +422,44 @@ $('btnLogToggle').onclick = (e) => { e.stopPropagation(); toggleLog(); };
 document.querySelector('.log-header').onclick = toggleLog;
 
 // ---------- 結算彈窗 ----------
+// ---------- 我的戰績（存在這台手機） ----------
+const MyRecords = (() => {
+  const KEY = 'mjRecords';
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; } };
+  const save = (list) => { try { localStorage.setItem(KEY, JSON.stringify(list.slice(-500))); } catch (e) {} };
+  function add(res) {
+    if (mySeat == null || !lastView) return;
+    const win = res.kind === 'win' ? res.winners[0] : null;
+    const coach = !FX.settings.coach ? 'off' : FX.settings.coachMode === 'call' ? 'call' : 'auto';
+    const list = load();
+    list.push({ t: Date.now(), d: lastView.difficulty, c: coach,
+      r: !win ? 'draw' : win.seat === mySeat ? 'win' : res.fromSeat === mySeat ? 'dealin' : 'other' });
+    save(list);
+    paint();
+  }
+  const LV = { easy: '🐣 小白', hard: '🀄 高手' };
+  function summaryText() {
+    const list = load();
+    if (!list.length) return '還沒有戰績，打完一局就會記下來';
+    return ['easy', 'hard'].filter(d => list.some(x => x.d === d)).map(d => {
+      const xs = list.filter(x => x.d === d);
+      const w = xs.filter(x => x.r === 'win').length, di = xs.filter(x => x.r === 'dealin').length;
+      return `${LV[d]}：${xs.length} 局，胡 ${w} 局（${Math.round(w / xs.length * 100)}%），放槍 ${di} 局`;
+    }).join('\n');
+  }
+  function paint() { const el = document.getElementById('myRecords'); if (el) el.textContent = summaryText(); }
+  document.addEventListener('DOMContentLoaded', () => {
+    paint();
+    const btn = document.getElementById('btnCopyRecords');
+    if (btn) btn.onclick = () => copyText('我家三缺一 我的戰績\n' + summaryText(), null).then(ok => {
+      btn.textContent = ok ? '✓ 已複製' : '請手動複製'; setTimeout(() => { btn.textContent = '複製戰績'; }, 1500);
+    });
+  });
+  return { add, paint };
+})();
+
 socket.on('result', (res) => {
+  MyRecords.add(res);
   const modal = $('resultModal');
   const title = $('resultTitle');
   const body = $('resultBody');

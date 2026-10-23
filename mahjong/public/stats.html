@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>我家三缺一｜戰績統計</title>
+<style>
+  body { margin: 0; background: #8b0a1e; color: #4a1c0f; font-family: "PingFang TC", "Noto Sans TC", sans-serif; }
+  main { max-width: 720px; margin: 16px auto; padding: 20px 16px; background: #fffaf0; border-radius: 18px; border: 2px solid #f0c04a; }
+  h1 { margin: 0 0 4px; font-size: 24px; color: #b3122a; }
+  .sub { color: #8a4b2a; font-size: 13px; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { padding: 8px 6px; border-bottom: 1px dashed #e6c98a; text-align: center; }
+  th { background: #fff1d6; }
+  td:first-child, th:first-child { text-align: left; }
+  .note { margin-top: 14px; font-size: 13px; color: #6a4a2a; line-height: 1.6; background: #fff3a8; padding: 10px 12px; border-radius: 10px; }
+  .recent { font-size: 12.5px; margin-top: 16px; }
+  .recent li { margin: 3px 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>📊 戰績統計</h1>
+  <div class="sub" id="since">讀取中…</div>
+  <table>
+    <thead><tr><th>難度／碰碰</th><th>真人局數</th><th>胡牌</th><th>胡牌率</th><th>放槍率</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+  <div class="note">只算真人玩家。四個人實力相當時，每人平均胡牌率約 25%。<br>
+  免費主機重新部署或長時間休眠後，這裡的統計可能歸零；每位玩家自己的戰績另外存在手機裡，在 ⚙️ 設定最下面可以複製。</div>
+  <div class="recent"><b>最近 50 局</b><ul id="recent"></ul></div>
+</main>
+<script>
+const LV = { easy: '🐣 小白', hard: '🀄 高手' };
+const CO = { '全部': '全部', off: '不用碰碰', auto: '隨時陪打', call: '需要再叫' };
+fetch('/api/stats').then(r => r.json()).then(s => {
+  document.getElementById('since').textContent = `從 ${new Date(s.since).toLocaleString('zh-TW')} 起，共 ${s.totalHands} 局`;
+  document.getElementById('rows').innerHTML = s.rows.length ? s.rows.map(r =>
+    `<tr><td>${LV[r.difficulty] || r.difficulty}｜${CO[r.coach] || r.coach}</td><td>${r.hands}</td><td>${r.wins}</td><td><b>${r.winRate}%</b></td><td>${r.dealInRate}%</td></tr>`).join('')
+    : '<tr><td colspan="5">還沒有真人打完的局</td></tr>';
+  document.getElementById('recent').innerHTML = s.recent.map(r => {
+    const hs = r.players.filter(p => p.human).map(p => p.name).join('、') || '（無真人）';
+    const res = r.kind === 'draw' ? '流局' : `座位${r.winner + 1}${r.tsumo ? '自摸' : '胡'} ${r.tai} 台`;
+    return `<li>${new Date(r.t).toLocaleString('zh-TW')}｜${LV[r.difficulty] || ''}｜${hs}｜${res}</li>`;
+  }).join('');
+}).catch(() => { document.getElementById('since').textContent = '讀取失敗，請重新整理'; });
+</script>
+</body>
+</html>
